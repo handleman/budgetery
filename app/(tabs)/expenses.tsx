@@ -16,9 +16,10 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">income</ThemedText>
+        <ThemedText type="title">Karina!</ThemedText>
         <HelloWave />
       </ThemedView>
+
     </ParallaxScrollView>
   );
 }
