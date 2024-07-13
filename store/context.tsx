@@ -21,7 +21,7 @@ export const appContext = createContext<AppContext>({
 
 
 
-const ContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [store, dispatch] = useReducer(appReducer, defaultStore);
 
     function passIncomeTutorial() {
@@ -51,4 +51,4 @@ const ContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     </appContext.Provider>
 }
 
-export default ContextProvider;
+export default AppContextProvider;
