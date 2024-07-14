@@ -26,6 +26,8 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+  //todo: add first getting started page stack
+  //todo: add select month page stack
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

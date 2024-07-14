@@ -4,8 +4,22 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Button } from 'react-native';
+import { useContext, useState } from 'react';
+import { appContext } from '@/store/context';
 
 export default function HomeScreen() {
+
+  const ctx = useContext(appContext);
+  const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.incomeTutorialPassed);
+
+  const getStartedHandler = () => {
+    //todo: add redirect to "add income form"
+    //todo: remove unecessary "tutorial passed view after redirect is in place"
+    ctx.mutators.passIncomeTutorial();
+    setTutorialPassed(true);
+
+  }
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -15,10 +29,35 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">income</ThemedText>
-        <HelloWave />
-      </ThemedView>
+      {
+        tutorialPassed ? (
+          <ThemedView>
+            <ThemedText>
+              Tutorial passed
+            </ThemedText>
+          </ThemedView>
+        ) : (
+          <>
+              <ThemedView style={styles.titleContainer}>
+                <ThemedText type="title">Income Sources</ThemedText>
+                <HelloWave />
+              </ThemedView>
+              <ThemedView>
+                <ThemedText>Your monthly income sources</ThemedText>
+                <ThemedText>There you may  set the whole budget</ThemedText>
+                <ThemedText>by adding different incomes</ThemedText>
+                <ThemedText>(salary, cashback, present, etc.)</ThemedText>
+              </ThemedView>
+              <ThemedView>
+                <Button
+                  title='Get started!'
+                  onPress={getStartedHandler}
+                />
+              </ThemedView>
+          </>
+        )
+      }
+
     </ParallaxScrollView>
   );
 }
