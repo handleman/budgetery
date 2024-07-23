@@ -8,6 +8,7 @@ const defaultStore = {
     incomeTutorialPassed: false,
     obligationsTutorialPassed: false,
     expensesTutorialPassed: false,
+    welcomeTutorialPassed: false,
 };
 export const appContext = createContext<AppContext>({
     store: defaultStore,
@@ -15,6 +16,7 @@ export const appContext = createContext<AppContext>({
         passIncomeTutorial: () => { },
         passObligationsTutorial: () => { },
         passExpensesTutorial: () => { },
+        passWelcomeTutorial: () => { },
     }
 });
 
@@ -33,14 +35,17 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     function passExpensesTutorial() {
         dispatch({ type: ACTION_TYPES.PASS_TUTORIAL, payload: TUTORIAL_NAMES.expenses });
     }
-
+    function passWelcomeTutorial() {
+        dispatch({ type: ACTION_TYPES.PASS_TUTORIAL, payload: TUTORIAL_NAMES.welcome });
+    }
 
     const value = {
         store,
         mutators: {
             passIncomeTutorial,
             passObligationsTutorial,
-            passExpensesTutorial
+            passExpensesTutorial,
+            passWelcomeTutorial,
         }
     }
 

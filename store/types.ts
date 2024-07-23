@@ -4,7 +4,7 @@ export type Store = {
     incomeTutorialPassed: boolean;
     obligationsTutorialPassed: boolean;
     expensesTutorialPassed: boolean;
-
+    welcomeTutorialPassed: boolean;
 };
 
 export type AppContext = {
@@ -13,6 +13,7 @@ export type AppContext = {
         passIncomeTutorial: () => void;
         passObligationsTutorial: () => void;
         passExpensesTutorial: () => void;
+        passWelcomeTutorial: () => void;
     }
 }
 

@@ -8,7 +8,7 @@ import { Button } from 'react-native';
 import { useContext, useState } from 'react';
 import { appContext } from '@/store/context';
 
-export default function HomeScreen() {
+export default function IncomeScreen() {
 
   const ctx = useContext(appContext);
   const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.incomeTutorialPassed);

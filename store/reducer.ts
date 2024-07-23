@@ -14,6 +14,8 @@ export function appReducer(store: Store, action: Action): Store {
                     return { ...store, obligationsTutorialPassed: true };
                 case TUTORIAL_NAMES.expenses:
                     return { ...store, expensesTutorialPassed: true };
+                case TUTORIAL_NAMES.welcome:
+                    return { ...store, welcomeTutorialPassed: true };
             }
         default:
             break
