@@ -6,6 +6,7 @@ export enum TUTORIAL_NAMES {
 }
 export enum ACTION_TYPES {
     'PASS_TUTORIAL',
+    'ADD_PERIOD',
     'ADD_INCOME',
     'ADD_OBLIGATION',
     'ADD_EXPENSE',

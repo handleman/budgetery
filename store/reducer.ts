@@ -1,11 +1,20 @@
 import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
-import { Action, Store } from "./types";
+import { Action, CurrentPeriodPassed, isCurrentPeriodPassed, Store } from "./types";
+
+
+function currentPeriodReducer(store: Store, payload: CurrentPeriodPassed): Store {
+    return {
+        ...store,
+        currentPeriod: payload,
+    }
+}
+
 
 
 export function appReducer(store: Store, action: Action): Store {
+    const { payload } = action;
     switch (action.type) {
         case ACTION_TYPES.PASS_TUTORIAL:
-            const { payload } = action;
             if (!payload) break;
             switch (payload) {
                 case TUTORIAL_NAMES.income:
@@ -16,6 +25,10 @@ export function appReducer(store: Store, action: Action): Store {
                     return { ...store, expensesTutorialPassed: true };
                 case TUTORIAL_NAMES.welcome:
                     return { ...store, welcomeTutorialPassed: true };
+            }
+        case ACTION_TYPES.ADD_PERIOD:
+            if (isCurrentPeriodPassed(payload)) {
+                return currentPeriodReducer(store, payload);
             }
         default:
             break

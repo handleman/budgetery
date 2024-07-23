@@ -1,15 +1,20 @@
 import React, { createContext, useReducer } from 'react';
 import { ACTION_TYPES, TUTORIAL_NAMES } from './enums';
-import { AppContext } from './types';
+import { AppContext, CurrentPeriodPassed, Store } from './types';
 import { appReducer } from './reducer';
 
 
-const defaultStore = {
+const defaultStore: Store = {
     incomeTutorialPassed: false,
     obligationsTutorialPassed: false,
     expensesTutorialPassed: false,
     welcomeTutorialPassed: false,
+    currentPeriod: {
+        name: '',
+        month: null,
+    }
 };
+
 export const appContext = createContext<AppContext>({
     store: defaultStore,
     mutators: {
@@ -17,6 +22,7 @@ export const appContext = createContext<AppContext>({
         passObligationsTutorial: () => { },
         passExpensesTutorial: () => { },
         passWelcomeTutorial: () => { },
+        setCurrentPeriod: ({ name: string, month: number }) => { },
     }
 });
 
@@ -38,6 +44,9 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     function passWelcomeTutorial() {
         dispatch({ type: ACTION_TYPES.PASS_TUTORIAL, payload: TUTORIAL_NAMES.welcome });
     }
+    function setCurrentPeriod(passed: CurrentPeriodPassed) {
+        dispatch({ type: ACTION_TYPES.ADD_PERIOD, payload: passed });
+    }
 
     const value = {
         store,
@@ -46,6 +55,7 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
             passObligationsTutorial,
             passExpensesTutorial,
             passWelcomeTutorial,
+            setCurrentPeriod,
         }
     }
 
