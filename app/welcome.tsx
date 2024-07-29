@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { appContext } from "@/store/context";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, StyleSheet, TextInput, useColorScheme } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -37,7 +37,11 @@ export default function WelcomeScreen() {
         const monthName = monthNames.find(item => item.value === value)?.label || '';
         setSelectedPeriodName(monthName);
     }
-
+    useEffect(() => {
+        if (selectedMonth && selectedPeriodName.trim() !== '') {
+            ctx.mutators.setCurrentPeriod({ name: selectedPeriodName, month: selectedMonth });
+        }
+    }, [selectedMonth, selectedPeriodName]);
     return (
         <ThemedView style={styles.container}>
             <ThemedView style={styles.content}>
