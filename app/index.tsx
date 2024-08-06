@@ -20,6 +20,8 @@ const monthNames = [
     { label: 'December', value: 12 },
 ];
 
+//todo: set Apply button inactive without filled data
+
 export default function WelcomeScreen() {
     const ctx = useContext(appContext);
     const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.welcomeTutorialPassed);
@@ -32,6 +34,11 @@ export default function WelcomeScreen() {
         ctx.mutators.passWelcomeTutorial();
         setTutorialPassed(true);
     }
+
+    const savePeriodHandler = () => {
+        router.navigate('tabs')
+    }
+
     const selectMonthHandler = (value: number) => {
         setSelectedMonth(value);
         const monthName = monthNames.find(item => item.value === value)?.label || '';
@@ -40,7 +47,6 @@ export default function WelcomeScreen() {
     useEffect(() => {
         if (selectedMonth && selectedPeriodName.trim() !== '') {
             ctx.mutators.setCurrentPeriod({ name: selectedPeriodName, month: selectedMonth });
-            router.navigate('(tabs)');
         }
     }, [selectedMonth, selectedPeriodName]);
     return (
@@ -64,6 +70,12 @@ export default function WelcomeScreen() {
                                 style={styles.input}
                                 value={selectedPeriodName}
                                 onChangeText={setSelectedPeriodName}
+                            />
+                        </ThemedView>
+                        <ThemedView>
+                            <Button
+                                title='Apply!'
+                                onPress={savePeriodHandler}
                             />
                         </ThemedView>
 

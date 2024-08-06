@@ -22,7 +22,7 @@ export default function IncomeScreen() {
   }
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ dark: '#0E863D', light: '#18C521' }}
       headerImage={
         <Image
           source={require('@/assets/images/income-back.jpeg')}
@@ -73,10 +73,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,
+    height: 200,
     width: '100%',
     bottom: 0,
     left: 0,
     position: 'absolute',
+    objectFit: 'cover',
   },
 });
