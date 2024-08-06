@@ -4,7 +4,7 @@ import { appContext } from "@/store/context";
 import { useContext, useEffect, useState } from "react";
 import { Button, StyleSheet, TextInput, useColorScheme } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-
+import { useRouter } from 'expo-router';
 const monthNames = [
     { label: 'January', value: 1 },
     { label: 'February', value: 2 },
@@ -20,12 +20,12 @@ const monthNames = [
     { label: 'December', value: 12 },
 ];
 
-//todo: connect to currentPeriod state
 export default function WelcomeScreen() {
     const ctx = useContext(appContext);
     const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.welcomeTutorialPassed);
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [selectedPeriodName, setSelectedPeriodName] = useState<string>('');
+    const router = useRouter();
 
 
     const getStartedHandler = () => {
@@ -40,6 +40,7 @@ export default function WelcomeScreen() {
     useEffect(() => {
         if (selectedMonth && selectedPeriodName.trim() !== '') {
             ctx.mutators.setCurrentPeriod({ name: selectedPeriodName, month: selectedMonth });
+            router.navigate('(tabs)');
         }
     }, [selectedMonth, selectedPeriodName]);
     return (
