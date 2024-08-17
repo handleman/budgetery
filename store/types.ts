@@ -8,6 +8,17 @@ export interface CurrentPeriodPassed {
     name: string;
     month: number;
 }
+export type IncomeItem = {
+    date: Date;
+    amount: number;
+    label: string;
+}
+export function isIncomeItemPassed(value: any): value is IncomeItem {
+    const isDateDefined = !!value?.date && value.date instanceof Date;
+    const isAmountDefined = !!value?.amount && typeof value.amount === 'number';
+    const isLabelDefined = !!value?.label && typeof value.label === 'string';
+    return isDateDefined && isAmountDefined && isLabelDefined;
+}
 
 export function isCurrentPeriodPassed(value: any): value is CurrentPeriodPassed {
     const isNameDefined = !!value?.name;
@@ -21,6 +32,7 @@ export type Store = {
     expensesTutorialPassed: boolean;
     welcomeTutorialPassed: boolean;
     currentPeriod: CurrentPeriod
+    incomeItems: IncomeItem[];
 };
 
 export type AppContext = {
@@ -31,6 +43,7 @@ export type AppContext = {
         passExpensesTutorial: () => void;
         passWelcomeTutorial: () => void;
         setCurrentPeriod: (value: CurrentPeriodPassed) => void;
+        addIncomeItem: (value: IncomeItem) => void;
     }
 }
 
