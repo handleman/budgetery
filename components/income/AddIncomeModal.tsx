@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { TextInput, Button, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
+import { appContext } from '@/store/context';
 
 const AddIncomeModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({ isVisible, onClose }) => {
-    const [amount, setAmount] = useState<number | undefined>(undefined);
+    const ctx = useContext(appContext);
+    const [amount, setAmount] = useState<number>(0);
     const [label, setLabel] = useState<string>('');
-
     const onSubmit = () => {
-        // todo: connect to app state
+        const currentDate = new Date();
+        const incomeItem = { date: currentDate, amount, label }
+        ctx.mutators.addIncomeItem(incomeItem);
         onClose();
+
+        //todo: remove
+        console.log(JSON.stringify(ctx.store.incomeItems));
     }
     return (
         <Modal isVisible={isVisible}>
@@ -20,7 +26,7 @@ const AddIncomeModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
                     <TextInput
                         style={styles.input}
                         keyboardType="numeric"
-                        value={amount?.toString()}
+                        value={amount > 0 ? amount?.toString() : ''}
                         onChangeText={(text) => setAmount(Number(text))}
                     />
                 </ThemedView>
@@ -35,7 +41,7 @@ const AddIncomeModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
             </ThemedView>
             <ThemedView>
                 <Button
-                    title='Cancel'
+                    title='Back'
                     onPress={onClose}
                 />
                 <Button
