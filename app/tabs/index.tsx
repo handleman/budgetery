@@ -7,58 +7,65 @@ import { ThemedView } from '@/components/ThemedView';
 import { Button } from 'react-native';
 import { useContext, useState } from 'react';
 import { appContext } from '@/store/context';
+import AddIncomeModal from '@/components/income/AddIncomeModal';
 
 export default function IncomeScreen() {
 
   const ctx = useContext(appContext);
   const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.incomeTutorialPassed);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+
 
   const getStartedHandler = () => {
-    //todo: add redirect to "add income form"
-    //todo: remove unecessary "tutorial passed view after redirect is in place"
+    setModalVisible(true);
     ctx.mutators.passIncomeTutorial();
     setTutorialPassed(true);
 
   }
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ dark: '#0E863D', light: '#18C521' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/income-back.jpeg')}
-          style={styles.reactLogo}
-        />
-      }>
-      {
-        tutorialPassed ? (
-          <ThemedView>
-            <ThemedText>
-              Tutorial passed
-            </ThemedText>
-          </ThemedView>
-        ) : (
-          <>
-            <ThemedView style={styles.titleContainer}>
-              <ThemedText type="title">Income Sources</ThemedText>
-              <HelloWave />
-            </ThemedView>
+    <>
+      <ParallaxScrollView
+        headerBackgroundColor={{ dark: '#0E863D', light: '#18C521' }}
+        headerImage={
+          <Image
+            source={require('@/assets/images/income-back.jpeg')}
+            style={styles.reactLogo}
+          />
+        }>
+        {
+          tutorialPassed ? (
             <ThemedView>
-              <ThemedText>Your monthly income sources</ThemedText>
-              <ThemedText>There you may  set the whole budget</ThemedText>
-              <ThemedText>by adding different incomes</ThemedText>
-              <ThemedText>(salary, cashback, present, etc.)</ThemedText>
+              {/* todo: list of income sources */}
+              <ThemedText>future list</ThemedText>
             </ThemedView>
-            <ThemedView>
-              <Button
-                title='Get started!'
-                onPress={getStartedHandler}
-              />
-            </ThemedView>
-          </>
-        )
-      }
+          ) : (
+            <>
+              <ThemedView style={styles.titleContainer}>
+                <ThemedText type="title">Income Sources</ThemedText>
+                <HelloWave />
+              </ThemedView>
+              <ThemedView>
+                <ThemedText>Your monthly income sources</ThemedText>
+                <ThemedText>There you may  set the whole budget</ThemedText>
+                <ThemedText>by adding different incomes</ThemedText>
+                <ThemedText>(salary, cashback, present, etc.)</ThemedText>
+              </ThemedView>
+              <ThemedView>
+                <Button
+                  title='Get started!'
+                  onPress={getStartedHandler}
+                />
+              </ThemedView>
+            </>
+          )
+        }
 
-    </ParallaxScrollView>
+      </ParallaxScrollView>
+      <AddIncomeModal isVisible={isModalVisible} onClose={closeModal} />
+    </>
   );
 }
 
