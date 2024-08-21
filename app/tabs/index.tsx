@@ -5,9 +5,10 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Button } from 'react-native';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { appContext } from '@/store/context';
 import AddIncomeModal from '@/components/income/AddIncomeModal';
+import { IncomeItem } from '@/store/types';
 
 export default function IncomeScreen() {
 
@@ -15,16 +16,30 @@ export default function IncomeScreen() {
   const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.incomeTutorialPassed);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
+  const [incomes, setIncomes] = useState<IncomeItem[]>([]);
+
 
   const getStartedHandler = () => {
-    setModalVisible(true);
     ctx.mutators.passIncomeTutorial();
-    setTutorialPassed(true);
+    setModalVisible(true);
 
+  }
+  const addMoreHandler = () => {
+    setModalVisible(true);
   }
   const closeModal = () => {
     setModalVisible(false);
   };
+
+  useEffect(() => {
+    const { incomeItems, incomeTutorialPassed } = ctx.store;
+    setIncomes(incomeItems);
+    if (tutorialPassed !== incomeTutorialPassed) {
+      setTutorialPassed(incomeTutorialPassed);
+    }
+
+  }, [ctx.store.incomeItems, ctx.store.incomeTutorialPassed]);
+
   return (
     <>
       <ParallaxScrollView
@@ -38,8 +53,18 @@ export default function IncomeScreen() {
         {
           tutorialPassed ? (
             <ThemedView>
-              {/* todo: list of income sources */}
-              <ThemedText>future list</ThemedText>
+              {/* todo:  style the list of income sources */}
+              {incomes.map(income => (
+                <ThemedView key={income.date.getMilliseconds()}>
+                  <ThemedText>{income.date.toISOString()}</ThemedText>
+                  <ThemedText>{income.amount}</ThemedText>
+                  <ThemedText>{income.label}</ThemedText>
+                </ThemedView>
+              ))}
+              <Button
+                title='Add more!'
+                onPress={addMoreHandler}
+              />
             </ThemedView>
           ) : (
             <>

@@ -22,7 +22,7 @@ export function appReducer(store: Store, action: Action): Store {
     const { payload } = action;
     switch (action.type) {
         case ACTION_TYPES.PASS_TUTORIAL:
-            if (!payload) break;
+            if (payload === null || payload === undefined) break;
             switch (payload) {
                 case TUTORIAL_NAMES.income:
                     return { ...store, incomeTutorialPassed: true };

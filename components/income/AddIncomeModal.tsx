@@ -14,9 +14,6 @@ const AddIncomeModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
         const incomeItem = { date: currentDate, amount, label }
         ctx.mutators.addIncomeItem(incomeItem);
         onClose();
-
-        //todo: remove
-        console.log(JSON.stringify(ctx.store.incomeItems));
     }
     return (
         <Modal isVisible={isVisible}>
