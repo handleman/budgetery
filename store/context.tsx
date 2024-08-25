@@ -11,7 +11,7 @@ const defaultStore: Store = {
     welcomeTutorialPassed: false,
     currentPeriod: {
         name: '',
-        month: null,
+        month: 0,
     },
     incomeItems: [],
     obligationItems: [],

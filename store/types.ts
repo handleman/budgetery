@@ -1,8 +1,8 @@
-import { ACTION_TYPES } from "./enums";
+import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
 
 export type CurrentPeriod = {
     name: string;
-    month: number | null;
+    month: number;
 }
 export interface CurrentPeriodPassed {
     name: string;
@@ -67,5 +67,5 @@ export type AppContext = {
 
 export type Action = {
     type: ACTION_TYPES,
-    payload?: unknown,
+    payload?: IncomeItem | ObligationItem | CurrentPeriod | TUTORIAL_NAMES,
 }
