@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 import { ACTION_TYPES, TUTORIAL_NAMES } from './enums';
-import { AppContext, CurrentPeriodPassed, IncomeItem, ObligationItem, Store } from './types';
+import { AppContext, CurrentPeriod, ExpenseItem, IncomeItem, ObligationItem, Store } from './types';
 import { appReducer } from './reducer';
 
 
@@ -15,6 +15,7 @@ const defaultStore: Store = {
     },
     incomeItems: [],
     obligationItems: [],
+    expenseItems: [],
 };
 
 export const appContext = createContext<AppContext>({
@@ -27,6 +28,7 @@ export const appContext = createContext<AppContext>({
         setCurrentPeriod: ({ name: string, month: number }) => { },
         addIncomeItem: (value: IncomeItem) => { },
         addObligationItem: (value: ObligationItem) => { },
+        addExpenseItem: (value: ExpenseItem) => { },
     }
 });
 
@@ -48,7 +50,7 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     function passWelcomeTutorial() {
         dispatch({ type: ACTION_TYPES.PASS_TUTORIAL, payload: TUTORIAL_NAMES.welcome });
     }
-    function setCurrentPeriod(passed: CurrentPeriodPassed) {
+    function setCurrentPeriod(passed: CurrentPeriod) {
         dispatch({ type: ACTION_TYPES.ADD_PERIOD, payload: passed });
     }
     function addIncomeItem(passed: IncomeItem) {
@@ -56,6 +58,9 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     }
     function addObligationItem(passed: ObligationItem) {
         dispatch({ type: ACTION_TYPES.ADD_OBLIGATION, payload: passed });
+    }
+    function addExpenseItem(passed: ExpenseItem) {
+        dispatch({ type: ACTION_TYPES.ADD_EXPENSE, payload: passed });
     }
 
     const value = {
@@ -68,6 +73,7 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
             setCurrentPeriod,
             addIncomeItem,
             addObligationItem,
+            addExpenseItem,
         }
     }
 

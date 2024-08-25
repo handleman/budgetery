@@ -11,8 +11,15 @@ export type IncomeItem = {
     label: string;
 }
 
-// could differ form incomeItem in the future
 export type ObligationItem = {
+    date: Date;
+    amount: number;
+    label: string;
+    isPercentage: boolean;
+}
+
+// could differ from incomeItem in the future
+export type ExpenseItem = {
     date: Date;
     amount: number;
     label: string;
@@ -25,12 +32,20 @@ export function isIncomeItemPassed(value: any): value is IncomeItem {
     return isDateDefined && isAmountDefined && isLabelDefined;
 }
 
+export function isExpenseItemPassed(value: any): value is ExpenseItem {
+    const isDateDefined = !!value?.date && value.date instanceof Date;
+    const isAmountDefined = !!value?.amount && typeof value.amount === 'number';
+    const isLabelDefined = !!value?.label && typeof value.label === 'string';
+    return isDateDefined && isAmountDefined && isLabelDefined;
+}
+
 // may differ from isIncomeItemPassed in future
 export function isObligationItemPassed(value: any): value is ObligationItem {
     const isDateDefined = !!value?.date && value.date instanceof Date;
     const isAmountDefined = !!value?.amount && typeof value.amount === 'number';
     const isLabelDefined = !!value?.label && typeof value.label === 'string';
-    return isDateDefined && isAmountDefined && isLabelDefined;
+    const isPercentageDefined = !!value?.isPercentage && typeof value.isPercentage === 'boolean';
+    return isDateDefined && isAmountDefined && isLabelDefined && isPercentageDefined;
 }
 
 export function isCurrentPeriodPassed(value: any): value is CurrentPeriod {
@@ -47,6 +62,7 @@ export type Store = {
     currentPeriod: CurrentPeriod
     incomeItems: IncomeItem[];
     obligationItems: ObligationItem[];
+    expenseItems: ExpenseItem[];
 };
 
 export type AppContext = {
@@ -58,11 +74,12 @@ export type AppContext = {
         passWelcomeTutorial: () => void;
         setCurrentPeriod: (value: CurrentPeriod) => void;
         addIncomeItem: (value: IncomeItem) => void;
-        addObligationItem: (value: IncomeItem) => void;
+        addObligationItem: (value: ObligationItem) => void;
+        addExpenseItem: (value: ExpenseItem) => void;
     }
 }
 
 export type Action = {
     type: ACTION_TYPES,
-    payload?: IncomeItem | ObligationItem | CurrentPeriod | TUTORIAL_NAMES,
+    payload?: ExpenseItem | IncomeItem | ObligationItem | CurrentPeriod | TUTORIAL_NAMES,
 }

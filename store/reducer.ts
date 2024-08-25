@@ -1,5 +1,5 @@
 import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
-import { Action, CurrentPeriod, IncomeItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, Store } from "./types";
+import { Action, CurrentPeriod, IncomeItem, ExpenseItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, Store, isExpenseItemPassed } from "./types";
 
 
 function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
@@ -20,6 +20,13 @@ function addObligationItemReducer(store: Store, payload: ObligationItem): Store 
     return {
         ...store,
         obligationItems: [...store.obligationItems, payload],
+    }
+}
+
+function addExpenseItemReducer(store: Store, payload: ExpenseItem): Store {
+    return {
+        ...store,
+        expenseItems: [...store.expenseItems, payload],
     }
 }
 
@@ -51,6 +58,10 @@ export function appReducer(store: Store, action: Action): Store {
         case ACTION_TYPES.ADD_OBLIGATION:
             if (isObligationItemPassed(payload)) {
                 return addObligationItemReducer(store, payload);
+            }
+        case ACTION_TYPES.ADD_EXPENSE:
+            if (isExpenseItemPassed(payload)) {
+                return addExpenseItemReducer(store, payload);
             }
         default:
             break
