@@ -13,6 +13,14 @@ export type IncomeItem = {
     amount: number;
     label: string;
 }
+
+// could differ form incomeItem in the future
+export type ObligationItem = {
+    date: Date;
+    amount: number;
+    label: string;
+}
+
 export function isIncomeItemPassed(value: any): value is IncomeItem {
     const isDateDefined = !!value?.date && value.date instanceof Date;
     const isAmountDefined = !!value?.amount && typeof value.amount === 'number';
@@ -33,6 +41,7 @@ export type Store = {
     welcomeTutorialPassed: boolean;
     currentPeriod: CurrentPeriod
     incomeItems: IncomeItem[];
+    obligationItems: ObligationItem[];
 };
 
 export type AppContext = {

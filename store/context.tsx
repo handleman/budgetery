@@ -14,6 +14,7 @@ const defaultStore: Store = {
         month: null,
     },
     incomeItems: [],
+    obligationItems: [],
 };
 
 export const appContext = createContext<AppContext>({
