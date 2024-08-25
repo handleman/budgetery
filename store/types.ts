@@ -28,6 +28,14 @@ export function isIncomeItemPassed(value: any): value is IncomeItem {
     return isDateDefined && isAmountDefined && isLabelDefined;
 }
 
+// may differ from isIncomeItemPassed in future
+export function isObligationItemPassed(value: any): value is ObligationItem {
+    const isDateDefined = !!value?.date && value.date instanceof Date;
+    const isAmountDefined = !!value?.amount && typeof value.amount === 'number';
+    const isLabelDefined = !!value?.label && typeof value.label === 'string';
+    return isDateDefined && isAmountDefined && isLabelDefined;
+}
+
 export function isCurrentPeriodPassed(value: any): value is CurrentPeriodPassed {
     const isNameDefined = !!value?.name;
     const isMonthDefined = !!value?.month;
@@ -53,6 +61,7 @@ export type AppContext = {
         passWelcomeTutorial: () => void;
         setCurrentPeriod: (value: CurrentPeriodPassed) => void;
         addIncomeItem: (value: IncomeItem) => void;
+        addObligationItem: (value: IncomeItem) => void;
     }
 }
 

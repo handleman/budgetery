@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 import { ACTION_TYPES, TUTORIAL_NAMES } from './enums';
-import { AppContext, CurrentPeriodPassed, IncomeItem, Store } from './types';
+import { AppContext, CurrentPeriodPassed, IncomeItem, ObligationItem, Store } from './types';
 import { appReducer } from './reducer';
 
 
@@ -26,12 +26,13 @@ export const appContext = createContext<AppContext>({
         passWelcomeTutorial: () => { },
         setCurrentPeriod: ({ name: string, month: number }) => { },
         addIncomeItem: (value: IncomeItem) => { },
+        addObligationItem: (value: ObligationItem) => { },
     }
 });
 
 
 
-
+``
 const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [store, dispatch] = useReducer(appReducer, defaultStore);
 
@@ -53,6 +54,9 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     function addIncomeItem(passed: IncomeItem) {
         dispatch({ type: ACTION_TYPES.ADD_INCOME, payload: passed });
     }
+    function addObligationItem(passed: ObligationItem) {
+        dispatch({ type: ACTION_TYPES.ADD_OBLIGATION, payload: passed });
+    }
 
     const value = {
         store,
@@ -63,6 +67,7 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
             passWelcomeTutorial,
             setCurrentPeriod,
             addIncomeItem,
+            addObligationItem,
         }
     }
 
