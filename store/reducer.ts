@@ -1,8 +1,8 @@
 import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
-import { Action, CurrentPeriodPassed, IncomeItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, Store } from "./types";
+import { Action, CurrentPeriod, IncomeItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, Store } from "./types";
 
 
-function currentPeriodReducer(store: Store, payload: CurrentPeriodPassed): Store {
+function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
     return {
         ...store,
         currentPeriod: payload,
