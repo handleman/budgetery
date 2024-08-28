@@ -15,9 +15,10 @@ export default function TabTwoScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Obligations</ThemedText>
+        <ThemedText type="title">Obligatory payments</ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
+      <ThemedText>Your monthly Obligatory payments</ThemedText>
+      <ThemedText>It could be your rent, loan interest or even some subscriptions</ThemedText>
 
     </ParallaxScrollView>
   );

@@ -7,7 +7,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Button } from 'react-native';
 import { useContext, useState, useEffect } from 'react';
 import { appContext } from '@/store/context';
-import AddIncomeModal from '@/components/income/AddIncomeModal';
+import AddIncomeModal from '@/components/modal/AddIncomeModal';
 import { IncomeItem } from '@/store/types';
 
 export default function IncomeScreen() {
