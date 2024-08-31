@@ -12,9 +12,8 @@ const AddIncomeModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
     const [isPercentage, setIsPercentage] = useState<boolean>(false);
     const onSubmit = () => {
         const currentDate = new Date();
-        const incomeItem = { date: currentDate, amount, label, isPercentage } //todo: add isPercentage
-        // todo: call mututator for obligations
-        // ctx.mutators.addIncomeItem(incomeItem);
+        const obligationItem = { date: currentDate, amount, label, isPercentage }
+        ctx.mutators.addObligationItem(obligationItem);
         onClose();
     }
     const toggleSwitch = () => {
