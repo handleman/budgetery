@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, Button, StyleSheet } from 'react-native';
+import { TextInput, Button, StyleSheet, Switch } from 'react-native';
 import Modal from 'react-native-modal';
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
@@ -9,12 +9,18 @@ const AddIncomeModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
     const ctx = useContext(appContext);
     const [amount, setAmount] = useState<number>(0);
     const [label, setLabel] = useState<string>('');
+    const [isPercentage, setIsPercentage] = useState<boolean>(false);
     const onSubmit = () => {
         const currentDate = new Date();
-        const incomeItem = { date: currentDate, amount, label } //todo: add isPercentage
+        const incomeItem = { date: currentDate, amount, label, isPercentage } //todo: add isPercentage
         // todo: call mututator for obligations
         // ctx.mutators.addIncomeItem(incomeItem);
         onClose();
+    }
+    const toggleSwitch = () => {
+        setIsPercentage((old) => {
+            return !old;
+        });
     }
     return (
         <Modal isVisible={isVisible}>
@@ -24,7 +30,13 @@ const AddIncomeModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({
                     <ThemedText>(relative to total income)</ThemedText>
                 </ThemedView>
                 <ThemedView style={styles.inputContainer}>
-                    {/* todo: radiobutton */}
+                    <Switch
+                        trackColor={{ false: '#767577', true: '#81b0ff' }}
+                        thumbColor={isPercentage ? '#f5dd4b' : '#f4f3f4'}
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={toggleSwitch}
+                        value={isPercentage}
+                    />
                     <ThemedText style={styles.label}>Amount/Percentage</ThemedText>
 
                 </ThemedView>
