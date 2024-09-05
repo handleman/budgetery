@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -30,15 +30,15 @@ export default function IncomeScreen() {
   const closeModal = () => {
     setModalVisible(false);
   };
+  const { incomeItems, incomeTutorialPassed } = ctx.store;
 
   useEffect(() => {
-    const { incomeItems, incomeTutorialPassed } = ctx.store;
     setIncomes(incomeItems);
     if (tutorialPassed !== incomeTutorialPassed) {
       setTutorialPassed(incomeTutorialPassed);
     }
 
-  }, [ctx.store.incomeItems, ctx.store.incomeTutorialPassed]);
+  }, [incomeItems, incomeTutorialPassed]);
 
   return (
     <>
@@ -110,6 +110,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
-    objectFit: 'cover',
+    resizeMode: 'cover',
   },
 });
