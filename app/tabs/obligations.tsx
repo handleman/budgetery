@@ -15,7 +15,7 @@ export default function ObligationScreen() {
   const [obligations, setObligations] = useState<ObligationItem[]>([]);
 
   const getStartedHandler = () => {
-    ctx.mutators.passIncomeTutorial();
+    ctx.mutators.passObligationsTutorial();
     setModalVisible(true);
   }
 
@@ -29,6 +29,7 @@ export default function ObligationScreen() {
 
   useEffect(() => {
     setObligations(obligationItems);
+    console.log(`obligationsTutorialPassed ${JSON.stringify(obligationsTutorialPassed)}`);
     if (tutorialPassed !== obligationsTutorialPassed) {
       setTutorialPassed(obligationsTutorialPassed);
     }
@@ -68,6 +69,8 @@ export default function ObligationScreen() {
             <>
                 <ThemedView style={styles.titleContainer}>
                   <ThemedText type="title">Obligatory payments</ThemedText>
+                </ThemedView>
+                <ThemedView>
                   <ThemedText>Your monthly Obligatory payments</ThemedText>
                   <ThemedText>It could be your rent, loan interest or even some subscriptions</ThemedText>
               </ThemedView>
