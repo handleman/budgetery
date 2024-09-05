@@ -5,7 +5,7 @@ import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
 import { appContext } from '@/store/context';
 
-const AddIncomeModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({ isVisible, onClose }) => {
+const AddObligationModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({ isVisible, onClose }) => {
     const ctx = useContext(appContext);
     const [amount, setAmount] = useState<number>(0);
     const [label, setLabel] = useState<string>('');
@@ -91,4 +91,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddIncomeModal;
+export default AddObligationModal;
