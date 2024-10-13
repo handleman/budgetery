@@ -53,7 +53,7 @@ export function isCurrentPeriodPassed(value: any): value is CurrentPeriod {
     const isMonthDefined = !!value?.month;
     return isNameDefined && isMonthDefined;
 }
-
+//todo: add daily budget, remaining budget, percentage amount
 export type Store = {
     incomeTutorialPassed: boolean;
     obligationsTutorialPassed: boolean;

@@ -1,6 +1,7 @@
 import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
 import { Action, CurrentPeriod, IncomeItem, ExpenseItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, Store, isExpenseItemPassed } from "./types";
 
+//todo: add percentage amount reducer. which would calculate field by given percentage
 
 function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
     return {
@@ -8,7 +9,7 @@ function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
         currentPeriod: payload,
     }
 }
-
+// todo: call percentage amount reducer on every
 function addIncomeItemReducer(store: Store, payload: IncomeItem): Store {
     return {
         ...store,

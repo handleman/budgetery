@@ -73,13 +73,13 @@ export default function ObligationScreen() {
                 <ThemedView>
                   <ThemedText>Your monthly Obligatory payments</ThemedText>
                   <ThemedText>It could be your rent, loan interest or even some subscriptions</ThemedText>
-              </ThemedView>
-              <ThemedView>
-                <Button
-                  title='Get started!'
-                  onPress={getStartedHandler}
-                />
-              </ThemedView>
+                </ThemedView>
+                <ThemedView>
+                  <Button
+                    title='Get started!'
+                    onPress={getStartedHandler}
+                  />
+                </ThemedView>
             </>
           )
         }
