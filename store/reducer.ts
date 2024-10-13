@@ -1,7 +1,7 @@
 import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
 import { Action, CurrentPeriod, IncomeItem, ExpenseItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, Store, isExpenseItemPassed } from "./types";
 
-//todo: add percentage amount reducer. which would calculate field by given percentage
+//todo: add daylyBudget reducer
 
 function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
     return {
@@ -9,22 +9,57 @@ function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
         currentPeriod: payload,
     }
 }
-// todo: call percentage amount reducer on every
-function addIncomeItemReducer(store: Store, payload: IncomeItem): Store {
+function remainingBudgetReducer(store: Store): Store {
+    const { obligationItems, totalBudget, totalPercentageObligations } = store;
+    const obligationsPlainSum = obligationItems.reduce((acc, current) => !current.isPercentage ? acc + current.amount : acc, 0);
     return {
         ...store,
-        incomeItems: [...store.incomeItems, payload],
+        remainingBudget: totalBudget - totalPercentageObligations - obligationsPlainSum,
+    };
+}
+
+function totalPercentageObligationsReducer(store: Store): Store {
+    const { totalBudget, obligationItems } = store;
+    const percentageObligations = obligationItems.reduce((acc, current) => current.isPercentage ? acc + current.amount : acc, 0);
+    const percentageApplied = totalBudget * (percentageObligations / 100);
+    return {
+        ...store,
+        totalPercentageObligations: percentageApplied,
     }
+};
+
+function totalBudgetReducer(store: Store): Store {
+    const { incomeItems } = store;
+    const incomeAmount = incomeItems.reduce((acc, current) => acc + current.amount, 0);
+    return {
+        ...store,
+        totalBudget: incomeAmount,
+    }
+};
+function addIncomeItemReducer(store: Store, payload: IncomeItem): Store {
+    const incomeAddedStore = {
+        ...store,
+        incomeItems: [...store.incomeItems, payload],
+    };
+
+    return remainingBudgetReducer(totalPercentageObligationsReducer(totalBudgetReducer(incomeAddedStore)));
 }
 
 function addObligationItemReducer(store: Store, payload: ObligationItem): Store {
-    return {
+    const obligationAddedStore = {
         ...store,
         obligationItems: [...store.obligationItems, payload],
+    };
+    const { isPercentage } = payload;
+
+    if (isPercentage) {
+        return remainingBudgetReducer(totalPercentageObligationsReducer(obligationAddedStore));
     }
+    return remainingBudgetReducer(obligationAddedStore);
 }
 
 function addExpenseItemReducer(store: Store, payload: ExpenseItem): Store {
+    //todo: call afterExpensesRemains reducer
     return {
         ...store,
         expenseItems: [...store.expenseItems, payload],

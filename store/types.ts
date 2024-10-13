@@ -63,6 +63,9 @@ export type Store = {
     incomeItems: IncomeItem[];
     obligationItems: ObligationItem[];
     expenseItems: ExpenseItem[];
+    totalBudget: number;
+    totalPercentageObligations: number;
+    remainingBudget: number;
 };
 
 export type AppContext = {
