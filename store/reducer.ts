@@ -1,7 +1,28 @@
 import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
 import { Action, CurrentPeriod, IncomeItem, ExpenseItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, Store, isExpenseItemPassed } from "./types";
 
-//todo: add daylyBudget reducer
+
+function remainsReducer(store: Store): Store {
+    const { remainingBudget, expenseItems } = store;
+    const expensesTotal = expenseItems.reduce((acc, current) => acc + current.amount, 0);
+
+    return {
+        ...store,
+        remains: remainingBudget - expensesTotal,
+    }
+}
+
+function daylyBudgetReducer(store: Store): Store {
+    const month = store.currentPeriod.month;
+    const targetDate = new Date(new Date().getFullYear(), month, 0);
+    const daysInPeriod = targetDate.getDate();
+    const { remainingBudget } = store;
+    return {
+        ...store,
+        daylyBudget: remainingBudget / daysInPeriod,
+
+    }
+}
 
 function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
     return {
@@ -42,7 +63,13 @@ function addIncomeItemReducer(store: Store, payload: IncomeItem): Store {
         incomeItems: [...store.incomeItems, payload],
     };
 
-    return remainingBudgetReducer(totalPercentageObligationsReducer(totalBudgetReducer(incomeAddedStore)));
+    return daylyBudgetReducer(
+        daylyBudgetReducer(
+            totalPercentageObligationsReducer(
+                totalBudgetReducer(incomeAddedStore)
+            )
+        )
+    );
 }
 
 function addObligationItemReducer(store: Store, payload: ObligationItem): Store {
@@ -53,17 +80,23 @@ function addObligationItemReducer(store: Store, payload: ObligationItem): Store 
     const { isPercentage } = payload;
 
     if (isPercentage) {
-        return remainingBudgetReducer(totalPercentageObligationsReducer(obligationAddedStore));
+        return daylyBudgetReducer(
+            remainingBudgetReducer(
+                totalPercentageObligationsReducer(obligationAddedStore)
+            )
+        );
     }
-    return remainingBudgetReducer(obligationAddedStore);
+    return daylyBudgetReducer(
+        remainingBudgetReducer(obligationAddedStore)
+    );
 }
 
 function addExpenseItemReducer(store: Store, payload: ExpenseItem): Store {
-    //todo: call afterExpensesRemains reducer
-    return {
+    const expenseAdded = {
         ...store,
         expenseItems: [...store.expenseItems, payload],
     }
+    return remainsReducer(expenseAdded);
 }
 
 

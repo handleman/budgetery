@@ -19,6 +19,8 @@ const defaultStore: Store = {
     totalBudget: 0,
     totalPercentageObligations: 0,
     remainingBudget: 0,
+    daylyBudget: 0,
+    remains: 0,
 };
 
 export const appContext = createContext<AppContext>({
