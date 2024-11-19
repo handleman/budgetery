@@ -9,12 +9,17 @@ import { useContext, useState, useEffect } from 'react';
 import { appContext } from '@/store/context';
 import AddIncomeModal from '@/components/modal/AddIncomeModal';
 import { IncomeItem } from '@/store/types';
+import Hr from '@/components/Hr';
 
 export default function IncomeScreen() {
 
   const ctx = useContext(appContext);
-  const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.incomeTutorialPassed);
+  const { incomeItems, incomeTutorialPassed, totalBudget, remainingBudget, daylyBudget } = ctx.store;
+  const [tutorialPassed, setTutorialPassed] = useState<boolean>(incomeTutorialPassed);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [total, setTotal] = useState<number>(totalBudget);
+  const [remainingBudgetValue, setRemainingBudgetValue] = useState<number>(remainingBudget);
+  const [daylyBudgetValue, setDaylyBudgetValue] = useState<number>(remainingBudget);
 
   const [incomes, setIncomes] = useState<IncomeItem[]>([]);
 
@@ -30,7 +35,7 @@ export default function IncomeScreen() {
   const closeModal = () => {
     setModalVisible(false);
   };
-  const { incomeItems, incomeTutorialPassed } = ctx.store;
+
 
   useEffect(() => {
     setIncomes(incomeItems);
@@ -39,6 +44,18 @@ export default function IncomeScreen() {
     }
 
   }, [incomeItems, incomeTutorialPassed]);
+
+  useEffect(() => {
+    setTotal(totalBudget);
+  }, [totalBudget]);
+
+  useEffect(() => {
+    setRemainingBudgetValue(remainingBudget);
+  }, [remainingBudget]);
+
+  useEffect(() => {
+    setDaylyBudgetValue(daylyBudgetValue);
+  }, [daylyBudgetValue]);
 
   return (
     <>
@@ -61,6 +78,22 @@ export default function IncomeScreen() {
                   <ThemedText>{income.label}</ThemedText>
                 </ThemedView>
               ))}
+              <Hr />
+              <ThemedView>
+                <ThemedText>
+                  Totatl amount: {total}
+                </ThemedText>
+              </ThemedView>
+              <ThemedView>
+                <ThemedText>
+                  Remaining budget: {remainingBudgetValue}
+                </ThemedText>
+              </ThemedView>
+              <ThemedView>
+                <ThemedText>
+                  Daily budget: {daylyBudgetValue}
+                </ThemedText>
+              </ThemedView>
               <Button
                 title='Add more!'
                 onPress={addMoreHandler}
