@@ -3,12 +3,10 @@ import { Action, CurrentPeriod, IncomeItem, ExpenseItem, isCurrentPeriodPassed, 
 
 
 function remainsReducer(store: Store): Store {
-    const { remainingBudget, expenseItems } = store;
-    const expensesTotal = expenseItems.reduce((acc, current) => acc + current.amount, 0);
-
+    const { remainingBudget, expenseItems, totalExpenses } = store;
     return {
         ...store,
-        remains: remainingBudget - expensesTotal,
+        remains: remainingBudget - totalExpenses,
     }
 }
 
@@ -105,12 +103,25 @@ function addObligationItemReducer(store: Store, payload: ObligationItem): Store 
     );
 }
 
+function totalExpensesReducer(store: Store): Store {
+    const { expenseItems } = store;
+    const totalExpensesApplied = expenseItems.reduce((acc, current) => acc + current.amount, 0);
+    return {
+        ...store,
+        totalExpenses: totalExpensesApplied,
+    }
+};
+
 function addExpenseItemReducer(store: Store, payload: ExpenseItem): Store {
     const expenseAdded = {
         ...store,
         expenseItems: [...store.expenseItems, payload],
     }
-    return remainsReducer(expenseAdded);
+    return remainsReducer(
+        totalExpensesReducer(
+            expenseAdded
+        )
+    );
 }
 
 

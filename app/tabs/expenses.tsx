@@ -8,12 +8,16 @@ import { useContext, useEffect, useState } from 'react';
 import { appContext } from '@/store/context';
 import { ExpenseItem } from '@/store/types';
 import AddExpenseModal from '@/components/modal/AddExpenseModal';
+import Hr from '@/components/Hr';
 
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
-  const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.expensesTutorialPassed);
+  const { expenseItems, expensesTutorialPassed, remains, totalExpenses } = ctx.store;
+  const [tutorialPassed, setTutorialPassed] = useState<boolean>(expensesTutorialPassed);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
+  const [remainsValue, setRemainsValue] = useState<number>(remains);
+  const [totalExpensesValue, setTotalExpensesValue] = useState<number>(totalExpenses);
 
   const getStartedHandler = () => {
     ctx.mutators.passExpensesTutorial();
@@ -26,7 +30,7 @@ export default function ExpensesScreen() {
   const closeModal = () => {
     setModalVisible(false);
   };
-  const { expenseItems, expensesTutorialPassed } = ctx.store;
+
 
   useEffect(() => {
     setExpenses(expenseItems);
@@ -35,6 +39,14 @@ export default function ExpensesScreen() {
     }
 
   }, [expenseItems, expensesTutorialPassed]);
+
+  useEffect(() => {
+    setRemainsValue(remains);
+  }, [remains]);
+
+  useEffect(() => {
+    setTotalExpensesValue(totalExpenses);
+  }, [totalExpenses]);
 
   return (
     <>
@@ -59,6 +71,17 @@ export default function ExpensesScreen() {
                   </ThemedView>
                 ))
               }
+              <Hr />
+              <ThemedView>
+                <ThemedText>
+                  Remains: {remainsValue}
+                </ThemedText>
+              </ThemedView>
+              <ThemedView>
+                <ThemedText>
+                  Total expenses {totalExpensesValue}
+                </ThemedText>
+              </ThemedView>
               <Button
                 title='Add more!'
                 onPress={addMoreHandler}

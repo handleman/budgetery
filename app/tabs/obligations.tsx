@@ -83,7 +83,7 @@ export default function ObligationScreen() {
               </ThemedView>
               <ThemedView>
                 <ThemedText>
-                  remains: {remainingBudgetValue}
+                  Remaining budget: {remainingBudgetValue}
                 </ThemedText>
               </ThemedView>
               <ThemedView>

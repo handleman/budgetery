@@ -66,6 +66,7 @@ export type Store = {
     totalBudget: number;
     totalPercentageObligations: number;
     totalObligations: number;
+    totalExpenses: number;
     remainingBudget: number;
     daylyBudget: number;
     remains: number;
