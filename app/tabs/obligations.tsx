@@ -9,10 +9,14 @@ import AddObligationModal from '@/components/modal/AddObligationModal';
 
 export default function ObligationScreen() {
   const ctx = useContext(appContext);
-  const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.obligationsTutorialPassed);
+  const { obligationItems, obligationsTutorialPassed, totalObligations, remainingBudget, daylyBudget } = ctx.store;
+  const [tutorialPassed, setTutorialPassed] = useState<boolean>(obligationsTutorialPassed);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
   const [obligations, setObligations] = useState<ObligationItem[]>([]);
+  const [totalObligationsValue, setTotalObligationsValue] = useState<number>(0);
+  const [remainingBudgetValue, setRemainingBudgetValue] = useState<number>(remainingBudget);
+  const [daylyBudgetValue, setDaylyBudgetValue] = useState<number>(daylyBudget);
 
   const getStartedHandler = () => {
     ctx.mutators.passObligationsTutorial();
@@ -25,16 +29,28 @@ export default function ObligationScreen() {
   const closeModal = () => {
     setModalVisible(false);
   };
-  const { obligationItems, obligationsTutorialPassed } = ctx.store;
+
 
   useEffect(() => {
     setObligations(obligationItems);
-    console.log(`obligationsTutorialPassed ${JSON.stringify(obligationsTutorialPassed)}`);
+
     if (tutorialPassed !== obligationsTutorialPassed) {
       setTutorialPassed(obligationsTutorialPassed);
     }
 
   }, [obligationItems, obligationsTutorialPassed]);
+
+  useEffect(() => {
+    setTotalObligationsValue(totalObligations);
+  }, [totalObligations]);
+
+  useEffect(() => {
+    setRemainingBudgetValue(remainingBudget);
+  }, [remainingBudget]);
+
+  useEffect(() => {
+    setDaylyBudgetValue(daylyBudgetValue);
+  }, [daylyBudgetValue]);
 
   return (
     <>
@@ -60,6 +76,21 @@ export default function ObligationScreen() {
                   </ThemedView>
                 ))
               }
+              <ThemedView>
+                <ThemedText>
+                  Total amount: {totalObligationsValue}
+                </ThemedText>
+              </ThemedView>
+              <ThemedView>
+                <ThemedText>
+                  remains: {remainingBudgetValue}
+                </ThemedText>
+              </ThemedView>
+              <ThemedView>
+                <ThemedText>
+                  Daily budget: {daylyBudgetValue}
+                </ThemedText>
+              </ThemedView>
               <Button
                 title='Add more!'
                 onPress={addMoreHandler}

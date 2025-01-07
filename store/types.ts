@@ -65,6 +65,7 @@ export type Store = {
     expenseItems: ExpenseItem[];
     totalBudget: number;
     totalPercentageObligations: number;
+    totalObligations: number;
     remainingBudget: number;
     daylyBudget: number;
     remains: number;

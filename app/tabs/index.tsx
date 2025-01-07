@@ -19,7 +19,7 @@ export default function IncomeScreen() {
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [total, setTotal] = useState<number>(totalBudget);
   const [remainingBudgetValue, setRemainingBudgetValue] = useState<number>(remainingBudget);
-  const [daylyBudgetValue, setDaylyBudgetValue] = useState<number>(remainingBudget);
+  const [daylyBudgetValue, setDaylyBudgetValue] = useState<number>(daylyBudget);
 
   const [incomes, setIncomes] = useState<IncomeItem[]>([]);
 

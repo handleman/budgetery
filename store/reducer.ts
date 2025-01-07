@@ -31,11 +31,10 @@ function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
     }
 }
 function remainingBudgetReducer(store: Store): Store {
-    const { obligationItems, totalBudget, totalPercentageObligations } = store;
-    const obligationsPlainSum = obligationItems.reduce((acc, current) => !current.isPercentage ? acc + current.amount : acc, 0);
+    const { totalBudget, totalObligations } = store;
     return {
         ...store,
-        remainingBudget: totalBudget - totalPercentageObligations - obligationsPlainSum,
+        remainingBudget: totalBudget - totalObligations,
     };
 }
 
@@ -46,6 +45,15 @@ function totalPercentageObligationsReducer(store: Store): Store {
     return {
         ...store,
         totalPercentageObligations: percentageApplied,
+    }
+};
+function totalObligationsReducer(store: Store): Store {
+    const { obligationItems, totalPercentageObligations } = store;
+    const obligationsPlainSum = obligationItems.reduce((acc, current) => !current.isPercentage ? acc + current.amount : acc, 0);
+    const totalObligationsApplied = obligationsPlainSum + totalPercentageObligations;
+    return {
+        ...store,
+        totalObligations: totalObligationsApplied,
     }
 };
 
@@ -82,12 +90,18 @@ function addObligationItemReducer(store: Store, payload: ObligationItem): Store 
     if (isPercentage) {
         return daylyBudgetReducer(
             remainingBudgetReducer(
-                totalPercentageObligationsReducer(obligationAddedStore)
+                totalObligationsReducer(
+                    totalPercentageObligationsReducer(obligationAddedStore)
+                )
             )
         );
     }
     return daylyBudgetReducer(
-        remainingBudgetReducer(obligationAddedStore)
+        remainingBudgetReducer(
+            totalObligationsReducer(
+                obligationAddedStore
+            )
+        )
     );
 }
 
