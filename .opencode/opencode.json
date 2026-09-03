@@ -26,15 +26,32 @@
       "description": "Build and compile the app",
       "mode": "primary"
     },
-    "test-guardian": {
+"test-guardian": {
       "model": "anthropic/claude-3-5-sonnet-20241022",
-      "description": "Guard against rewriting files that are covered by unit tests",
+      "description": "Guard against rewriting source files during unit test writing. Auto-detects .test.ts paired sources and asks permission before blocking edits.",
       "mode": "subagent",
+      "auto-scan": true,
+      "detectors": [
+        {
+          "type": "file-pattern",
+          "pattern": "**/*.{ts,tsx,js,jsx}",
+          "paired_test": "**/*.test.ts",
+          "scanDirectories": ["app", "hooks", "components", "store"],
+          "exclusions": []
+        }
+      ],
+      "rules": [
+        {
+          "trigger": "conversation mentions unit tests + file detected",
+          "action": "ask_permission_then_block",
+          "scope": "${detected_source_files}",
+          "exclusions": []
+        }
+      ],
       "permission": {
         "edit": "ask"
       }
-    }
-  },
+    },
   "plugin": [
     "opencode-browser"
   ]

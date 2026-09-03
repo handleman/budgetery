@@ -1,0 +1,11 @@
+{
+  "blocking": {
+    "on_test_edit_conversation": "ask_user",
+    "on_source_rewrite_detected": "check_protection_flags",
+    "response_message_template": "[BLOCKED] Cannot edit {filename} - unit test writing in progress. Need permission to override.",
+    "protection_reasons": [
+      "unit tests being written for this file",
+      "test file detected in companion mode"
+    ]
+  }
+}
