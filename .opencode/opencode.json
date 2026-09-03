@@ -3,7 +3,20 @@
   "mcp": {
     "context7": {
       "type": "local",
-      "command": ["npx", "-y", "@upstash/context7-mcp"],
+      "command": [
+        "npx",
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "enabled": true
+    },
+    "browsermcp": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@browsermcp/mcp@0.1.3"
+      ],
       "enabled": true
     }
   },
@@ -12,16 +25,17 @@
       "model": "anthropic/claude-3-5-sonnet-20241022",
       "description": "Build and compile the app",
       "mode": "primary"
-    }
-  },
-  "agent": {
+    },
     "test-guardian": {
-      "model": "anthropic/claude-3-5-sonnet-20241022", 
+      "model": "anthropic/claude-3-5-sonnet-20241022",
       "description": "Guard against rewriting files that are covered by unit tests",
       "mode": "subagent",
       "permission": {
         "edit": "ask"
       }
     }
-  }
+  },
+  "plugin": [
+    "opencode-browser"
+  ]
 }
