@@ -1,50 +1,67 @@
-# Welcome to your Expo app 👋
+# Budgetery
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A budget tracking application built entirely free on a home computer using open source tools.
 
-## Get started
+## Made With
 
-1. Install dependencies
+- **opencode** - AI coding assistant for streamlined development
+- **Qwen Model (locally)** - Open-source LLM running locally for code generation and reasoning
+- **Expo/React Native** - Cross-platform mobile framework
+- **TypeScript** - Type-safe JavaScript
+- **Jest** - Testing framework
 
-   ```bash
-   npm install
-   ```
+## Goal
 
-2. Start the app
+This project demonstrates how to build modern applications completely free on a usual home computer, specifically targeting current entry-level hardware like:
 
-   ```bash
-    npx expo start
-   ```
+- Mac mini (M1/M2/M3)
+- Entry-level MacBooks  
+- Standard laptops with 8GB+ RAM
 
-In the output, you'll find options to open the app in a
+Everything runs locally without needing expensive cloud subscriptions or internet data charges.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Local-first Development Philosophy
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- All AI processing happens on your machine via local LLMs
+- No recurring subscription costs for development tools
+- Full control over your data and dependencies
+- Works offline after initial setup
 
-## Get a fresh project
-
-When you're ready, run:
+## Getting Started
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Then run one of:
+- `npm run ios` - iOS simulator  
+- `npm run android` - Android emulator
+- `npm run web` - Web development server
 
-## Learn more
+## Testing
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npm test
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Architecture
 
-## Join the community
+See [AGENTS.md](./AGENTS.md) for detailed notes on:
 
-Join our community of developers creating universal apps.
+- State management with reducers in `store/`
+- File-based routing via `expo-router`  
+- Tab navigation structure
+- Component organization
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Why Build Locally?
+
+1. **Zero development costs** - No cloud APIs needed
+2. **Data privacy** - Your code and data never leaves your machine
+3. **Internet independence** - Develop offline once setup is complete
+4. **Customizable AI** - Tune Qwen model locally for your use case
+5. **Open source stack** - Full transparency and control
+
+## License
+
+MIT

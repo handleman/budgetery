@@ -1,5 +1,4 @@
-export default {
+module.exports = {
   preset: 'jest-expo',
-  setupFilesAfterEnv: ['@testing-library/react-native/jest'],
-  testEnvironment: 'jsdom',
+  transformIgnorePatterns: ['node_modules/(?!.*\\.s?css)$'],
 };

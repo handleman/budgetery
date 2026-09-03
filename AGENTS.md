@@ -6,8 +6,8 @@ npm install
 npx expo start
 ```
 
-## Testing
-No test scripts are configured for CI usage; `test` runs Jest in watch mode. If adding tests, add scripts like:
+## Testing  
+Skip for now or add scripts:
 - `"test:single": "jest path/to/test"`
 - `"test:ci": "jest --ci --coverage"`
 
@@ -16,7 +16,7 @@ No test scripts are configured for CI usage; `test` runs Jest in watch mode. If 
 - State stored as a Context + reducer in `store/`
 - Tabs live in `app/tabs/`: `index.tsx`, `expenses.tsx`, `obligations.tsx`
 
-## Build commands
+## Build commands  
 ```bash
 npm run ios    # iOS simulator
 npm run android # Android emulator
@@ -32,3 +32,4 @@ npx expo reset-project
 ## TypeScript
 - Uses `expo/tsconfig.base` with `"@/*" => "./*"` path mapping
 - TS error blocking is normal during edits; verify changes compile cleanly before committing
+
