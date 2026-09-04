@@ -2,7 +2,7 @@ import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
 import { Action, CurrentPeriod, IncomeItem, ExpenseItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, Store, isExpenseItemPassed } from "./types";
 
 
-function remainsReducer(store: Store): Store {
+export function remainsReducer(store: Store): Store {
     const { remainingBudget, expenseItems, totalExpenses } = store;
     return {
         ...store,
@@ -10,7 +10,7 @@ function remainsReducer(store: Store): Store {
     }
 }
 
-function daylyBudgetReducer(store: Store): Store {
+export function daylyBudgetReducer(store: Store): Store {
     const month = store.currentPeriod.month;
     const targetDate = new Date(new Date().getFullYear(), month, 0);
     const daysInPeriod = targetDate.getDate();
@@ -22,13 +22,13 @@ function daylyBudgetReducer(store: Store): Store {
     }
 }
 
-function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
+export function currentPeriodReducer(store: Store, payload: CurrentPeriod): Store {
     return {
         ...store,
         currentPeriod: payload,
     }
 }
-function remainingBudgetReducer(store: Store): Store {
+export function remainingBudgetReducer(store: Store): Store {
     const { totalBudget, totalObligations } = store;
     return {
         ...store,
@@ -36,7 +36,7 @@ function remainingBudgetReducer(store: Store): Store {
     };
 }
 
-function totalPercentageObligationsReducer(store: Store): Store {
+export function totalPercentageObligationsReducer(store: Store): Store {
     const { totalBudget, obligationItems } = store;
     const percentageObligations = obligationItems.reduce((acc, current) => current.isPercentage ? acc + current.amount : acc, 0);
     const percentageApplied = totalBudget * (percentageObligations / 100);
@@ -45,7 +45,7 @@ function totalPercentageObligationsReducer(store: Store): Store {
         totalPercentageObligations: percentageApplied,
     }
 };
-function totalObligationsReducer(store: Store): Store {
+export function totalObligationsReducer(store: Store): Store {
     const { obligationItems, totalPercentageObligations } = store;
     const obligationsPlainSum = obligationItems.reduce((acc, current) => !current.isPercentage ? acc + current.amount : acc, 0);
     const totalObligationsApplied = obligationsPlainSum + totalPercentageObligations;
@@ -55,7 +55,7 @@ function totalObligationsReducer(store: Store): Store {
     }
 };
 
-function totalBudgetReducer(store: Store): Store {
+export function totalBudgetReducer(store: Store): Store {
     const { incomeItems } = store;
     const incomeAmount = incomeItems.reduce((acc, current) => acc + current.amount, 0);
     return {

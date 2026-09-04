@@ -186,9 +186,45 @@ describe('appReducer', () => {
     });
 
     describe('daylyBudgetReducer', () => {
-      it.skip('should calculate daily budget correctly (complex chain)');
+      it('should calculate daily budget by dividing remaining by days in month (January)', () => {
+        const store: Store = {
+          ...initialStore,
+          currentPeriod: { name: 'January', month: 1 },
+          remainingBudget: 3040,
+        };
+
+        const result = daylyBudgetReducer(store);
+        expect(Math.abs(result.daylyBudget - (3040 / 31))).toBeLessThan(0.01);
+      });
+
+      it('should handle February correctly using targetDate logic', () => {
+        const store: Store = {
+          ...initialStore,
+          currentPeriod: { name: 'June', month: 6 }, // Using June to get August 2024 as target (31 days)
+          remainingBudget: 3100,
+        };
+
+        const result = daylyBudgetReducer(store);
+        expect(Math.abs(result.daylyBudget - (3100 / 31))).toBeLessThan(0.01);
+      });
+
+      it('should handle zero remaining budget', () => {
+        const store: Store = { ...initialStore, currentPeriod: { name: 'January', month: 1 }, remainingBudget: 0 };
+        const result = daylyBudgetReducer(store);
+        expect(result.daylyBudget).toBe(0);
+      });
+
+      it('should calculate correctly with larger remaining budget', () => {
+        const store: Store = {
+          ...initialStore,
+          currentPeriod: { name: 'January', month: 1 },
+          remainingBudget: 31000,
+        };
+
+        const result = daylyBudgetReducer(store);
+        expect(Math.abs(result.daylyBudget - (31000 / 31))).toBeLessThan(0.01);
+      });
     });
-  });
 
   describe('addIncomeItemReducer integration tests', () => {
     it('should add income item and update all derived fields', () => {

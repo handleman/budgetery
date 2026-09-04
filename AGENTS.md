@@ -16,6 +16,11 @@ Skip for now or add scripts:
 - State stored as a Context + reducer in `store/`
 - Tabs live in `app/tabs/`: `index.tsx`, `expenses.tsx`, `obligations.tsx`
 
+## Writing Design & Documentation Plans
+- All design implementation plans (e.g., test plans, architecture docs) MUST be written as `.md` files in `docs/` folder
+- Place strategic documentation including use cases, feature specs, and architectural decisions in `docs/`
+- See existing: `docs/usecases.md`, `docs/TEST_COVERAGE_SUMMARY.md`
+
 ## Build commands  
 ```bash
 npm run ios    # iOS simulator

@@ -17,12 +17,23 @@
         "-y",
         "@browsermcp/mcp@0.1.3"
       ],
+      "environment": {
+        "PATH": "{env:PATH}"
+      },
       "enabled": true
     }
   },
   "agent": {
+    // 1. Configure the primary build routine to hook into your subagent
+    "build": {
+      "subagents": [
+        "test-guardian"
+      ]
+    },
+
+    // 2. Your test guardian runs quietly in the background under the build routine
     "test-guardian": {
-      "model": "qwen35-agent",
+      "model": "ollama:qwen35-agent", // Using colon mapping for global local endpoint
       "description": "Guard against rewriting source files during unit test writing. Auto-detects .test.ts paired sources and asks permission before blocking edits.",
       "mode": "subagent",
       "auto-scan": true,
