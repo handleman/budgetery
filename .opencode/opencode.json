@@ -1,4 +1,4 @@
-{
+{ 
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "context7": {
@@ -21,13 +21,8 @@
     }
   },
   "agent": {
-    "build": {
-      "model": "anthropic/claude-3-5-sonnet-20241022",
-      "description": "Build and compile the app",
-      "mode": "primary"
-    },
-"test-guardian": {
-      "model": "anthropic/claude-3-5-sonnet-20241022",
+    "test-guardian": {
+      "model": "qwen35-agent",
       "description": "Guard against rewriting source files during unit test writing. Auto-detects .test.ts paired sources and asks permission before blocking edits.",
       "mode": "subagent",
       "auto-scan": true,
@@ -51,7 +46,8 @@
       "permission": {
         "edit": "ask"
       }
-    },
+    }
+  },
   "plugin": [
     "opencode-browser"
   ]
