@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hr should render with border-bottom style 1`] = `
+<View
+  style={
+    {
+      "borderBottomColor": "#000",
+      "borderBottomWidth": 1,
+      "marginVertical": 10,
+    }
+  }
+/>
+`;

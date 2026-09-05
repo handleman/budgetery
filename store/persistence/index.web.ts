@@ -1,0 +1,1 @@
+export { PersistenceService } from './service';
