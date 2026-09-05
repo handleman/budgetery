@@ -97,6 +97,10 @@ navigate("http://localhost:8081/tabs/obligations")
 - [ ] Console logs for errors/warnings
 - [ ] Tab switching functionality works after hydration
 
+## Git Remote Reference
+**Remote name:** `budgetery` (not "origin")  
+**Push command:** `git push budgetery main`
+
 ## Git Operations Available
 ```bash
 # View staged changes
