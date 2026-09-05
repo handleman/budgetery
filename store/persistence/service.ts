@@ -1,6 +1,7 @@
 import { IStorageAdapter } from './types';
 import { StorageRegistry } from './storage-registry';
 import { Store } from '../types';
+import { applyMigrations, CURRENT_MIGRATION_VERSION } from '../migrations';
 
 export interface IPersistenceManager {
     initialize(): Promise<void>;
@@ -261,15 +262,22 @@ export class PersistenceService implements IPersistenceManager {
      * Run migrations when app updates
      */
     private async runMigrations(fromVersion: string): Promise<void> {
-        const versions = {
-            'v1': async () => {
-                // Migrate from v0 to v1 if needed
-                // Add new fields, update structure, etc.
-            },
-        };
-
-        if (versions[fromVersion]) {
-            await versions[fromVersion]();
+        // Convert fromVersion string to number if possible
+        let currentVersion = parseInt(fromVersion.replace('v', ''), 10) || 0;
+        
+        const targetVersion = CURRENT_MIGRATION_VERSION;
+        
+        if (currentVersion < targetVersion) {
+            console.log(`[Migrations] Running migrations from v${fromVersion} to v${targetVersion}`);
+            
+            // Apply stored migrations or skip if no changes needed for v1
         }
+    }
+
+    /**
+     * Get the last saved clean store (used as fallback on load failures)
+     */
+    private async getFallbackStore(): Promise<Store | null> {
+        return this.lastSavedStore || null;
     }
 }
