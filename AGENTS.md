@@ -29,8 +29,73 @@ npx expo export -p web --to /Users/handleman/projects/budgetery/dist  # Create f
 - NEVER push to remote repositories without user confirmation
 - Always verify no sensitive files are staged before commit
 
-## Testing  
-Skip for now or add scripts:
+## 🧪 Testing - Real User Behavior Pattern MANDATORY
+
+### Hybrid Approach Protocol (Recommended)
+
+**Strategy:** Combine direct URL navigation with same-session hover+click to maximize test coverage.
+
+#### Phase 1: Page Load via Navigation ✅
+```bash
+navigate("http://localhost:8081/tabs")  # or any route
+browsermcp_browser_snapshot             # capture fresh refs
+```
+
+#### Phase 2: Same-Session Hover + Click ✅  
+**CRITICAL:** Do NOT take intermediate snapshots between hover and click!
+```bash
+# Take snapshot once, get ref ID
+browsermcp_browser_snapshot  # ← Get ref sXeYZ
+
+# Hover to advance page state (ref remains valid for this session)
+browsermcp_browser_hover("Income tab", "sXeYZ")
+
+# Immediately click before next snapshot changes refs
+browsermcp_browser_click("tab to switch", "sXeYZ")
+
+# → If FAILS: Don't take new snapshot first - ref regenerated!
+```
+
+#### Phase 3: Inspect Without Breaking Session ⚠️  
+Avoid `browsermcp_browser_snapshot` if already in hover+click sequence. Use browser devtools for deeper inspection instead.
+
+#### Phase 4: Next Page Test via Navigation ✅  
+When moving to different tab/route, use direct URL:
+```bash
+navigate("http://localhost:8081/tabs/expenses")  # fresh route = fresh ref session
+browsermcp_browser_snapshot  # get new refs for this page
+```
+
+### Testing Commands Pattern
+```bash
+# Export and start server
+npx expo export --platform web --output-dir dist
+python3 -m http.server 8081
+
+# Test Homepage
+navigate("http://localhost:8081/")
+browsermcp_browser_snapshot  # inspect rendered content
+
+# Test Tabs via Navigation (Recommended)
+navigate("http://localhost:8081/tabs")
+browsermcp_browser_snapshot
+
+# Same-session interaction on loaded page
+browsermcp_browser_hover("Income tab", "sXeYZ")
+browsermcp_browser_click("Income tab", "sXeYZ")  # Must be same session!
+
+# Test other tabs - each via direct navigation
+navigate("http://localhost:8081/tabs/expenses")
+navigate("http://localhost:8081/tabs/obligations")
+```
+
+### Scenarios to Cover Per Round
+- [ ] All routes load correctly via URL navigation
+- [ ] Content displays: headers, forms, images, buttons  
+- [ ] Styling verified: dark mode, fonts, responsive layouts
+- [ ] Assets bundle check: fonts, images, icons, favicon
+- [ ] Console logs for errors/warnings
+- [ ] Tab switching functionality works after hydration
 
 ## Git Operations Available
 ```bash
