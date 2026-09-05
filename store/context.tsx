@@ -1,5 +1,5 @@
-import React, { createContext, useReducer, useRef, useEffect } from 'react';
-import { ACTION_TYPES, TUTORIAL_NAMES } from './enums';
+import React, { createContext } from 'react';
+import { ACTION_TYPES, TUTORIAL_NAMES, CURRENT_MIGRATION_VERSION } from './enums';
 import { AppContext, CurrentPeriod, ExpenseItem, IncomeItem, ObligationItem, Store } from './types';
 import { appReducer } from './reducer';
 import { PersistenceService } from '../persistence/service';
