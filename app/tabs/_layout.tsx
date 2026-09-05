@@ -17,6 +17,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          href: undefined,  // Keep as main tab (no direct URL)
           title: 'Income',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'wallet' : 'wallet-outline'} color={color} />

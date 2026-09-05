@@ -45,3 +45,14 @@ Format: "As a user I want to [action] and get [result]"
 
 - As a user I want comprehensive unit tests for each reducer function and get confidence in calculations
 - As a user I want type validation to catch errors early and get clean TypeScript compilation
+
+## Web-Specific Features
+
+- As a user I want static HTML generation so pages load instantly without API calls on initial visit
+- As a user I want meta viewport optimized for responsive design across devices and browsers
+- As a user I want accessible screen-reader support with aria-* props maintained from React Native components
+- As a user I want SEO-friendly semantic HTML when exporting routes for search engine discovery
+- As a user I want graceful fallback on browser incompatibilities via CDN fallback paths
+- As a user I want PWA manifest support for app installation and offline capabilities
+- As a user I want progressive enhancement so web features work without JavaScript
+- As a user I want social sharing meta tags for Open Graph cards when linked from external sites
