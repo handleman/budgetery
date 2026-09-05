@@ -1,8 +1,11 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useRef, useEffect } from 'react';
 import { ACTION_TYPES, TUTORIAL_NAMES } from './enums';
 import { AppContext, CurrentPeriod, ExpenseItem, IncomeItem, ObligationItem, Store } from './types';
 import { appReducer } from './reducer';
+import { PersistenceService } from '../persistence/service';
 
+// Create singleton persistence service
+const persistence = new PersistenceService();
 
 const defaultStore: Store = {
     incomeTutorialPassed: false,
@@ -39,11 +42,35 @@ export const appContext = createContext<AppContext>({
     }
 });
 
-
-
-``
 const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [store, dispatch] = useReducer(appReducer, defaultStore);
+    const initialized = useRef(false);
+    
+    // Hydrate from storage when first loaded
+    useEffect(() => {
+        if (initialized.current) return;
+        
+        persistence.initialize().then(async () => {
+            try {
+                const hydratedStore = await persistence.load();
+                
+                if (hydratedStore && persistence.isValidStore(hydratedStore)) {
+                    dispatch({ type: 'LOAD_STORE', payload: hydratedStore });
+                    
+                    // Ensure the loaded store is persisted back in case of any changes
+                    await persistence.save(hydratedStore);
+                }
+
+                initialized.current = true;
+            } catch (error) {
+                console.error('Hydration error:', error);
+                // Continue without persisted data (graceful degradation)
+                initialized.current = true;
+            }
+        }).catch(console.error);
+        
+        return () => undefined; // Cleanup not needed
+    }, []);
 
     function passIncomeTutorial() {
         dispatch({ type: ACTION_TYPES.PASS_TUTORIAL, payload: TUTORIAL_NAMES.income });
@@ -89,6 +116,6 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     >
         {children}
     </appContext.Provider>
-}
+};
 
 export default AppContextProvider;
