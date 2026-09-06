@@ -18,6 +18,18 @@ jest.mock('react-native-reanimated', () => {
   };
 });
 
+// The tab screens mount the real Add*Modal (hidden). Its third-party Modal
+// calls the removed BackHandler.removeEventListener on unmount under RN 0.79,
+// so stub it the same way the modal suites do.
+jest.mock('react-native-modal', () => {
+  const React = require('react');
+  function MockModal({ children, isVisible }: { children?: React.ReactNode; isVisible?: boolean }) {
+    if (!isVisible) return null;
+    return React.createElement(React.Fragment, null, children);
+  }
+  return { __esModule: true, default: MockModal };
+});
+
 describe('IncomeScreen (app/tabs/index.tsx)', () => {
 
   describe('Component Structure', () => {
@@ -29,7 +41,9 @@ describe('IncomeScreen (app/tabs/index.tsx)', () => {
       });
 
       expect(tree!.toJSON()).toBeDefined();
-      tree!.unmount();
+      renderer.act(() => {
+        tree!.unmount();
+      });
     });
 
     it('should have Get started button in initial state', () => {
@@ -39,7 +53,9 @@ describe('IncomeScreen (app/tabs/index.tsx)', () => {
       });
 
       expect(tree!.toJSON()).toBeDefined();
-      tree!.unmount();
+      renderer.act(() => {
+        tree!.unmount();
+      });
     });
 
   });
@@ -54,7 +70,9 @@ describe('IncomeScreen (app/tabs/index.tsx)', () => {
 
       // Snapshot test for initial state
       expect(tree!.toJSON()).toMatchSnapshot();
-      tree!.unmount();
+      renderer.act(() => {
+        tree!.unmount();
+      });
     });
 
     it.todo('should show modal when getStartedHandler is pressed (requires mocking context)');

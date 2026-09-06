@@ -16,8 +16,22 @@ jest.mock('react-native-modal', () => {
   return { __esModule: true, default: MockModal };
 });
 
+// React 19 renders concurrently: create AND unmount must run inside act(),
+// otherwise effects flush after teardown and crash the worker.
+function renderTree(element: React.ReactElement) {
+  let tree: renderer.ReactTestRenderer | undefined;
+  renderer.act(() => {
+    tree = renderer.create(element);
+  });
+  const json = tree!.toJSON();
+  renderer.act(() => {
+    tree!.unmount();
+  });
+  return json;
+}
+
 describe('AddIncomeModal', () => {
-  
+
   const mockDispatch = jest.fn();
 
   const mockStore: any = {
@@ -48,17 +62,17 @@ describe('AddIncomeModal', () => {
 
   describe('Component Structure', () => {
     it('should render when visible is true', () => {
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddIncomeModal isVisible={true} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toMatchSnapshot();
     });
 
     it('should not render when visible is false', () => {
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddIncomeModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       // Modal component renders differently based on library implementation
       expect(tree).toBeDefined();
@@ -66,20 +80,20 @@ describe('AddIncomeModal', () => {
   });
 
   describe('State Management', () => {
-    
+
     it('should initialize amount to 0', () => {
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddIncomeModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
 
     it('should initialize label to empty string', () => {
       // The component renders - verify structure
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddIncomeModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
@@ -95,27 +109,27 @@ describe('AddIncomeModal', () => {
     it('should call provided onClose when Back button is pressed', () => {
       // Note: For full interactive testing, use React Native Testing Library
       // This is a structural test for snapshot purposes
-      
-      const tree = renderer.create(
+
+      const tree = renderTree(
         <AddIncomeModal isVisible={false} onClose={onCloseSpy} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
   });
 
   describe('On Submit Handler', () => {
-    
+
     it('should dispatch action when Save button is pressed with valid data', () => {
       const testAmount = 100;
       const testLabel = 'Test Income';
-      
+
       // We need to simulate the onSubmit function being called
       // This would require more complex mocking
-      
-      const tree = renderer.create(
+
+      const tree = renderTree(
         <AddIncomeModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
@@ -128,25 +142,25 @@ describe('AddIncomeModal', () => {
       };
 
       // This is a structural test
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddIncomeModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
   });
 
   describe('Modal Visibility', () => {
-    
+
     it('should change render output when isVisible prop changes from false to true', () => {
       // Structural test - modal renders based on this prop
-      const visibleTree = renderer.create(
+      const visibleTree = renderTree(
         <AddIncomeModal isVisible={true} onClose={() => {}} />,
-      ).toJSON();
+      );
 
-      const hiddenTree = renderer.create(
+      const hiddenTree = renderTree(
         <AddIncomeModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       // Modal visibility affects content - snapshots capture this
       expect(visibleTree).toBeDefined();
