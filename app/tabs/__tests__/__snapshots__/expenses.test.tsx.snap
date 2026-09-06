@@ -1,0 +1,229 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExpensesScreen (app/tabs/expenses.tsx) Tutorial State Management should show expenses tutorial content initially 1`] = `
+<View
+  style={
+    [
+      {
+        "backgroundColor": "#fff",
+      },
+      {
+        "flex": 1,
+      },
+    ]
+  }
+>
+  <ScrollView
+    scrollEventThrottle={16}
+  >
+    <View
+      style={
+        [
+          {
+            "height": 250,
+            "overflow": "hidden",
+          },
+          {
+            "backgroundColor": "#6F888C",
+          },
+          {
+            "transform": [
+              {
+                "translateY": 0,
+              },
+              {
+                "scale": 0,
+              },
+            ],
+          },
+        ]
+      }
+    >
+      <Image
+        source={1}
+        style={
+          {
+            "bottom": 0,
+            "height": 200,
+            "left": 0,
+            "position": "absolute",
+            "width": "100%",
+          }
+        }
+      />
+    </View>
+    <View
+      style={
+        [
+          {
+            "backgroundColor": "#fff",
+          },
+          {
+            "flex": 1,
+            "gap": 16,
+            "overflow": "hidden",
+            "padding": 32,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          [
+            {
+              "backgroundColor": "#fff",
+            },
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "gap": 8,
+            },
+          ]
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "color": "#11181C",
+              },
+              undefined,
+              {
+                "fontSize": 32,
+                "fontWeight": "bold",
+                "lineHeight": 32,
+              },
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+            ]
+          }
+        >
+          Daily expenses
+        </Text>
+      </View>
+      <View
+        style={
+          [
+            {
+              "backgroundColor": "#fff",
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "color": "#11181C",
+              },
+              {
+                "fontSize": 16,
+                "lineHeight": 24,
+              },
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+            ]
+          }
+        >
+          You can enter several values in a row, separated by comma
+        </Text>
+        <Text
+          style={
+            [
+              {
+                "color": "#11181C",
+              },
+              {
+                "fontSize": 16,
+                "lineHeight": 24,
+              },
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+            ]
+          }
+        >
+          your casual daily expenses
+        </Text>
+      </View>
+      <View
+        style={
+          [
+            {
+              "backgroundColor": "#fff",
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "opacity": 1,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {},
+              ]
+            }
+          >
+            <Text
+              style={
+                [
+                  {
+                    "color": "#007AFF",
+                    "fontSize": 18,
+                    "margin": 8,
+                    "textAlign": "center",
+                  },
+                ]
+              }
+            >
+              Add one!
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  </ScrollView>
+</View>
+`;
