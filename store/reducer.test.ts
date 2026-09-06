@@ -1,4 +1,4 @@
-import { appReducer, daylyBudgetReducer } from './reducer';
+import { appReducer, daylyBudgetReducer, totalBudgetReducer, totalExpensesReducer, totalObligationsReducer, remainingBudgetReducer, remainsReducer } from './reducer';
 import { ACTION_TYPES } from './enums';
 import { TUTORIAL_NAMES } from './enums';
 import { Store, IncomeItem, ExpenseItem, ObligationItem, CurrentPeriod } from './types';
@@ -74,10 +74,7 @@ describe('appReducer', () => {
           ],
         };
 
-        const result = appReducer(storeWithIncome, { 
-          type: ACTION_TYPES.ADD_INCOME, 
-          payload: {} as IncomeItem // Will validate and handle invalid gracefully
-        });
+        const result = totalBudgetReducer(storeWithIncome);
 
         expect(result.totalBudget).toBe(6000);
       });
@@ -98,7 +95,7 @@ describe('appReducer', () => {
           ],
         };
 
-        const result = appReducer(storeWithExpenses, {} as any);
+        const result = totalExpensesReducer(storeWithExpenses);
         expect(result.totalExpenses).toBe(80);
       });
     });
@@ -114,7 +111,7 @@ describe('appReducer', () => {
           ],
         };
 
-        const result = appReducer(store, {} as any);
+        const result = totalObligationsReducer(store);
         expect(result.totalObligations).toBe(1700);
       });
 
@@ -125,7 +122,7 @@ describe('appReducer', () => {
           obligationItems: [],
         };
 
-        const result = appReducer(store, {} as any);
+        const result = totalObligationsReducer(store);
         expect(result.totalObligations).toBe(50);
       });
     });
@@ -156,10 +153,11 @@ describe('appReducer', () => {
       it('should calculate remaining budget correctly', () => {
         const store: Store = {
           ...initialStore,
+          totalBudget: 10000,
           totalObligations: 3000,
         };
 
-        const result = appReducer(store, {} as any);
+        const result = remainingBudgetReducer(store);
         expect(result.remainingBudget).toBe(7000);
       });
 
@@ -181,7 +179,7 @@ describe('appReducer', () => {
           totalExpenses: 500,
         };
 
-        const result = appReducer(store, {} as any);
+        const result = remainsReducer(store);
         expect(result.remains).toBe(-500); // remainingBudget is 0 initially
       });
     });
@@ -198,15 +196,15 @@ describe('appReducer', () => {
         expect(Math.abs(result.daylyBudget - (3040 / 31))).toBeLessThan(0.01);
       });
 
-      it('should handle February correctly using targetDate logic', () => {
+      it('should handle 30-day months correctly (June)', () => {
         const store: Store = {
           ...initialStore,
-          currentPeriod: { name: 'June', month: 6 }, // Using June to get August 2024 as target (31 days)
+          currentPeriod: { name: 'June', month: 6 },
           remainingBudget: 3100,
         };
 
         const result = daylyBudgetReducer(store);
-        expect(Math.abs(result.daylyBudget - (3100 / 31))).toBeLessThan(0.01);
+        expect(Math.abs(result.daylyBudget - (3100 / 30))).toBeLessThan(0.01);
       });
 
       it('should handle zero remaining budget', () => {

@@ -44,7 +44,7 @@ export function isObligationItemPassed(value: any): value is ObligationItem {
     const isDateDefined = !!value?.date && value.date instanceof Date;
     const isAmountDefined = !!value?.amount && typeof value.amount === 'number';
     const isLabelDefined = !!value?.label && typeof value.label === 'string';
-    const isPercentageDefined = !!value?.isPercentage && typeof value.isPercentage === 'boolean';
+    const isPercentageDefined = typeof value?.isPercentage === 'boolean';
     return isDateDefined && isAmountDefined && isLabelDefined && isPercentageDefined;
 }
 

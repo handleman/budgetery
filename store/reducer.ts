@@ -70,9 +70,11 @@ function addIncomeItemReducer(store: Store, payload: IncomeItem): Store {
     };
 
     return daylyBudgetReducer(
-        daylyBudgetReducer(
-            totalPercentageObligationsReducer(
-                totalBudgetReducer(incomeAddedStore)
+        remainingBudgetReducer(
+            totalObligationsReducer(
+                totalPercentageObligationsReducer(
+                    totalBudgetReducer(incomeAddedStore)
+                )
             )
         )
     );
@@ -103,7 +105,7 @@ function addObligationItemReducer(store: Store, payload: ObligationItem): Store 
     );
 }
 
-function totalExpensesReducer(store: Store): Store {
+export function totalExpensesReducer(store: Store): Store {
     const { expenseItems } = store;
     const totalExpensesApplied = expenseItems.reduce((acc, current) => acc + current.amount, 0);
     return {

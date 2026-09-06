@@ -2,34 +2,62 @@ import * as React from 'react';
 import renderer from 'react-test-renderer';
 import IncomeScreen from '../index';
 
+jest.mock('react-native-reanimated', () => {
+  const { View, ScrollView } = require('react-native');
+  return {
+    __esModule: true,
+    default: { View, ScrollView },
+    useAnimatedRef: jest.fn(() => ({ current: null })),
+    useScrollViewOffset: jest.fn(() => ({ value: 0 })),
+    useAnimatedStyle: jest.fn((updater: () => unknown) => updater()),
+    useSharedValue: jest.fn((initial: unknown) => ({ value: initial })),
+    interpolate: jest.fn(() => 0),
+    withTiming: jest.fn((value: unknown) => value),
+    withRepeat: jest.fn((value: unknown) => value),
+    withSequence: jest.fn((value: unknown) => value),
+  };
+});
+
 describe('IncomeScreen (app/tabs/index.tsx)', () => {
-  
+
   describe('Component Structure', () => {
-    
+
     it('should render initially without tutorial passed', () => {
-      const tree = renderer.create(<IncomeScreen />).toJSON();
-      
-      expect(tree).toBeDefined();
+      let tree: renderer.ReactTestRenderer | undefined;
+      renderer.act(() => {
+        tree = renderer.create(<IncomeScreen />);
+      });
+
+      expect(tree!.toJSON()).toBeDefined();
+      tree!.unmount();
     });
 
     it('should have Get started button in initial state', () => {
-      const tree = renderer.create(<IncomeScreen />).toJSON();
-      
-      expect(tree).toBeDefined();
+      let tree: renderer.ReactTestRenderer | undefined;
+      renderer.act(() => {
+        tree = renderer.create(<IncomeScreen />);
+      });
+
+      expect(tree!.toJSON()).toBeDefined();
+      tree!.unmount();
     });
 
   });
 
   describe('Tutorial State Management', () => {
-    
+
     it('should show income tutorial content initially', () => {
-      const tree = renderer.create(<IncomeScreen />).toJSON();
-      
+      let tree: renderer.ReactTestRenderer | undefined;
+      renderer.act(() => {
+        tree = renderer.create(<IncomeScreen />);
+      });
+
       // Snapshot test for initial state
-      expect(tree).toMatchSnapshot();
+      expect(tree!.toJSON()).toMatchSnapshot();
+      tree!.unmount();
     });
 
-    it.skip('should show modal when getStartedHandler is pressed (requires mocking context)');
+    it.todo('should show modal when getStartedHandler is pressed (requires mocking context)');
   });
 
 });
