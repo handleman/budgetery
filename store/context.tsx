@@ -51,16 +51,13 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     // Hydrate from storage when first loaded
     useEffect(() => {
         if (initialized.current) return;
-        
+
         persistence.initialize().then(async () => {
             try {
                 const hydratedStore = await persistence.load();
-                
+
                 if (hydratedStore && persistence.isValidStore(hydratedStore)) {
                     dispatch({ type: ACTION_TYPES.LOAD_STORE, payload: hydratedStore });
-                    
-                    // Ensure the loaded store is persisted back in case of any changes
-                    await persistence.save(hydratedStore);
                 }
 
                 initialized.current = true;
@@ -70,9 +67,19 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
                 initialized.current = true;
             }
         }).catch(console.error);
-        
+
         return () => undefined; // Cleanup not needed
     }, []);
+
+    // Persist on every store change once hydration finished, so user
+    // actions survive app restarts (replaces the one-off save on load).
+    useEffect(() => {
+        if (!initialized.current) return;
+
+        persistence.save(store).catch((error) => {
+            console.error('Persist error:', error);
+        });
+    }, [store]);
 
     function passIncomeTutorial() {
         dispatch({ type: ACTION_TYPES.PASS_TUTORIAL, payload: TUTORIAL_NAMES.income });

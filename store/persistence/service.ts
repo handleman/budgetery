@@ -1,7 +1,7 @@
 import { IStorageAdapter } from './types';
 import { StorageRegistry } from './storage-registry';
 import { Store } from '../types';
-import { applyMigrations, CURRENT_MIGRATION_VERSION } from '../migrations';
+import { applyMigrations } from '../migrations';
 
 export interface IPersistenceManager {
     initialize(): Promise<void>;
@@ -11,11 +11,15 @@ export interface IPersistenceManager {
     hasData(): Promise<boolean>;
 }
 
+const MAX_SAVE_ATTEMPTS = 3;
+
+function delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export class PersistenceService implements IPersistenceManager {
-    private static readonly INSTANCE_KEY = 'budgetery_persistence_service_initialized';
-    
     private static instance: PersistenceService;
-    
+
     public static getInstance(): PersistenceService {
         if (!PersistenceService.instance) {
             PersistenceService.instance = new PersistenceService();
@@ -25,63 +29,59 @@ export class PersistenceService implements IPersistenceManager {
 
     private isInitialized = false;
     private storage: IStorageAdapter | null = null;
-    private readonly storageKey = 'budgetery_store_v1';
-    // Store the last saved version of the clean store for validation
-    private lastSavedStore: Store | null = null;
+
+    /**
+     * @param storage Optional adapter to use directly (used by tests to
+     * inject a mock). When omitted, the adapter is resolved via
+     * StorageRegistry during initialize().
+     */
+    constructor(storage?: IStorageAdapter) {
+        if (storage) {
+            this.storage = storage;
+        }
+    }
 
     /**
      * Initialize persistence (call once at app startup)
      */
     public async initialize(): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            // Idempotency - if already initialized, just resolve
-            if (this.isInitialized && this.storage) {
-                console.log('[PersistenceService] Already initialized');
-                resolve();
-                return;
-            }
+        // Idempotency - if already initialized, just resolve
+        if (this.isInitialized && this.storage) {
+            return;
+        }
 
-            try {
+        try {
+            if (!this.storage) {
                 // Get registry and initialize storage adapter
                 const registry = StorageRegistry.getInstance();
                 await registry.initialize();
-                
+
                 this.storage = registry.getAdapter() || null;
-                
-                if (!this.storage) {
-                    console.warn('[PersistenceService] No storage adapter available');
-                    resolve();
-                    return;
-                }
-
-                // Initialize platform-specific setups (e.g., IndexedDB create)
-                if (typeof this.storage.init === 'function') {
-                    await this.storage.init();
-                }
-
-                this.isInitialized = true;
-                console.log('[PersistenceService] Successfully initialized');
-                
-                // Check for pending migrations
-                const currentVersion = this.getStorageVersion() || 'v0';
-                if (currentVersion !== 'v1') {
-                    await this.runMigrations(currentVersion);
-                }
-
-                resolve();
-            } catch (error) {
-                console.error('[PersistenceService] Failed to initialize:', error);
-                
-                // Graceful degradation - store can work without persistence
-                // Mark as initialized for graceful fallback mode
-                this.isInitialized = true; 
-                resolve();
             }
-        });
+
+            if (!this.storage) {
+                console.warn('[PersistenceService] No storage adapter available');
+                return;
+            }
+
+            // Initialize platform-specific setups (e.g., IndexedDB create)
+            if (typeof this.storage.init === 'function') {
+                await this.storage.init();
+            }
+
+            this.isInitialized = true;
+        } catch (error) {
+            console.error('[PersistenceService] Failed to initialize:', error);
+
+            // Graceful degradation - store can work without persistence
+            // Mark as initialized for graceful fallback mode
+            this.isInitialized = true;
+        }
     }
 
     /**
-     * Load persisted store from storage
+     * Load persisted store from storage. Applies pending migrations and
+     * normalizes missing fields so callers always get a complete Store.
      */
     public async load(): Promise<Store | null> {
         if (!this.storage) {
@@ -90,23 +90,25 @@ export class PersistenceService implements IPersistenceManager {
 
         try {
             const storedData: Store | null = await this.storage.load();
-            
-            if (storedData && storedData.currentPeriod?.month !== undefined) {
-                // Validate that the loaded data structure is compatible
-                // Future-proofing for breaking schema changes in the future
+
+            if (!storedData) {
+                return null;
             }
 
-            return storedData;
+            const migrated = (await applyMigrations(storedData)) as Store;
+            const restored = restoreDates(migrated);
+
+            return normalizeStore(restored);
         } catch (error) {
             console.error('[PersistenceService] Failed to load persisted state:', error);
-            
+
             // Return null on error - let app use default/initial data
             return null;
         }
     }
 
     /**
-     * Persist store to disk
+     * Persist store to disk, retrying with backoff on transient failures.
      */
     public async save(store: Store): Promise<void> {
         if (!this.storage) {
@@ -114,19 +116,24 @@ export class PersistenceService implements IPersistenceManager {
             return;
         }
 
-        try {
-            // Clean the store for storage (convert Dates, numbers, etc.)
-            const storedData = this.cleanStoreForStorage(store);
-            
-            await this.storage.save(storedData);
-            console.log('[PersistenceService] Saved to storage successfully');
-            
-            this.lastSavedStore = { ...store }; // Track last saved state
-            
-        } catch (error) {
-            console.error('[PersistenceService] Failed to persist state:', error);
-            throw error; // Let caller handle retry logic if needed
+        // Clean the store for storage (convert Dates, numbers, etc.)
+        const storedData = cleanStoreForStorage(store);
+
+        let lastError: unknown = null;
+        for (let attempt = 1; attempt <= MAX_SAVE_ATTEMPTS; attempt++) {
+            try {
+                await this.storage.save(storedData);
+                return;
+            } catch (error) {
+                lastError = error;
+                console.error(`[PersistenceService] Save attempt ${attempt} failed:`, error);
+                if (attempt < MAX_SAVE_ATTEMPTS) {
+                    await delay(100 * 2 ** (attempt - 1));
+                }
+            }
         }
+
+        throw lastError;
     }
 
     /**
@@ -139,8 +146,6 @@ export class PersistenceService implements IPersistenceManager {
 
         try {
             await this.storage.clear();
-            console.log('[PersistenceService] Storage cleared');
-            this.lastSavedStore = null;
         } catch (error) {
             console.error('[PersistenceService] Failed to clear storage:', error);
             throw error;
@@ -170,116 +175,144 @@ export class PersistenceService implements IPersistenceManager {
             console.warn('[PersistenceService] Not yet initialized');
             await this.initialize();
         }
-        
+
         return !!this.storage && this.isInitialized;
     }
 
     /**
-     * Get the current stored version of data (for version comparison)
-     */
-    private getStorageVersion(): string | null {
-        // This would typically be stored alongside data or extracted from storage key
-        // For now, assume single store - return latest version
-        return 'v0'; // Default for first run
-    }
-
-    /**
-     * Simple validation of loaded data before returning to UI
+     * Validation of loaded data before returning to UI. Tolerant of
+     * missing derived fields (normalizeStore fills them in) but strict
+     * about structural fields.
      */
     public isValidStore(store: any): store is Store {
-        if (!store) return false;
-        
-        // Check required fields exist with correct types
-        const isValidCurrentPeriod = 
-            store.currentPeriod && 
+        if (!store || typeof store !== 'object') return false;
+
+        const isValidCurrentPeriod =
+            !!store.currentPeriod &&
             typeof store.currentPeriod.name === 'string' &&
-            (typeof store.currentPeriod.month === 'number' || 
-             typeof store.currentPeriod.month === 'string');
+            typeof store.currentPeriod.month === 'number';
 
-        const isValidItemsArray = 
-            Array.isArray(store.incomeItems) && 
-            Array.isArray(store.obligationItems) && 
+        const isValidItemsArray =
+            Array.isArray(store.incomeItems) &&
+            Array.isArray(store.obligationItems) &&
             Array.isArray(store.expenseItems);
-        
-        const isValidNumbers = 
-            typeof store.totalBudget === 'number' &&
-            typeof store.remainingBudget === 'number' &&
-            typeof store.dayilyBudget === 'number';
 
-        return isValidCurrentPeriod && isValidItemsArray && isValidNumbers;
+        return isValidCurrentPeriod && isValidItemsArray;
     }
+}
 
-    /**
-     * Clean a store for JSON serialization (Date -> string, etc.)
-     */
-    private cleanStoreForStorage(store: Store): any {
-        const result = {} as any;
-        
-        // Convert currentPeriod if needed
-        if (store.currentPeriod && typeof store.currentPeriod.month === 'string') {
-            try {
-                const monthNum = Array.isArray(store.currentPeriod.month) 
-                    ? store.currentPeriod.month[0] 
-                    : Number(store.currentPeriod.month);
-                
-                result.currentPeriod = {
-                    name: store.currentPeriod.name || '',
-                    month: isNaN(monthNum) ? 0 : monthNum,
-                };
-            } catch (e) {}
-        } else if (store.currentPeriod) {
-            result.currentPeriod = store.currentPeriod;
+type SerializableItem = {
+    date?: Date | string;
+    amount: number;
+    label: string;
+    isPercentage?: boolean;
+};
+
+function cleanItems(items: unknown): Array<Record<string, unknown>> {
+    if (!Array.isArray(items)) return [];
+    return (items as SerializableItem[]).map((item) => ({
+        date:
+            item.date instanceof Date
+                ? item.date.toISOString()
+                : typeof item.date === 'string'
+                  ? item.date
+                  : '',
+        amount: typeof item.amount === 'number' ? item.amount : 0,
+        label: typeof item.label === 'string' ? item.label : '',
+        isPercentage: item.isPercentage === true,
+    }));
+}
+
+/**
+ * Clean a store for JSON serialization (Date -> ISO string, etc.).
+ * Preserves every Store field so round-trips are lossless.
+ */
+function cleanStoreForStorage(store: Store): Store {
+    const record = store as unknown as Record<string, unknown>;
+    const monthRaw = store.currentPeriod?.month;
+    const month =
+        typeof monthRaw === 'number'
+            ? monthRaw
+            : typeof monthRaw === 'string'
+              ? Number(monthRaw) || 0
+              : 0;
+
+    const cleaned = {
+        incomeTutorialPassed: store.incomeTutorialPassed === true,
+        obligationsTutorialPassed: store.obligationsTutorialPassed === true,
+        expensesTutorialPassed: store.expensesTutorialPassed === true,
+        welcomeTutorialPassed: store.welcomeTutorialPassed === true,
+        currentPeriod: {
+            name: store.currentPeriod?.name || '',
+            month,
+        },
+        incomeItems: cleanItems(record['incomeItems']),
+        obligationItems: cleanItems(record['obligationItems']),
+        expenseItems: cleanItems(record['expenseItems']),
+        totalBudget: toNumber(record['totalBudget']),
+        totalPercentageObligations: toNumber(record['totalPercentageObligations']),
+        totalObligations: toNumber(record['totalObligations']),
+        totalExpenses: toNumber(record['totalExpenses']),
+        remainingBudget: toNumber(record['remainingBudget']),
+        daylyBudget: toNumber(record['daylyBudget']),
+        remains: toNumber(record['remains']),
+    };
+
+    return cleaned as unknown as Store;
+}
+
+function toNumber(value: unknown): number {
+    return typeof value === 'number' && !isNaN(value) ? value : 0;
+}
+
+/**
+ * Convert ISO date strings back to Date objects for the UI layer.
+ */
+function restoreDates(store: Store): Store {
+    const restored = { ...(store as unknown as Record<string, unknown>) };
+
+    (['incomeItems', 'obligationItems', 'expenseItems'] as const).forEach((key) => {
+        const items = restored[key];
+        if (Array.isArray(items)) {
+            restored[key] = items.map((item: any) => {
+                if (item && typeof item.date === 'string' && item.date) {
+                    const parsed = new Date(item.date);
+                    if (!isNaN(parsed.getTime())) {
+                        return { ...item, date: parsed };
+                    }
+                }
+                return item;
+            });
         }
+    });
 
-        // Process item arrays - convert to serializable format
-        ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
-            const storeRecord = store as unknown as Record<string, unknown>;
-            const items = storeRecord[key] as Array<{ date?: Date | string; amount: number; label: string; isPercentage?: boolean }>;
-            
-            if (Array.isArray(items)) {
-                result[key] = items.map((item) => ({
-                    date: 
-                        item.date instanceof Date ? item.date.toISOString() : 
-                        (typeof item.date === 'string' ? item.date : ''),
-                    amount: typeof item.amount === 'number' ? item.amount : 0,
-                    label: item.label || '',
-                    isPercentage: item.isPercentage !== undefined ? item.isPercentage : false,
-                }));
-            } else {
-                result[key] = [];
-            }
-        });
+    return restored as unknown as Store;
+}
 
-        // Handle numeric fields safely
-        ['totalBudget', 'remainingBudget', 'dayilyBudget'].forEach((key) => {
-            const storeRecord = store as unknown as Record<string, unknown>;
-            const value = storeRecord[key];
-            result[key] = typeof value === 'number' ? Number(value) || 0 : (key.endsWith('udget') ? 0 : null);
-        });
-
-        return result;
-    }
-
-    /**
-     * Run migrations when app updates
-     */
-    private async runMigrations(fromVersion: string): Promise<void> {
-        // Convert fromVersion string to number if possible
-        let currentVersion = parseInt(fromVersion.replace('v', ''), 10) || 0;
-        
-        const targetVersion = CURRENT_MIGRATION_VERSION;
-        
-        if (currentVersion < targetVersion) {
-            console.log(`[Migrations] Running migrations from v${fromVersion} to v${targetVersion}`);
-            
-            // Apply stored migrations or skip if no changes needed for v1
-        }
-    }
-
-    /**
-     * Get the last saved clean store (used as fallback on load failures)
-     */
-    private async getFallbackStore(): Promise<Store | null> {
-        return this.lastSavedStore || null;
-    }
+/**
+ * Fill in missing fields with defaults so older/incomplete payloads
+ * still produce a complete Store.
+ */
+function normalizeStore(store: any): Store {
+    const record = (store || {}) as Record<string, unknown>;
+    return {
+        incomeTutorialPassed: record['incomeTutorialPassed'] === true,
+        obligationsTutorialPassed: record['obligationsTutorialPassed'] === true,
+        expensesTutorialPassed: record['expensesTutorialPassed'] === true,
+        welcomeTutorialPassed: record['welcomeTutorialPassed'] === true,
+        currentPeriod: {
+            name: (record['currentPeriod'] as any)?.name || '',
+            month: toNumber((record['currentPeriod'] as any)?.month),
+        },
+        incomeItems: Array.isArray(record['incomeItems']) ? (record['incomeItems'] as Store['incomeItems']) : [],
+        obligationItems: Array.isArray(record['obligationItems']) ? (record['obligationItems'] as Store['obligationItems']) : [],
+        expenseItems: Array.isArray(record['expenseItems']) ? (record['expenseItems'] as Store['expenseItems']) : [],
+        totalBudget: toNumber(record['totalBudget']),
+        totalPercentageObligations: toNumber(record['totalPercentageObligations']),
+        totalObligations: toNumber(record['totalObligations']),
+        totalExpenses: toNumber(record['totalExpenses']),
+        remainingBudget: toNumber(record['remainingBudget']),
+        daylyBudget: toNumber(record['daylyBudget'] ?? (record as any)['dayilyBudget']),
+        remains: toNumber(record['remains']),
+    };
 }

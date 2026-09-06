@@ -4,6 +4,18 @@ import AddObligationModal from './AddObligationModal';
 import { appContext } from '@/store/context';
 import { ObligationItem } from '@/store/types';
 
+// Stub the animated third-party Modal: it schedules animation timers that
+// outlive the Jest environment and crash full-suite runs. The stub renders
+// children synchronously so tests stay deterministic.
+jest.mock('react-native-modal', () => {
+  const React = require('react');
+  function MockModal({ children, isVisible }: { children?: React.ReactNode; isVisible?: boolean }) {
+    if (!isVisible) return null;
+    return React.createElement(React.Fragment, null, children);
+  }
+  return { __esModule: true, default: MockModal };
+});
+
 describe('AddObligationModal', () => {
   
   const mockDispatch = jest.fn();

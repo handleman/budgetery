@@ -58,30 +58,56 @@ export class MockStorageAdapter implements IStorageAdapter {
         ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
             const storeRecord = store as unknown as Record<string, unknown>;
             const items = (storeRecord[key] as unknown[]) || [];
-            
+
             if (Array.isArray(items)) {
                 result[key] = (items as any[]).map((item: any) => ({
-                    date: item.date instanceof Date ? item.date.toISOString() : '',
+                    date:
+                        item.date instanceof Date
+                            ? item.date.toISOString()
+                            : typeof item.date === 'string'
+                              ? item.date
+                              : '',
                     amount: typeof item.amount === 'number' ? item.amount : 0,
                     label: item.label || '',
-                    isPercentage: item.isPercentage !== undefined ? item.isPercentage : false,
+                    isPercentage: item.isPercentage === true,
                 }));
             } else {
                 result[key] = [];
             }
         });
 
-        ['totalBudget', 'remainingBudget', 'dayilyBudget'].forEach((key) => {
+        ['totalBudget', 'totalPercentageObligations', 'totalObligations', 'totalExpenses', 'remainingBudget', 'daylyBudget', 'remains'].forEach((key) => {
             const storeRecord = store as unknown as Record<string, unknown>;
             const value = storeRecord[key];
-            result[key] = typeof value === 'number' ? Number(value) || 0 : (key.endsWith('udget') ? 0 : null);
+            result[key] = typeof value === 'number' ? value : 0;
+        });
+
+        ['incomeTutorialPassed', 'obligationsTutorialPassed', 'expensesTutorialPassed', 'welcomeTutorialPassed'].forEach((key) => {
+            const storeRecord = store as unknown as Record<string, unknown>;
+            result[key] = storeRecord[key] === true;
         });
 
         return result;
     }
 
     private restoreDates(store: any): any {
-        // Already in date format when loading from mock - no conversion needed
-        return store;
+        const restored = { ...store };
+
+        ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
+            const items = restored[key];
+            if (Array.isArray(items)) {
+                restored[key] = items.map((item: any) => {
+                    if (item && typeof item.date === 'string' && item.date) {
+                        const parsed = new Date(item.date);
+                        if (!isNaN(parsed.getTime())) {
+                            return { ...item, date: parsed };
+                        }
+                    }
+                    return item;
+                });
+            }
+        });
+
+        return restored;
     }
 }
