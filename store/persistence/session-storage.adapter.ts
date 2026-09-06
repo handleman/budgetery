@@ -1,27 +1,31 @@
-export class SessionStorageAdapter {
+import { IStorageAdapter, StorageOperation } from './types';
+import { Store } from '../types';
+
+export class SessionStorageAdapter implements IStorageAdapter {
     private readonly storageKey = 'budgetery_store_v1';
-    
-    async load(): Promise<any | null> {
+
+    async load(): Promise<Store | null> {
         const data = sessionStorage.getItem(this.storageKey);
-        
+
         if (!data) {
             return null;
         }
 
         try {
-            return JSON.parse(data) as any;
+            const parsed = JSON.parse(data) as Store;
+            return this.restoreDates(parsed);
         } catch (error) {
             console.error('Failed to parse stored data:', error);
             return null;
         }
     }
 
-    async save(store: any): Promise<void> {
+    async save(store: Store): Promise<void> {
         try {
             const cleanedStore = this.cleanStoreForStorage(store);
-            
+
             sessionStorage.setItem(
-                this.storageKey, 
+                this.storageKey,
                 JSON.stringify(cleanedStore)
             );
         } catch (error) {
@@ -39,14 +43,44 @@ export class SessionStorageAdapter {
         }
     }
 
-    async transaction<T>(operations: any[]): Promise<T> {
-        // SessionStorage is limited - operations are typically independent
-        for (const op of operations) {
-            await this.save(null as any); // Clear and re-load
-            const data = sessionStorage.getItem(this.storageKey);
-            return JSON.parse(data || '{}') as T;
+    async transaction<T>(operations: StorageOperation[]): Promise<T | void> {
+        if (operations.length === 0) {
+            return {} as T;
         }
-        return {} as T;
+
+        // SessionStorage holds a single JSON blob: apply operations as
+        // top-level field writes/deletes, then persist the result.
+        const current = (await this.load() || {}) as unknown as Record<string, unknown>;
+        for (const op of operations) {
+            if (op.type === 'WRITE') {
+                current[op.key] = op.value;
+            } else if (op.type === 'DELETE') {
+                delete current[op.key];
+            }
+        }
+        await this.save(current as unknown as Store);
+        return current as unknown as T;
+    }
+
+    private restoreDates(store: Store): Store {
+        const restored = { ...(store as unknown as Record<string, unknown>) };
+
+        (['incomeItems', 'obligationItems', 'expenseItems'] as const).forEach((key) => {
+            const items = restored[key];
+            if (Array.isArray(items)) {
+                restored[key] = (items as any[]).map((item: any) => {
+                    if (item && typeof item.date === 'string' && item.date) {
+                        const parsed = new Date(item.date);
+                        if (!isNaN(parsed.getTime())) {
+                            return { ...item, date: parsed };
+                        }
+                    }
+                    return item;
+                });
+            }
+        });
+
+        return restored as unknown as Store;
     }
 
     private cleanStoreForStorage(store: any): Partial<Record<string, any>> {

@@ -57,8 +57,14 @@ export class IndexedDBAdapter implements IStorageAdapter {
                 if (getAllRequest.result.length === 0) {
                     resolve(null);
                 } else {
+                    const latest = getAllRequest.result[getAllRequest.result.length - 1];
+                    // Records are stored as { id, timestamp, version, data };
+                    // fall back to the record itself for legacy bare payloads.
+                    const payload = latest && typeof latest === 'object' && 'data' in latest
+                        ? (latest as { data: Store }).data
+                        : (latest as Store);
                     // Restore Date objects for UI layer
-                    resolve(this.restoreDates(getAllRequest.result[getAllRequest.result.length - 1]));
+                    resolve(this.restoreDates(payload));
                 }
             };
             
@@ -221,12 +227,15 @@ export class IndexedDBAdapter implements IStorageAdapter {
             
             ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
                 const items = restored[key] || [];
-                
+
                 if (Array.isArray(items)) {
-                    const restoredItems = items.map((item: any) => {
+                    restored[key] = items.map((item: any) => {
                         if (item.date && typeof item.date === 'string') {
                             try {
-                                item.date = new Date(item.date);
+                                const parsed = new Date(item.date);
+                                if (!isNaN(parsed.getTime())) {
+                                    return { ...item, date: parsed };
+                                }
                             } catch (e) {}
                         }
                         return item;

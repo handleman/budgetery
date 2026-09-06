@@ -131,24 +131,18 @@ export class AsyncStorageAdapter implements IStorageAdapter {
     private restoreDates(store: any): any {
         // Convert ISO strings back to Date objects for the UI layer
         const restored = { ...store };
-        
-        if (restored.currentPeriod && restored.currentPeriod.date) {
-            try {
-                restored.currentPeriod.date = new Date(restored.currentPeriod.date);
-            } catch (e) {
-                // Ignore parse errors
-            }
-        }
 
         ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
             const items = (restored[key] || []).map((item: any) => {
-                if (item.date && typeof item.date === 'string') {
-                    try {
-                        item.date = new Date(item.date);
-                    } catch (e) {}
+                if (item && typeof item.date === 'string' && item.date) {
+                    const parsed = new Date(item.date);
+                    if (!isNaN(parsed.getTime())) {
+                        return { ...item, date: parsed };
+                    }
                 }
                 return item;
             });
+            restored[key] = items;
         });
 
         return restored;

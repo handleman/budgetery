@@ -60,19 +60,7 @@ export class StorageRegistry {
                         this.currentAdapter = new SessionStorageAdapter();
                         console.log('[StorageRegistry] Using sessionStorage fallback');
                     }
-                    
-                    // For web, we may also want to add a "load demo data" mode
-                    const globalWindow = (globalThis as unknown) as Record<string, any>;
-                    const loadDemoData = globalWindow.expoConfig?.loadDemoData || false;
-                    if (loadDemoData) {
-                        // Load some sample data for testing on first run
-                        const sampleStore = await this.loadSampleData();
-                        if (sampleStore) {
-                            console.log('[StorageRegistry] Loading demo data');
-                            // But don't save it - let user start fresh or use real data later
-                        }
-                    }
-                    
+
                     break;
                 
                 default:
@@ -141,45 +129,6 @@ export class StorageRegistry {
         }
 
         return 'other';
-    }
-
-    /**
-     * Load and return demo/sample data for testing on first run
-     */
-    private async loadSampleData(): Promise<any | null> {
-        try {
-            const defaultStore: any = {
-                incomeTutorialPassed: false,
-                obligationsTutorialPassed: false,
-                expensesTutorialPassed: false,
-                welcomeTutorialPassed: false,
-                currentPeriod: {
-                    name: 'November',
-                    month: 10, // November is index 10 (0-based months)
-                },
-                incomeItems: [
-                    { date: new Date(), amount: 5000, label: 'Salary' },
-                    { date: new Date(), amount: 100, label: 'Cashback' },
-                ],
-                obligationItems: [
-                    { date: new Date(), amount: 2000, label: 'Rent', isPercentage: false },
-                    { date: new Date(), amount: 357.69, label: 'Insurance (15%)', isPercentage: true },
-                ],
-                expenseItems: [],
-                totalBudget: 5100,
-                totalPercentageObligations: 766.84,
-                totalObligations: 2766.84,
-                totalExpenses: 0,
-                remainingBudget: 2333.16,
-                dayilyBudget: 81.11, // Example value
-                remains: 2333.16,
-            };
-
-            return defaultStore;
-        } catch (error) {
-            console.error('[StorageRegistry] Failed to load sample data:', error);
-            return null;
-        }
     }
 
     private async flushPendingOperations(): Promise<void> {

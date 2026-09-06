@@ -1,102 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AddExpenseModal Component Structure should render when visible is true 1`] = `
-<Modal
-  animationType="none"
-  deviceHeight={null}
-  deviceWidth={null}
-  hardwareAccelerated={false}
-  hideModalContentWhileAnimating={false}
-  onBackdropPress={[Function]}
-  onModalHide={[Function]}
-  onModalWillHide={[Function]}
-  onModalWillShow={[Function]}
-  onRequestClose={[Function]}
-  panResponderThreshold={4}
-  scrollHorizontal={false}
-  scrollOffset={0}
-  scrollOffsetMax={0}
-  scrollTo={null}
-  statusBarTranslucent={false}
-  supportedOrientations={
-    [
-      "portrait",
-      "landscape",
-    ]
-  }
-  swipeThreshold={100}
-  transparent={true}
-  visible={true}
->
+[
   <View
-    accessibilityState={
-      {
-        "busy": undefined,
-        "checked": undefined,
-        "disabled": undefined,
-        "expanded": undefined,
-        "selected": undefined,
-      }
-    }
-    accessible={true}
-    collapsable={false}
-    focusable={true}
-    onClick={[Function]}
-    onResponderGrant={[Function]}
-    onResponderMove={[Function]}
-    onResponderRelease={[Function]}
-    onResponderTerminate={[Function]}
-    onResponderTerminationRequest={[Function]}
-    onStartShouldSetResponder={[Function]}
     style={
-      {
-        "backgroundColor": "black",
-        "bottom": 0,
-        "height": 1334,
-        "left": 0,
-        "opacity": 0,
-        "position": "absolute",
-        "right": 0,
-        "top": 0,
-        "width": 750,
-      }
-    }
-  />
-  <View
-    collapsable={false}
-    deviceHeight={null}
-    deviceWidth={null}
-    hideModalContentWhileAnimating={false}
-    onBackdropPress={[Function]}
-    onModalHide={[Function]}
-    onModalWillHide={[Function]}
-    onModalWillShow={[Function]}
-    panResponderThreshold={4}
-    pointerEvents="box-none"
-    scrollHorizontal={false}
-    scrollOffset={0}
-    scrollOffsetMax={0}
-    scrollTo={null}
-    statusBarTranslucent={false}
-    style={
-      {
-        "flex": 1,
-        "justifyContent": "center",
-        "margin": 37.5,
-        "transform": [
-          {
-            "translateY": 1334,
-          },
-        ],
-      }
-    }
-    supportedOrientations={
       [
-        "portrait",
-        "landscape",
+        {
+          "backgroundColor": "#fff",
+        },
+        {
+          "flex": 1,
+          "justifyContent": "center",
+          "padding": 16,
+        },
       ]
     }
-    swipeThreshold={100}
   >
     <View
       style={
@@ -105,110 +23,47 @@ exports[`AddExpenseModal Component Structure should render when visible is true 
             "backgroundColor": "#fff",
           },
           {
-            "flex": 1,
-            "justifyContent": "center",
-            "padding": 16,
+            "marginBottom": 16,
           },
         ]
       }
     >
-      <View
+      <Text
         style={
           [
             {
-              "backgroundColor": "#fff",
+              "color": "#11181C",
             },
             {
-              "marginBottom": 16,
+              "fontSize": 16,
+              "lineHeight": 24,
+            },
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            {
+              "fontSize": 16,
+              "marginBottom": 8,
             },
           ]
         }
       >
-        <Text
-          style={
-            [
-              {
-                "color": "#11181C",
-              },
-              {
-                "fontSize": 16,
-                "lineHeight": 24,
-              },
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              {
-                "fontSize": 16,
-                "marginBottom": 8,
-              },
-            ]
-          }
-        >
-          Amount
-        </Text>
-        <TextInput
-          keyboardType="numeric"
-          onChangeText={[Function]}
-          style={
-            {
-              "borderColor": "#ccc",
-              "borderRadius": 4,
-              "borderWidth": 1,
-              "padding": 8,
-            }
-          }
-          value=""
-        />
-      </View>
-      <View
+        Amount
+      </Text>
+      <TextInput
+        keyboardType="numeric"
+        onChangeText={[Function]}
         style={
-          [
-            {
-              "backgroundColor": "#fff",
-            },
-            {
-              "marginBottom": 16,
-            },
-          ]
+          {
+            "borderColor": "#ccc",
+            "borderRadius": 4,
+            "borderWidth": 1,
+            "padding": 8,
+          }
         }
-      >
-        <Text
-          style={
-            [
-              {
-                "color": "#11181C",
-              },
-              {
-                "fontSize": 16,
-                "lineHeight": 24,
-              },
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              {
-                "fontSize": 16,
-                "marginBottom": 8,
-              },
-            ]
-          }
-        >
-          Label
-        </Text>
-        <TextInput
-          onChangeText={[Function]}
-          style={
-            {
-              "borderColor": "#ccc",
-              "borderRadius": 4,
-              "borderWidth": 1,
-              "padding": 8,
-            }
-          }
-          value=""
-        />
-      </View>
+        value=""
+      />
     </View>
     <View
       style={
@@ -216,127 +71,175 @@ exports[`AddExpenseModal Component Structure should render when visible is true 
           {
             "backgroundColor": "#fff",
           },
-          undefined,
+          {
+            "marginBottom": 16,
+          },
         ]
       }
     >
-      <View
-        accessibilityRole="button"
-        accessibilityState={
-          {
-            "busy": undefined,
-            "checked": undefined,
-            "disabled": undefined,
-            "expanded": undefined,
-            "selected": undefined,
-          }
-        }
-        accessibilityValue={
-          {
-            "max": undefined,
-            "min": undefined,
-            "now": undefined,
-            "text": undefined,
-          }
-        }
-        accessible={true}
-        collapsable={false}
-        focusable={true}
-        onClick={[Function]}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
+      <Text
         style={
-          {
-            "opacity": 1,
-          }
+          [
+            {
+              "color": "#11181C",
+            },
+            {
+              "fontSize": 16,
+              "lineHeight": 24,
+            },
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            {
+              "fontSize": 16,
+              "marginBottom": 8,
+            },
+          ]
         }
       >
-        <View
+        Label
+      </Text>
+      <TextInput
+        onChangeText={[Function]}
+        style={
+          {
+            "borderColor": "#ccc",
+            "borderRadius": 4,
+            "borderWidth": 1,
+            "padding": 8,
+          }
+        }
+        value=""
+      />
+    </View>
+  </View>,
+  <View
+    style={
+      [
+        {
+          "backgroundColor": "#fff",
+        },
+        undefined,
+      ]
+    }
+  >
+    <View
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          [
+            {},
+          ]
+        }
+      >
+        <Text
           style={
             [
-              {},
+              {
+                "color": "#007AFF",
+                "fontSize": 18,
+                "margin": 8,
+                "textAlign": "center",
+              },
             ]
           }
         >
-          <Text
-            style={
-              [
-                {
-                  "color": "#007AFF",
-                  "fontSize": 18,
-                  "margin": 8,
-                  "textAlign": "center",
-                },
-              ]
-            }
-          >
-            Back
-          </Text>
-        </View>
-      </View>
-      <View
-        accessibilityRole="button"
-        accessibilityState={
-          {
-            "busy": undefined,
-            "checked": undefined,
-            "disabled": undefined,
-            "expanded": undefined,
-            "selected": undefined,
-          }
-        }
-        accessibilityValue={
-          {
-            "max": undefined,
-            "min": undefined,
-            "now": undefined,
-            "text": undefined,
-          }
-        }
-        accessible={true}
-        collapsable={false}
-        focusable={true}
-        onClick={[Function]}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
-        style={
-          {
-            "opacity": 1,
-          }
-        }
-      >
-        <View
-          style={
-            [
-              {},
-            ]
-          }
-        >
-          <Text
-            style={
-              [
-                {
-                  "color": "#007AFF",
-                  "fontSize": 18,
-                  "margin": 8,
-                  "textAlign": "center",
-                },
-              ]
-            }
-          >
-            Save
-          </Text>
-        </View>
+          Back
+        </Text>
       </View>
     </View>
-  </View>
-</Modal>
+    <View
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          [
+            {},
+          ]
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "color": "#007AFF",
+                "fontSize": 18,
+                "margin": 8,
+                "textAlign": "center",
+              },
+            ]
+          }
+        >
+          Save
+        </Text>
+      </View>
+    </View>
+  </View>,
+]
 `;
