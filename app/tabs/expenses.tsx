@@ -1,6 +1,5 @@
-import { Image, StyleSheet, Platform, Button } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -9,6 +8,7 @@ import { appContext } from '@/store/context';
 import { ExpenseItem } from '@/store/types';
 import AddExpenseModal from '@/components/modal/AddExpenseModal';
 import Hr from '@/components/Hr';
+import { AppButton, AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
 
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
@@ -61,48 +61,46 @@ export default function ExpensesScreen() {
         {
           tutorialPassed ? (
             <ThemedView>
-              {/* todo:  style the list of obligation sources */}
-              {
-                expenses.map(expense => (
-                  <ThemedView key={expense.date.getMilliseconds()}>
-                    <ThemedText>{expense.date.toISOString()}</ThemedText>
-                    <ThemedText>{expense.amount}</ThemedText>
-                    <ThemedText>{expense.label}</ThemedText>
-                  </ThemedView>
-                ))
-              }
+              <AppCard testID="expenses-list-card">
+                <AppCardTitle title="Expenses" subtitle={`${expenses.length} items`} />
+                {
+                  expenses.map(expense => (
+                    <ThemedView key={expense.date.getMilliseconds()}>
+                      <AppListRow
+                        title={`${expense.label} — ${expense.amount}`}
+                        description={expense.date.toISOString()}
+                      />
+                      <AppDivider />
+                    </ThemedView>
+                  ))
+                }
+              </AppCard>
               <Hr />
-              <ThemedView>
-                <ThemedText>
-                  Remains: {remainsValue}
-                </ThemedText>
-              </ThemedView>
-              <ThemedView>
-                <ThemedText>
-                  Total expenses {totalExpensesValue}
-                </ThemedText>
-              </ThemedView>
-              <Button
+              <AppCard testID="expenses-totals-card">
+                <ThemedView>
+                  <ThemedText>
+                    Remains: {remainsValue}
+                  </ThemedText>
+                </ThemedView>
+                <ThemedView>
+                  <ThemedText>
+                    Total expenses {totalExpensesValue}
+                  </ThemedText>
+                </ThemedView>
+              </AppCard>
+              <AppButton
                 title='Add more!'
                 onPress={addMoreHandler}
               />
+              <AppFAB onPress={addMoreHandler} label="Add expense" testID="expenses-fab" />
             </ThemedView>
           ) : (
-            <>
-                <ThemedView style={styles.titleContainer}>
-                  <ThemedText type="title">Daily expenses</ThemedText>
-                </ThemedView>
-              <ThemedView>
-                <ThemedText>You can enter several values in a row, separated by comma</ThemedText>
-                <ThemedText>your casual daily expenses</ThemedText>
-              </ThemedView>
-              <ThemedView>
-                <Button
-                  title='Add one!'
-                  onPress={getStartedHandler}
-                />
-              </ThemedView>
-            </>
+            <AppEmptyState
+              title="Daily expenses"
+              description="You can enter several values in a row, separated by comma — your casual daily expenses"
+              actionLabel="Add one!"
+              onAction={getStartedHandler}
+            />
           )
         }
       </ParallaxScrollView>

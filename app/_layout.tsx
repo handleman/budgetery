@@ -2,17 +2,20 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router/react-naviga
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import 'react-native-reanimated';
+import { PaperProvider } from 'react-native-paper';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AppContextProvider from '@/store/context';
+import { getPaperTheme } from '@/components/ui/paperTheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const paperTheme = useMemo(() => getPaperTheme(colorScheme), [colorScheme]);
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -28,6 +31,7 @@ export default function RootLayout() {
   }
 
   return (
+    <PaperProvider theme={paperTheme}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AppContextProvider>
         <Stack>
@@ -37,5 +41,6 @@ export default function RootLayout() {
         </Stack>
       </AppContextProvider>
     </ThemeProvider>
+    </PaperProvider>
   );
 }
