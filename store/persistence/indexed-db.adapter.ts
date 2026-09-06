@@ -5,6 +5,13 @@ export class IndexedDBAdapter implements IStorageAdapter {
     private db: IDBDatabase | null = null;
     private readonly dbName = 'Budgetery';
     private readonly storeName = 'budget_store';
+    /**
+     * Single-row store: every save overwrites the same record instead of
+     * appending. Must be a valid numeric key — an explicit `null`/`undefined`
+     * `id` throws `DataError: ... key path yielded a value that is not a
+     * valid key` on keyPath stores, even with `autoIncrement: true`.
+     */
+    private readonly singletonId = 1;
     
     async init(): Promise<void> {
         return new Promise((resolve, reject) => {
@@ -90,7 +97,7 @@ export class IndexedDBAdapter implements IStorageAdapter {
             const storeObj = transaction.objectStore(this.storeName);
             
             const record = {
-                id: null as unknown as number, // auto-increment
+                id: this.singletonId,
                 timestamp: Date.now(),
                 version: 'v1',
                 data: this.cleanStoreForDB(store),

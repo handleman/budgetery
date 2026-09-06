@@ -85,7 +85,7 @@ export default function IncomeScreen() {
               <AppCard testID="income-totals-card">
                 <ThemedView>
                   <ThemedText>
-                    Totatl amount: {total}
+                    Total amount: {total}
                   </ThemedText>
                 </ThemedView>
                 <ThemedView>

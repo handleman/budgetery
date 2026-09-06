@@ -40,9 +40,18 @@ export default function WelcomeScreen() {
         router.navigate('/tabs')
     }
 
-    const selectMonthHandler = (value: number) => {
-        setSelectedMonth(value);
-        const monthName = monthNames.find(item => item.value === value)?.label || '';
+    const selectMonthHandler = (value: number | string | null) => {
+        // RNPickerSelect hands back the raw DOM <select> value (string) on
+        // web but the numeric item value on native — coerce so the lookup
+        // and the month state stay numeric on both platforms.
+        const numeric = typeof value === 'number' ? value : Number(value);
+        if (!numeric) {
+            setSelectedMonth(null);
+            setSelectedPeriodName('');
+            return;
+        }
+        setSelectedMonth(numeric);
+        const monthName = monthNames.find(item => item.value === numeric)?.label || '';
         setSelectedPeriodName(monthName);
     }
     useEffect(() => {
