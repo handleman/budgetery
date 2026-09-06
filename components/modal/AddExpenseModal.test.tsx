@@ -14,8 +14,22 @@ jest.mock('react-native-modal', () => {
   return { __esModule: true, default: MockModal };
 });
 
+// React 19 renders concurrently: create AND unmount must run inside act(),
+// otherwise effects flush after teardown and crash the worker.
+function renderTree(element: React.ReactElement) {
+  let tree: renderer.ReactTestRenderer | undefined;
+  renderer.act(() => {
+    tree = renderer.create(element);
+  });
+  const json = tree!.toJSON();
+  renderer.act(() => {
+    tree!.unmount();
+  });
+  return json;
+}
+
 describe('AddExpenseModal', () => {
-  
+
   const mockDispatch = jest.fn();
 
   const mockStore: any = {
@@ -44,43 +58,43 @@ describe('AddExpenseModal', () => {
 
   describe('Component Structure', () => {
     it('should render when visible is true', () => {
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddExpenseModal isVisible={true} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toMatchSnapshot();
     });
 
     it('should not crash when visible is false', () => {
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddExpenseModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
   });
 
   describe('State Management', () => {
-    
+
     it('should initialize amount to 0', () => {
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddExpenseModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
 
     it('should initialize label to empty string', () => {
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddExpenseModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
   });
 
   describe('On Close Handler', () => {
-    
+
     let onCloseSpy: jest.Mock;
 
     beforeEach(() => {
@@ -88,44 +102,44 @@ describe('AddExpenseModal', () => {
     });
 
     it('should call provided onClose when Back button is pressed', () => {
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddExpenseModal isVisible={false} onClose={onCloseSpy} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
   });
 
   describe('On Submit Handler', () => {
-    
+
     it('should dispatch action with current date, amount, and label when Save button is pressed', () => {
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddExpenseModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
 
     it('should create ExpenseItem without percentage field', () => {
       // Unlike AddObligationModal, expense items don't have isPercentage
-      const tree = renderer.create(
+      const tree = renderTree(
         <AddExpenseModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(tree).toBeDefined();
     });
   });
 
   describe('Modal Visibility', () => {
-    
-    it('should change render output when isVisible prop changes from false to true', () => {
-      const visibleTree = renderer.create(
-        <AddExpenseModal isVisible={true} onClose={() => {}} />,
-      ).toJSON();
 
-      const hiddenTree = renderer.create(
+    it('should change render output when isVisible prop changes from false to true', () => {
+      const visibleTree = renderTree(
+        <AddExpenseModal isVisible={true} onClose={() => {}} />,
+      );
+
+      const hiddenTree = renderTree(
         <AddExpenseModal isVisible={false} onClose={() => {}} />,
-      ).toJSON();
+      );
 
       expect(visibleTree).toBeDefined();
       expect(hiddenTree).toBeDefined();

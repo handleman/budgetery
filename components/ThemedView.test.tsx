@@ -5,33 +5,57 @@ import { ThemedView } from './ThemedView';
 describe('ThemedView', () => {
   
   it('should render with backgroundColor applied', () => {
-    const tree = renderer.create(<ThemedView />).toJSON();
-    
-    expect(tree).toMatchSnapshot();
+    let tree: renderer.ReactTestRenderer | undefined;
+    renderer.act(() => {
+      tree = renderer.create(<ThemedView />);
+    });
+
+    expect(tree!.toJSON()).toMatchSnapshot();
+    renderer.act(() => {
+      tree!.unmount();
+    });
   });
 
   it('should accept style props and merge them', () => {
     const customStyle = { padding: 10 };
-    const tree = renderer.create(<ThemedView style={customStyle} />).toJSON();
-    
-    expect(tree).toBeDefined();
+    let tree: renderer.ReactTestRenderer | undefined;
+    renderer.act(() => {
+      tree = renderer.create(<ThemedView style={customStyle} />);
+    });
+
+    expect(tree!.toJSON()).toBeDefined();
+    renderer.act(() => {
+      tree!.unmount();
+    });
   });
 
   it('should accept lightColor and darkColor props', () => {
-    const tree = renderer.create(
-      <ThemedView 
-        lightColor="#fff" 
-        darkColor="#123"
-      />,
-    ).toJSON();
-    
-    expect(tree).toBeDefined();
+    let tree: renderer.ReactTestRenderer | undefined;
+    renderer.act(() => {
+      tree = renderer.create(
+        <ThemedView
+          lightColor="#fff"
+          darkColor="#123"
+        />,
+      );
+    });
+
+    expect(tree!.toJSON()).toBeDefined();
+    renderer.act(() => {
+      tree!.unmount();
+    });
   });
 
   it('should accept all ThemedViewProps', () => {
-    const tree = renderer.create(<ThemedView style={{ backgroundColor: 'red' }} />).toJSON();
-    
-    expect(tree).toBeDefined();
+    let tree: renderer.ReactTestRenderer | undefined;
+    renderer.act(() => {
+      tree = renderer.create(<ThemedView style={{ backgroundColor: 'red' }} />);
+    });
+
+    expect(tree!.toJSON()).toBeDefined();
+    renderer.act(() => {
+      tree!.unmount();
+    });
   });
 
 });

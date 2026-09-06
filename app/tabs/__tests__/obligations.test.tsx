@@ -2,9 +2,11 @@ import * as React from 'react';
 import renderer from 'react-test-renderer';
 import ObligationScreen from '../obligations';
 
-jest.mock('react-native-reanimated', () => ({
-  __esModule: true,
-  default: { View: 'View', ScrollView: 'ScrollView' },
+jest.mock('react-native-reanimated', () => {
+  const { View, ScrollView } = require('react-native');
+  return {
+    __esModule: true,
+    default: { View, ScrollView },
   useAnimatedRef: jest.fn(() => ({ current: null })),
   useScrollViewOffset: jest.fn(() => ({ value: 0 })),
   useAnimatedStyle: jest.fn((updater: () => unknown) => updater()),
@@ -13,7 +15,20 @@ jest.mock('react-native-reanimated', () => ({
   withTiming: jest.fn((value: unknown) => value),
   withRepeat: jest.fn((value: unknown) => value),
   withSequence: jest.fn((value: unknown) => value),
-}));
+  };
+});
+
+// The tab screens mount the real Add*Modal (hidden). Its third-party Modal
+// calls the removed BackHandler.removeEventListener on unmount under RN 0.79,
+// so stub it the same way the modal suites do.
+jest.mock('react-native-modal', () => {
+  const React = require('react');
+  function MockModal({ children, isVisible }: { children?: React.ReactNode; isVisible?: boolean }) {
+    if (!isVisible) return null;
+    return React.createElement(React.Fragment, null, children);
+  }
+  return { __esModule: true, default: MockModal };
+});
 
 describe('ObligationScreen (app/tabs/obligations.tsx)', () => {
 
@@ -26,7 +41,9 @@ describe('ObligationScreen (app/tabs/obligations.tsx)', () => {
       });
 
       expect(tree!.toJSON()).toBeDefined();
-      tree!.unmount();
+      renderer.act(() => {
+        tree!.unmount();
+      });
     });
 
     it('should have Get started button in initial state', () => {
@@ -36,7 +53,9 @@ describe('ObligationScreen (app/tabs/obligations.tsx)', () => {
       });
 
       expect(tree!.toJSON()).toBeDefined();
-      tree!.unmount();
+      renderer.act(() => {
+        tree!.unmount();
+      });
     });
 
   });
@@ -51,7 +70,9 @@ describe('ObligationScreen (app/tabs/obligations.tsx)', () => {
 
       // Snapshot test for initial state
       expect(tree!.toJSON()).toMatchSnapshot();
-      tree!.unmount();
+      renderer.act(() => {
+        tree!.unmount();
+      });
     });
 
     it.todo('should show modal with percentage toggle when getStartedHandler is pressed');

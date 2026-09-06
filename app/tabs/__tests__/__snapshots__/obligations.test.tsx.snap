@@ -13,95 +13,50 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
     ]
   }
 >
-  <ScrollView
+  <RCTScrollView
     scrollEventThrottle={16}
   >
-    <View
-      style={
-        [
-          {
-            "height": 250,
-            "overflow": "hidden",
-          },
-          {
-            "backgroundColor": "#F43F38",
-          },
-          {
-            "transform": [
-              {
-                "translateY": 0,
-              },
-              {
-                "scale": 0,
-              },
-            ],
-          },
-        ]
-      }
-    >
-      <Image
-        source={1}
-        style={
-          {
-            "bottom": 0,
-            "height": 200,
-            "left": 0,
-            "position": "absolute",
-            "resizeMode": "cover",
-            "width": "100%",
-          }
-        }
-      />
-    </View>
-    <View
-      style={
-        [
-          {
-            "backgroundColor": "#fff",
-          },
-          {
-            "flex": 1,
-            "gap": 16,
-            "overflow": "hidden",
-            "padding": 32,
-          },
-        ]
-      }
-    >
+    <View>
       <View
         style={
           [
             {
-              "backgroundColor": "#fff",
+              "height": 250,
+              "overflow": "hidden",
             },
             {
-              "flexDirection": "row",
-              "gap": 8,
+              "backgroundColor": "#F43F38",
+            },
+            {
+              "transform": [
+                {
+                  "translateY": 0,
+                },
+                {
+                  "scale": 0,
+                },
+              ],
             },
           ]
         }
       >
-        <Text
-          style={
-            [
-              {
-                "color": "#11181C",
-              },
-              undefined,
-              {
-                "fontSize": 32,
-                "fontWeight": "bold",
-                "lineHeight": 32,
-              },
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-            ]
+        <Image
+          source={
+            {
+              "testUri": "../../../assets/images/obligations-back.jpeg",
+            }
           }
-        >
-          Obligatory payments
-        </Text>
+          style={
+            {
+              "bottom": 0,
+              "height": 200,
+              "left": 0,
+              "position": "absolute",
+              "resizeMode": "cover",
+              "width": "100%",
+            }
+          }
+        />
       </View>
       <View
         style={
@@ -109,121 +64,172 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
             {
               "backgroundColor": "#fff",
             },
-            undefined,
-          ]
-        }
-      >
-        <Text
-          style={
-            [
-              {
-                "color": "#11181C",
-              },
-              {
-                "fontSize": 16,
-                "lineHeight": 24,
-              },
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-            ]
-          }
-        >
-          Your monthly Obligatory payments
-        </Text>
-        <Text
-          style={
-            [
-              {
-                "color": "#11181C",
-              },
-              {
-                "fontSize": 16,
-                "lineHeight": 24,
-              },
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-              undefined,
-            ]
-          }
-        >
-          It could be your rent, loan interest or even some subscriptions
-        </Text>
-      </View>
-      <View
-        style={
-          [
             {
-              "backgroundColor": "#fff",
+              "flex": 1,
+              "gap": 16,
+              "overflow": "hidden",
+              "padding": 32,
             },
-            undefined,
           ]
         }
       >
         <View
-          accessibilityRole="button"
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          collapsable={false}
-          focusable={true}
-          onClick={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
           style={
-            {
-              "opacity": 1,
-            }
+            [
+              {
+                "backgroundColor": "#fff",
+              },
+              {
+                "flexDirection": "row",
+                "gap": 8,
+              },
+            ]
           }
         >
-          <View
+          <Text
             style={
               [
-                {},
+                {
+                  "color": "#11181C",
+                },
+                undefined,
+                {
+                  "fontSize": 32,
+                  "fontWeight": "bold",
+                  "lineHeight": 32,
+                },
+                undefined,
+                undefined,
+                undefined,
+                undefined,
               ]
             }
           >
-            <Text
+            Obligatory payments
+          </Text>
+        </View>
+        <View
+          style={
+            [
+              {
+                "backgroundColor": "#fff",
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "color": "#11181C",
+                },
+                {
+                  "fontSize": 16,
+                  "lineHeight": 24,
+                },
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+              ]
+            }
+          >
+            Your monthly Obligatory payments
+          </Text>
+          <Text
+            style={
+              [
+                {
+                  "color": "#11181C",
+                },
+                {
+                  "fontSize": 16,
+                  "lineHeight": 24,
+                },
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+              ]
+            }
+          >
+            It could be your rent, loan interest or even some subscriptions
+          </Text>
+        </View>
+        <View
+          style={
+            [
+              {
+                "backgroundColor": "#fff",
+              },
+              undefined,
+            ]
+          }
+        >
+          <View
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "opacity": 1,
+              }
+            }
+          >
+            <View
               style={
                 [
-                  {
-                    "color": "#007AFF",
-                    "fontSize": 18,
-                    "margin": 8,
-                    "textAlign": "center",
-                  },
+                  {},
                 ]
               }
             >
-              Get started!
-            </Text>
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#007AFF",
+                      "fontSize": 18,
+                      "margin": 8,
+                      "textAlign": "center",
+                    },
+                  ]
+                }
+              >
+                Get started!
+              </Text>
+            </View>
           </View>
         </View>
       </View>
     </View>
-  </ScrollView>
+  </RCTScrollView>
 </View>
 `;

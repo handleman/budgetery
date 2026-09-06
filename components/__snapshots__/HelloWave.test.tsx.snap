@@ -2,23 +2,11 @@
 
 exports[`HelloWave should render the wave emoji 1`] = `
 <View
-  collapsable={false}
-  jestAnimatedStyle={
-    {
-      "value": {
-        "transform": [
-          {
-            "rotate": "0deg",
-          },
-        ],
-      },
-    }
-  }
   style={
     {
       "transform": [
         {
-          "rotate": "0deg",
+          "rotate": "25deg",
         },
       ],
     }

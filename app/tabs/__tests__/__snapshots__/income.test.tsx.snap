@@ -41,7 +41,11 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
         }
       >
         <Image
-          source={1}
+          source={
+            {
+              "testUri": "../../../assets/images/income-back.jpeg",
+            }
+          }
           style={
             {
               "bottom": 0,
