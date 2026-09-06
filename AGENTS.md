@@ -124,8 +124,8 @@ git add src/**/*.tsx   # Only source code, exclude tests/config
 
 ## Writing Design & Documentation Plans
 - All design implementation plans (e.g., test plans, architecture docs) MUST be written as `.md` files in `docs/` folder
-- Place strategic documentation including use cases, feature specs, and architectural decisions in `docs/`
-- See existing: `docs/design/usecases.md`, `docs/TEST_COVERAGE_SUMMARY.md`
+- Place strategic documentation including use cases, feature specs, and architectural decisions in `docs/design/`
+- See existing: `docs/design/usecases.md`, `docs/design/PERSISTENCE_LAYER_DESIGN.md`, `docs/TEST_COVERAGE_SUMMARY.md`
 
 ## Build commands  
 ```bash
@@ -134,6 +134,31 @@ npm run android # Android emulator
 npm run web     # Web dev server
 npm run start   # Platform detection (same as above)
 ```
+
+## Verify Before Commit (all must pass)
+```bash
+npx tsc --noEmit                                  # typecheck, must exit 0
+npx jest --silent --runInBand                     # unit tests (NOT npm test: --watchAll hangs non-interactively)
+npx expo export --platform web --output-dir dist  # production build (dist/ is gitignored)
+```
+- Always run all three before committing; fix in this order: syntax errors → unit tests → export
+- `expo export` regenerates `.expo/types`, which can surface NEW tsc errors (typed routes) — re-run `npx tsc --noEmit` after exporting
+
+## Unit Test Rules (learned the hard way)
+- Wrap stateful renders in `renderer.act()` and call `unmount()` at test end — otherwise `useEffect` updates flush after teardown and crash the worker with misleading errors (`useColorScheme`/`Image` "not a function")
+- `it.skip('name')` without a callback is invalid — use `it.todo('name')` for placeholders
+- Never import `react-dom/test-utils` (no `@types/react-dom`); use `react-test-renderer`
+- `react-native-reanimated` needs the manual mock in `app/tabs/__tests__/` (stock `reanimated/mock` breaks this env and v3.10 lacks `useScrollViewOffset`); keep mock factories `require`-free with `__esModule: true`
+- Stub animated `react-native-modal` in modal tests — its animation timers outlive teardown and kill full-suite runs
+- Test reducers directly (e.g. `totalBudgetReducer(store)`), not `appReducer(store, {})` — unknown actions return state unchanged by design
+- Commit new snapshots; never leave them untracked
+
+## Review Checklist (recurring bug patterns)
+- Enums MUST be string enums (tests and dispatched literals expect strings, not numerics)
+- Type guards: never `!!value?.flag` for booleans (`false` gets rejected); use `typeof x === 'boolean'`
+- Serialization must be lossless: preserve every `Store` field, watch key spellings (`daylyBudget`), keep save/load envelopes symmetric
+- Persistence features must be wired, not just present: migrations called on load, save on every mutation, native deps declared in `package.json`
+- Sync lockfile only via `npm install --package-lock-only`
 
 ## Reset / Starter code wipe
 ```bash

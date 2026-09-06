@@ -6,6 +6,7 @@ A budget tracking application built entirely free on a home computer using open 
 
 - **opencode** - AI coding assistant for streamlined development
 - **Qwen Model (locally)** - Open-source LLM running locally for code generation and reasoning
+- **Free-tier opencode models (e.g. Meta Muse Spark)** - Zero-cost hosted models, allowed as an alternative or complement to local LLMs
 - **Expo/React Native** - Cross-platform mobile framework
 - **TypeScript** - Type-safe JavaScript
 - **Jest** - Testing framework
@@ -18,14 +19,14 @@ This project demonstrates how to build modern applications completely free on a 
 - Entry-level MacBooks  
 - Standard laptops with 8GB+ RAM
 
-Everything runs locally without needing expensive cloud subscriptions or internet data charges.
+Everything runs free of charge: either locally, without needing expensive cloud subscriptions or internet data charges, or via free-tier hosted models in opencode.
 
 ## Local-first Development Philosophy
 
-- All AI processing happens on your machine via local LLMs
+- AI processing happens on your machine via local LLMs, with free-tier opencode models (e.g. Meta Muse Spark) allowed as a zero-cost alternative
 - No recurring subscription costs for development tools
 - Full control over your data and dependencies
-- Works offline after initial setup
+- Works offline after initial setup (local-model mode)
 
 ## Getting Started
 
