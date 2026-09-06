@@ -1,6 +1,6 @@
 # Use Cases
 
-Format: "As a user I want to [action] and get [result]"
+Format: "As a user I want to [action] and get [result]" or "I want to [action] and get [result]"
 
 ## Budget Management
 
@@ -13,22 +13,37 @@ Format: "As a user I want to [action] and get [result]"
 
 ## Expense Tracking
 
-- As a user I want to categorize expenses by label (food, transport, entertainment) and see breakdown
-- As a user I want to mark expense items as percentage of total or fixed amount and get accurate totals
+
 - As a user I want to view all expenses for a selected period and get visual summary
-- As a user I want to filter expenses by type and get focused list
+- i want to be able to set expense, and label
+- i want to be able to see expenses grouped by day entered, expandable card consisting expenses for the day
+- i want to be able to add\edit expenses in the current day as default but may want to edit another day before today
+- if my expense exceed dayly budget goal i want to see visual confirmation for example day card should be colored in theme's accent level as warning, for example become pale red
+- the next card should be accented as well untill there is not passes as much days as daily budget overlap (big_expense/day_budget = quatity of days should be passed until overlap warning will be taken off), and i am free to enter expense
+- if i enter the expenses on the next day after overlapped day with accented visual warning it should be accented untill (big_expense/day_budget = quatity of days should be passed until overlap warning will be taken off) newly added expenses should add to big_expense value
+- if i enter expense after overlap days went off so day card should be usual
+- if i enter expense i want to see remaining sum from allowed budget recalculated on all the related screens
+- i want to see total spend summary below all day cards and remaining sum (remains) to spend in this month
+- remains and total spend should be sticked as  bottom navbar
 
 ## Income Management
 
 - As a user I want to add multiple income sources (salary, freelance, investments) and see combined total
 - As a user I want to set salary dates and get monthly income projections
-- As a user I want to track irregular income and get accurate budget calculations
+- want to see here total income sum of all entered
+- dayly budget
+- remaing budget which is total - obligations
+- remaining budget and totals should be sticked to bottom on scroll as bottom navbar
 
 ## Obligation Tracking
 
 - As a user I want to add recurring obligations (rent, utilities, subscriptions) and see total obligation cost
 - As a user I want to mark some obligations as percentage-based and get calculated amounts from total budget
-- As a user I want to select which month an obligation starts and get period-specific calculations
+- i want to see dayly budget calculated
+- i want to see remaining budget calculated here
+- i want to see list od all obligations and its summary here
+- i dont need to see timestamps or datetime of obligation entered
+- remaining budget and other totals should be sticked to bottom on scroll as bottom navbar
 
 ## Tutorial Onboarding
 
@@ -41,18 +56,3 @@ Format: "As a user I want to [action] and get [result]"
 - As a user I want all budget calculations to be accurate and get correct remaining budget values
 - As a user I want to see day-by-day budget breakdown and get proper daily average calculations
 
-## Testing & Validation
-
-- As a user I want comprehensive unit tests for each reducer function and get confidence in calculations
-- As a user I want type validation to catch errors early and get clean TypeScript compilation
-
-## Web-Specific Features
-
-- As a user I want static HTML generation so pages load instantly without API calls on initial visit
-- As a user I want meta viewport optimized for responsive design across devices and browsers
-- As a user I want accessible screen-reader support with aria-* props maintained from React Native components
-- As a user I want SEO-friendly semantic HTML when exporting routes for search engine discovery
-- As a user I want graceful fallback on browser incompatibilities via CDN fallback paths
-- As a user I want PWA manifest support for app installation and offline capabilities
-- As a user I want progressive enhancement so web features work without JavaScript
-- As a user I want social sharing meta tags for Open Graph cards when linked from external sites
