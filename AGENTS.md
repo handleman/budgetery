@@ -125,7 +125,7 @@ git add src/**/*.tsx   # Only source code, exclude tests/config
 ## Writing Design & Documentation Plans
 - All design implementation plans (e.g., test plans, architecture docs) MUST be written as `.md` files in `docs/` folder
 - Place strategic documentation including use cases, feature specs, and architectural decisions in `docs/`
-- See existing: `docs/usecases.md`, `docs/TEST_COVERAGE_SUMMARY.md`
+- See existing: `docs/design/usecases.md`, `docs/TEST_COVERAGE_SUMMARY.md`
 
 ## Build commands  
 ```bash
