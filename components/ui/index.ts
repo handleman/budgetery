@@ -6,4 +6,5 @@ export { AppFAB } from './AppFAB';
 export { AppListRow } from './AppListRow';
 export { AppEmptyState } from './AppEmptyState';
 export { AppDivider } from './AppDivider';
+export { AppSwitch } from './AppSwitch';
 export { getPaperTheme } from './paperTheme';

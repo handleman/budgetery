@@ -9,13 +9,17 @@ type Props = {
   description?: string;
   actionLabel: string;
   onAction: () => void;
+  adornment?: React.ReactNode;
 };
 
 /** Adapter: tutorial/empty state block. */
-export function AppEmptyState({ title, description, actionLabel, onAction }: Props) {
+export function AppEmptyState({ title, description, actionLabel, onAction, adornment }: Props) {
   return (
     <ThemedView style={styles.container}>
-      <Text variant="titleLarge">{title}</Text>
+      <ThemedView style={styles.titleRow}>
+        <Text variant="titleLarge">{title}</Text>
+        {adornment}
+      </ThemedView>
       {description ? <Text variant="bodyMedium">{description}</Text> : null}
       <AppButton title={actionLabel} onPress={onAction} />
     </ThemedView>
@@ -26,5 +30,10 @@ const styles = StyleSheet.create({
   container: {
     gap: 8,
     padding: 16,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
 });

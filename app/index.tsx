@@ -1,8 +1,9 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { AppButton, AppTextInput } from "@/components/ui";
 import { appContext } from "@/store/context";
 import { useContext, useEffect, useState } from "react";
-import { Button, StyleSheet, TextInput, useColorScheme } from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { useRouter } from 'expo-router';
 const monthNames = [
@@ -66,14 +67,15 @@ export default function WelcomeScreen() {
                         <ThemedView>
                             <ThemedText type="title">Set the Label</ThemedText>
                             <ThemedText>(selected month name is by default)</ThemedText>
-                            <TextInput
-                                style={styles.input}
+                            <AppTextInput
+                                label="Period label"
                                 value={selectedPeriodName}
                                 onChangeText={setSelectedPeriodName}
+                                testID="period-label-input"
                             />
                         </ThemedView>
                         <ThemedView>
-                            <Button
+                            <AppButton
                                 title='Apply!'
                                 onPress={savePeriodHandler}
                             />
@@ -84,7 +86,7 @@ export default function WelcomeScreen() {
                     <>
                         <ThemedText type="title">You don't have any data yet</ThemedText>
                         <ThemedView>
-                            <Button
+                            <AppButton
                                 title='Get started!'
                                 onPress={getStartedHandler}
                             />
@@ -105,13 +107,6 @@ const styles = StyleSheet.create({
         padding: 32,
         gap: 16,
         overflow: 'hidden',
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        width: '80%',
-        paddingHorizontal: 10,
     },
 });
 

@@ -1,27 +1,20 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
+import { PaperProvider } from 'react-native-paper';
 import AddIncomeModal from './AddIncomeModal';
 import { appContext } from '@/store/context';
 import { IncomeItem } from '@/store/types';
 
-// Stub the animated third-party Modal: it schedules animation timers that
-// outlive the Jest environment and crash full-suite runs. The stub renders
-// children synchronously so tests stay deterministic.
-jest.mock('react-native-modal', () => {
-  const React = require('react');
-  function MockModal({ children, isVisible }: { children?: React.ReactNode; isVisible?: boolean }) {
-    if (!isVisible) return null;
-    return React.createElement(React.Fragment, null, children);
-  }
-  return { __esModule: true, default: MockModal };
-});
+// AddIncomeModal now renders Paper Dialog via Portal when visible, which
+// requires the Paper theme context. Hidden dialogs render null (AppDialog).
+// The old react-native-modal stub is obsolete and removed.
 
 // React 19 renders concurrently: create AND unmount must run inside act(),
 // otherwise effects flush after teardown and crash the worker.
 function renderTree(element: React.ReactElement) {
   let tree: renderer.ReactTestRenderer | undefined;
   renderer.act(() => {
-    tree = renderer.create(element);
+    tree = renderer.create(<PaperProvider>{element}</PaperProvider>);
   });
   const json = tree!.toJSON();
   renderer.act(() => {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
+import { PaperProvider } from 'react-native-paper';
 import IncomeScreen from '../index';
 
 jest.mock('react-native-reanimated', () => {
@@ -18,44 +19,40 @@ jest.mock('react-native-reanimated', () => {
   };
 });
 
-// The tab screens mount the real Add*Modal (hidden). Its third-party Modal
-// calls the removed BackHandler.removeEventListener on unmount under RN 0.79,
-// so stub it the same way the modal suites do.
-jest.mock('react-native-modal', () => {
-  const React = require('react');
-  function MockModal({ children, isVisible }: { children?: React.ReactNode; isVisible?: boolean }) {
-    if (!isVisible) return null;
-    return React.createElement(React.Fragment, null, children);
-  }
-  return { __esModule: true, default: MockModal };
-});
+// Paper Dialog mounts via Portal only when visible; hidden dialogs render
+// null (see AppDialog), so tab screens only need the Paper theme context.
+// The old react-native-modal stub is obsolete — AddIncomeModal no longer
+// uses react-native-modal.
+function renderWithPaper(element: React.ReactElement) {
+  let tree: renderer.ReactTestRenderer | undefined;
+  renderer.act(() => {
+    tree = renderer.create(<PaperProvider>{element}</PaperProvider>);
+  });
+  return tree!;
+}
+
+function unmountTree(tree: renderer.ReactTestRenderer) {
+  renderer.act(() => {
+    tree.unmount();
+  });
+}
 
 describe('IncomeScreen (app/tabs/index.tsx)', () => {
 
   describe('Component Structure', () => {
 
     it('should render initially without tutorial passed', () => {
-      let tree: renderer.ReactTestRenderer | undefined;
-      renderer.act(() => {
-        tree = renderer.create(<IncomeScreen />);
-      });
+      const tree = renderWithPaper(<IncomeScreen />);
 
-      expect(tree!.toJSON()).toBeDefined();
-      renderer.act(() => {
-        tree!.unmount();
-      });
+      expect(tree.toJSON()).toBeDefined();
+      unmountTree(tree);
     });
 
     it('should have Get started button in initial state', () => {
-      let tree: renderer.ReactTestRenderer | undefined;
-      renderer.act(() => {
-        tree = renderer.create(<IncomeScreen />);
-      });
+      const tree = renderWithPaper(<IncomeScreen />);
 
-      expect(tree!.toJSON()).toBeDefined();
-      renderer.act(() => {
-        tree!.unmount();
-      });
+      expect(tree.toJSON()).toBeDefined();
+      unmountTree(tree);
     });
 
   });
@@ -63,16 +60,11 @@ describe('IncomeScreen (app/tabs/index.tsx)', () => {
   describe('Tutorial State Management', () => {
 
     it('should show income tutorial content initially', () => {
-      let tree: renderer.ReactTestRenderer | undefined;
-      renderer.act(() => {
-        tree = renderer.create(<IncomeScreen />);
-      });
+      const tree = renderWithPaper(<IncomeScreen />);
 
       // Snapshot test for initial state
-      expect(tree!.toJSON()).toMatchSnapshot();
-      renderer.act(() => {
-        tree!.unmount();
-      });
+      expect(tree.toJSON()).toMatchSnapshot();
+      unmountTree(tree);
     });
 
     it.todo('should show modal when getStartedHandler is pressed (requires mocking context)');

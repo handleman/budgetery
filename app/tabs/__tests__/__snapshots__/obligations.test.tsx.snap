@@ -1,235 +1,329 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management should show obstacles tutorial content initially 1`] = `
-<View
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
   style={
     [
       {
-        "backgroundColor": "#fff",
-      },
-      {
         "flex": 1,
       },
+      undefined,
     ]
   }
 >
-  <RCTScrollView
-    scrollEventThrottle={16}
+  <View
+    collapsable={false}
+    pointerEvents="box-none"
+    style={
+      {
+        "flex": 1,
+      }
+    }
   >
-    <View>
-      <View
-        style={
-          [
-            {
-              "height": 250,
-              "overflow": "hidden",
-            },
-            {
-              "backgroundColor": "#F43F38",
-            },
-            {
-              "transform": [
-                {
-                  "translateY": 0,
-                },
-                {
-                  "scale": 0,
-                },
-              ],
-            },
-          ]
-        }
+    <View
+      style={
+        [
+          {
+            "backgroundColor": "#fff",
+          },
+          {
+            "flex": 1,
+          },
+        ]
+      }
+    >
+      <RCTScrollView
+        scrollEventThrottle={16}
       >
-        <Image
-          source={
-            {
-              "testUri": "../../../assets/images/obligations-back.jpeg",
-            }
-          }
-          style={
-            {
-              "bottom": 0,
-              "height": 200,
-              "left": 0,
-              "position": "absolute",
-              "resizeMode": "cover",
-              "width": "100%",
-            }
-          }
-        />
-      </View>
-      <View
-        style={
-          [
-            {
-              "backgroundColor": "#fff",
-            },
-            {
-              "flex": 1,
-              "gap": 16,
-              "overflow": "hidden",
-              "padding": 32,
-            },
-          ]
-        }
-      >
-        <View
-          style={
-            [
-              {
-                "backgroundColor": "#fff",
-              },
-              {
-                "flexDirection": "row",
-                "gap": 8,
-              },
-            ]
-          }
-        >
-          <Text
-            style={
-              [
-                {
-                  "color": "#11181C",
-                },
-                undefined,
-                {
-                  "fontSize": 32,
-                  "fontWeight": "bold",
-                  "lineHeight": 32,
-                },
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-              ]
-            }
-          >
-            Obligatory payments
-          </Text>
-        </View>
-        <View
-          style={
-            [
-              {
-                "backgroundColor": "#fff",
-              },
-              undefined,
-            ]
-          }
-        >
-          <Text
-            style={
-              [
-                {
-                  "color": "#11181C",
-                },
-                {
-                  "fontSize": 16,
-                  "lineHeight": 24,
-                },
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-              ]
-            }
-          >
-            Your monthly Obligatory payments
-          </Text>
-          <Text
-            style={
-              [
-                {
-                  "color": "#11181C",
-                },
-                {
-                  "fontSize": 16,
-                  "lineHeight": 24,
-                },
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-              ]
-            }
-          >
-            It could be your rent, loan interest or even some subscriptions
-          </Text>
-        </View>
-        <View
-          style={
-            [
-              {
-                "backgroundColor": "#fff",
-              },
-              undefined,
-            ]
-          }
-        >
+        <View>
           <View
-            accessibilityRole="button"
-            accessibilityState={
-              {
-                "busy": undefined,
-                "checked": undefined,
-                "disabled": undefined,
-                "expanded": undefined,
-                "selected": undefined,
-              }
-            }
-            accessibilityValue={
-              {
-                "max": undefined,
-                "min": undefined,
-                "now": undefined,
-                "text": undefined,
-              }
-            }
-            accessible={true}
-            collapsable={false}
-            focusable={true}
-            onClick={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
             style={
-              {
-                "opacity": 1,
+              [
+                {
+                  "height": 250,
+                  "overflow": "hidden",
+                },
+                {
+                  "backgroundColor": "#F43F38",
+                },
+                {
+                  "transform": [
+                    {
+                      "translateY": 0,
+                    },
+                    {
+                      "scale": 0,
+                    },
+                  ],
+                },
+              ]
+            }
+          >
+            <Image
+              source={
+                {
+                  "testUri": "../../../assets/images/obligations-back.jpeg",
+                }
               }
+              style={
+                {
+                  "bottom": 0,
+                  "height": 200,
+                  "left": 0,
+                  "position": "absolute",
+                  "resizeMode": "cover",
+                  "width": "100%",
+                }
+              }
+            />
+          </View>
+          <View
+            style={
+              [
+                {
+                  "backgroundColor": "#fff",
+                },
+                {
+                  "flex": 1,
+                  "gap": 16,
+                  "overflow": "hidden",
+                  "padding": 32,
+                },
+              ]
             }
           >
             <View
               style={
                 [
-                  {},
+                  {
+                    "backgroundColor": "#fff",
+                  },
+                  {
+                    "gap": 8,
+                    "padding": 16,
+                  },
                 ]
               }
             >
-              <Text
+              <View
                 style={
                   [
                     {
-                      "color": "#007AFF",
-                      "fontSize": 18,
-                      "margin": 8,
-                      "textAlign": "center",
+                      "backgroundColor": "#fff",
+                    },
+                    {
+                      "alignItems": "center",
+                      "flexDirection": "row",
+                      "gap": 8,
                     },
                   ]
                 }
               >
-                Get started!
+                <Text
+                  style={
+                    [
+                      {
+                        "textAlign": "left",
+                      },
+                      {
+                        "color": "rgba(28, 27, 31, 1)",
+                        "writingDirection": "ltr",
+                      },
+                      [
+                        {
+                          "fontFamily": "System",
+                          "fontSize": 22,
+                          "fontWeight": "400",
+                          "letterSpacing": 0,
+                          "lineHeight": 28,
+                        },
+                        undefined,
+                      ],
+                    ]
+                  }
+                >
+                  Obligatory payments
+                </Text>
+              </View>
+              <Text
+                style={
+                  [
+                    {
+                      "textAlign": "left",
+                    },
+                    {
+                      "color": "rgba(28, 27, 31, 1)",
+                      "writingDirection": "ltr",
+                    },
+                    [
+                      {
+                        "fontFamily": "System",
+                        "fontSize": 14,
+                        "fontWeight": "400",
+                        "letterSpacing": 0.25,
+                        "lineHeight": 20,
+                      },
+                      undefined,
+                    ],
+                  ]
+                }
+              >
+                Your monthly obligatory payments — rent, loan interest or subscriptions
               </Text>
+              <View
+                collapsable={false}
+                style={
+                  {
+                    "backgroundColor": "rgba(103, 80, 164, 1)",
+                    "borderRadius": 20,
+                    "shadowColor": "#000",
+                    "shadowOffset": {
+                      "height": 0,
+                      "width": 0,
+                    },
+                    "shadowOpacity": 0,
+                    "shadowRadius": 0,
+                  }
+                }
+                testID="button-container-outer-layer"
+              >
+                <View
+                  collapsable={false}
+                  style={
+                    {
+                      "backgroundColor": "rgba(103, 80, 164, 1)",
+                      "borderColor": "transparent",
+                      "borderRadius": 20,
+                      "borderStyle": "solid",
+                      "borderWidth": 0,
+                      "flex": undefined,
+                      "minWidth": 64,
+                      "shadowColor": "#000",
+                      "shadowOffset": {
+                        "height": 0,
+                        "width": 0,
+                      },
+                      "shadowOpacity": 0,
+                      "shadowRadius": 0,
+                    }
+                  }
+                  testID="button-container"
+                >
+                  <View
+                    accessibilityRole="button"
+                    accessibilityState={
+                      {
+                        "busy": undefined,
+                        "checked": undefined,
+                        "disabled": false,
+                        "expanded": undefined,
+                        "selected": undefined,
+                      }
+                    }
+                    accessibilityValue={
+                      {
+                        "max": undefined,
+                        "min": undefined,
+                        "now": undefined,
+                        "text": undefined,
+                      }
+                    }
+                    accessible={true}
+                    collapsable={false}
+                    focusable={true}
+                    onBlur={[Function]}
+                    onClick={[Function]}
+                    onFocus={[Function]}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      [
+                        {
+                          "overflow": "hidden",
+                        },
+                        {
+                          "borderRadius": 20,
+                        },
+                      ]
+                    }
+                    testID="button"
+                  >
+                    <View
+                      style={
+                        [
+                          {
+                            "alignItems": "center",
+                            "flexDirection": "row",
+                            "justifyContent": "center",
+                          },
+                          undefined,
+                        ]
+                      }
+                    >
+                      <Text
+                        numberOfLines={1}
+                        selectable={false}
+                        style={
+                          [
+                            {
+                              "textAlign": "left",
+                            },
+                            {
+                              "color": "rgba(28, 27, 31, 1)",
+                              "writingDirection": "ltr",
+                            },
+                            [
+                              {
+                                "fontFamily": "System",
+                                "fontSize": 14,
+                                "fontWeight": "500",
+                                "letterSpacing": 0.1,
+                                "lineHeight": 20,
+                              },
+                              [
+                                {
+                                  "marginHorizontal": 16,
+                                  "marginVertical": 9,
+                                  "textAlign": "center",
+                                },
+                                false,
+                                {
+                                  "marginHorizontal": 24,
+                                  "marginVertical": 10,
+                                },
+                                undefined,
+                                false,
+                                {
+                                  "color": "rgba(255, 255, 255, 1)",
+                                  "fontFamily": "System",
+                                  "fontSize": 14,
+                                  "fontWeight": "500",
+                                  "letterSpacing": 0.1,
+                                  "lineHeight": 20,
+                                },
+                                undefined,
+                              ],
+                            ],
+                          ]
+                        }
+                        testID="button-text"
+                      >
+                        Get started!
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </RCTScrollView>
     </View>
-  </RCTScrollView>
-</View>
+  </View>
+</RNCSafeAreaProvider>
 `;

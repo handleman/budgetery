@@ -105,31 +105,46 @@ exports[`ExpensesScreen (app/tabs/expenses.tsx) Tutorial State Management should
                 ]
               }
             >
-              <Text
+              <View
                 style={
                   [
                     {
-                      "textAlign": "left",
+                      "backgroundColor": "#fff",
                     },
                     {
-                      "color": "rgba(28, 27, 31, 1)",
-                      "writingDirection": "ltr",
+                      "alignItems": "center",
+                      "flexDirection": "row",
+                      "gap": 8,
                     },
-                    [
-                      {
-                        "fontFamily": "System",
-                        "fontSize": 22,
-                        "fontWeight": "400",
-                        "letterSpacing": 0,
-                        "lineHeight": 28,
-                      },
-                      undefined,
-                    ],
                   ]
                 }
               >
-                Daily expenses
-              </Text>
+                <Text
+                  style={
+                    [
+                      {
+                        "textAlign": "left",
+                      },
+                      {
+                        "color": "rgba(28, 27, 31, 1)",
+                        "writingDirection": "ltr",
+                      },
+                      [
+                        {
+                          "fontFamily": "System",
+                          "fontSize": 22,
+                          "fontWeight": "400",
+                          "letterSpacing": 0,
+                          "lineHeight": 28,
+                        },
+                        undefined,
+                      ],
+                    ]
+                  }
+                >
+                  Daily expenses
+                </Text>
+              </View>
               <Text
                 style={
                   [

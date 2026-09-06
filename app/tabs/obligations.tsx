@@ -1,4 +1,4 @@
-import { StyleSheet, Image, Platform, Button } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import { useContext, useState, useEffect } from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { appContext } from '@/store/context';
@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ObligationItem } from '@/store/types';
 import AddObligationModal from '@/components/modal/AddObligationModal';
+import { AppButton, AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
 
 export default function ObligationScreen() {
   const ctx = useContext(appContext);
@@ -65,53 +66,50 @@ export default function ObligationScreen() {
         {
           tutorialPassed ? (
             <ThemedView>
-              {/* todo:  style the list of obligation sources */}
-              {
-                obligations.map(obligation => (
-                  <ThemedView key={obligation.date.getMilliseconds()}>
-                    <ThemedText>{obligation.date.toISOString()}</ThemedText>
-                    <ThemedText>{obligation.amount}</ThemedText>
-                    <ThemedText>{obligation.label}</ThemedText>
-                    <ThemedText>{obligation.isPercentage}</ThemedText>
-                  </ThemedView>
-                ))
-              }
-              <ThemedView>
-                <ThemedText>
-                  Total amount: {totalObligationsValue}
-                </ThemedText>
-              </ThemedView>
-              <ThemedView>
-                <ThemedText>
-                  Remaining budget: {remainingBudgetValue}
-                </ThemedText>
-              </ThemedView>
-              <ThemedView>
-                <ThemedText>
-                  Daily budget: {daylyBudgetValue}
-                </ThemedText>
-              </ThemedView>
-              <Button
+              <AppCard testID="obligations-list-card">
+                <AppCardTitle title="Obligations" subtitle={`${obligations.length} items`} />
+                {
+                  obligations.map(obligation => (
+                    <ThemedView key={obligation.date.getMilliseconds()}>
+                      <AppListRow
+                        title={`${obligation.label} — ${obligation.amount}${obligation.isPercentage ? '%' : ''}`}
+                        description={obligation.date.toISOString()}
+                      />
+                      <AppDivider />
+                    </ThemedView>
+                  ))
+                }
+              </AppCard>
+              <AppCard testID="obligations-totals-card">
+                <ThemedView>
+                  <ThemedText>
+                    Total amount: {totalObligationsValue}
+                  </ThemedText>
+                </ThemedView>
+                <ThemedView>
+                  <ThemedText>
+                    Remaining budget: {remainingBudgetValue}
+                  </ThemedText>
+                </ThemedView>
+                <ThemedView>
+                  <ThemedText>
+                    Daily budget: {daylyBudgetValue}
+                  </ThemedText>
+                </ThemedView>
+              </AppCard>
+              <AppButton
                 title='Add more!'
                 onPress={addMoreHandler}
               />
+              <AppFAB onPress={addMoreHandler} label="Add obligation" testID="obligations-fab" />
             </ThemedView>
           ) : (
-            <>
-                <ThemedView style={styles.titleContainer}>
-                  <ThemedText type="title">Obligatory payments</ThemedText>
-                </ThemedView>
-                <ThemedView>
-                  <ThemedText>Your monthly Obligatory payments</ThemedText>
-                  <ThemedText>It could be your rent, loan interest or even some subscriptions</ThemedText>
-                </ThemedView>
-                <ThemedView>
-                  <Button
-                    title='Get started!'
-                    onPress={getStartedHandler}
-                  />
-                </ThemedView>
-            </>
+            <AppEmptyState
+              title="Obligatory payments"
+              description="Your monthly obligatory payments — rent, loan interest or subscriptions"
+              actionLabel="Get started!"
+              onAction={getStartedHandler}
+            />
           )
         }
       </ParallaxScrollView>
