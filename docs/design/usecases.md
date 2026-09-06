@@ -10,6 +10,13 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 - As a user I want to track obligations (rent, utilities) and see their impact on my budget
 - As a user I want to calculate daily budget allocation automatically based on period
 - As a user I want to select which month I'm budgeting for and get relevant calculations
+- i want to be able to navigate between screens by bottom bar (bottom navbar)
+- i want to see in the bottom navbar: income, obligations, expenses
+- on first run should be tutorial shown after that income tab
+- after the tutorial passed default tab should be expenses
+- if i start tracking new month, i should see tutorial one more time
+- i want to be able to see list of months where i was tracking data if i have more than one month tracked
+
 
 ## Expense Tracking
 
