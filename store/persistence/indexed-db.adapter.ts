@@ -97,7 +97,8 @@ export class IndexedDBAdapter implements IStorageAdapter {
             };
             
             putRequest.onerror = (event?: Event) => {
-                const error = event?.target?.error || new Error('Unknown error');
+                const target = event?.target as unknown as { error?: unknown } | null | undefined;
+                const error = target?.error || new Error('Unknown error');
                 console.error('IndexedDB save failed:', error);
                 reject(error);
             };
@@ -175,10 +176,11 @@ export class IndexedDBAdapter implements IStorageAdapter {
 
         // Process item arrays with cleaned dates
         ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
-            const items = store[key] || [];
+            const storeRecord = store as unknown as Record<string, unknown>;
+            const items = (storeRecord[key] as unknown[]) || [];
             
             if (Array.isArray(items)) {
-                result[key] = items.map((item: any) => ({
+                result[key] = (items as any[]).map((item: any) => ({
                     date: item.date instanceof Date ? item.date.toISOString() : (item.date || ''),
                     amount: typeof item.amount === 'number' ? item.amount : 0,
                     label: item.label || '',
@@ -191,15 +193,17 @@ export class IndexedDBAdapter implements IStorageAdapter {
 
         // Handle numeric fields safely
         ['totalBudget', 'remainingBudget', 'daylyBudget'].forEach((key) => {
-            const value = store[key];
+            const storeRecord = store as unknown as Record<string, unknown>;
+            const value = storeRecord[key];
             result[key] = typeof value === 'number' ? Number(value) || 0 : 0;
         });
 
         // Handle boolean flags
         ['incomeTutorialPassed', 'obligationsTutorialPassed', 
          'expensesTutorialPassed', 'welcomeTutorialPassed'].forEach((key) => {
+            const storeRecord = store as unknown as Record<string, unknown>;
             if (store.hasOwnProperty(key)) {
-                result[key] = !!store[key];
+                result[key] = !!storeRecord[key];
             }
         });
 

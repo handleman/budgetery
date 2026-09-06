@@ -10,4 +10,5 @@ export enum ACTION_TYPES {
     'ADD_INCOME',
     'ADD_OBLIGATION',
     'ADD_EXPENSE',
+    'LOAD_STORE',
 };

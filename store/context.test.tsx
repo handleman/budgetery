@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { appContext } from './context';
+import { defaultAppContextValue } from './context';
 import { ACTION_TYPES, TUTORIAL_NAMES } from './enums';
 import { IncomeItem, ExpenseItem, ObligationItem, CurrentPeriod } from './types';
 
@@ -29,40 +29,39 @@ describe('appContext', () => {
         remains: 0,
       };
 
-      rendererInstance = renderer.create({ store: mockStore, 
-        mutators: {} as any }).toJSON();
+      rendererInstance = renderer.create(React.createElement('div')).toJSON();
     });
 
     it('passIncomeTutorial should exist in mutators', () => {
-      expect(appContext.mutators.passIncomeTutorial).toBeDefined();
+      expect(defaultAppContextValue.mutators.passIncomeTutorial).toBeDefined();
     });
 
     it('passObligationsTutorial should exist in mutators', () => {
-      expect(appContext.mutators.passObligationsTutorial).toBeDefined();
+      expect(defaultAppContextValue.mutators.passObligationsTutorial).toBeDefined();
     });
 
     it('passExpensesTutorial should exist in mutators', () => {
-      expect(appContext.mutators.passExpensesTutorial).toBeDefined();
+      expect(defaultAppContextValue.mutators.passExpensesTutorial).toBeDefined();
     });
 
     it('passWelcomeTutorial should exist in mutators', () => {
-      expect(appContext.mutators.passWelcomeTutorial).toBeDefined();
+      expect(defaultAppContextValue.mutators.passWelcomeTutorial).toBeDefined();
     });
 
     it('setCurrentPeriod should exist in mutators', () => {
-      expect(appContext.mutators.setCurrentPeriod).toBeDefined();
+      expect(defaultAppContextValue.mutators.setCurrentPeriod).toBeDefined();
     });
 
     it('addIncomeItem should exist in mutators', () => {
-      expect(appContext.mutators.addIncomeItem).toBeDefined();
+      expect(defaultAppContextValue.mutators.addIncomeItem).toBeDefined();
     });
 
     it('addObligationItem should exist in mutators', () => {
-      expect(appContext.mutators.addObligationItem).toBeDefined();
+      expect(defaultAppContextValue.mutators.addObligationItem).toBeDefined();
     });
 
     it('addExpenseItem should exist in mutators', () => {
-      expect(appContext.mutators.addExpenseItem).toBeDefined();
+      expect(defaultAppContextValue.mutators.addExpenseItem).toBeDefined();
     });
   });
 
@@ -76,7 +75,7 @@ describe('appContext', () => {
       };
 
       // Should not throw
-      expect(() => appContext.mutators.addIncomeItem(incomeItem)).not.toThrow();
+      expect(() => defaultAppContextValue.mutators.addIncomeItem(incomeItem)).not.toThrow();
     });
 
     it('addObligationItem should accept ObligationItem payload', () => {
@@ -87,7 +86,7 @@ describe('appContext', () => {
         isPercentage: true,
       };
 
-      expect(() => appContext.mutators.addObligationItem(obligationItem)).not.toThrow();
+      expect(() => defaultAppContextValue.mutators.addObligationItem(obligationItem)).not.toThrow();
     });
 
     it('addExpenseItem should accept ExpenseItem payload', () => {
@@ -97,27 +96,25 @@ describe('appContext', () => {
         label: 'Coffee',
       };
 
-      expect(() => appContext.mutators.addExpenseItem(expenseItem)).not.toThrow();
+      expect(() => defaultAppContextValue.mutators.addExpenseItem(expenseItem)).not.toThrow();
     });
 
     it('setCurrentPeriod should accept CurrentPeriod payload', () => {
       const period: CurrentPeriod = { name: 'October', month: 10 };
       
-      expect(() => appContext.mutators.setCurrentPeriod(period)).not.toThrow();
+      expect(() => defaultAppContextValue.mutators.setCurrentPeriod(period)).not.toThrow();
     });
   });
 
   describe('Mutators - Pass Functions', () => {
-    
-    it.each`
-      tutorial | type
-      ${'income'}        | ${ACTION_TYPES.PASS_TUTORIAL}
-      ${'obligations'}   | ${ACTION_TYPES.PASS_TUTORIAL}
-      ${'expenses'}      | ${ACTION_TYPES.PASS_TUTORIAL}
-      ${'welcome'}       | ${ACTION_TYPES.PASS_TUTORIAL}
-    `(`$tutorial` tutorial should dispatch correct action type, ({ 
-      tutorial, 
-      type 
+    it.each([
+      { tutorial: 'income', type: ACTION_TYPES.PASS_TUTORIAL },
+      { tutorial: 'obligations', type: ACTION_TYPES.PASS_TUTORIAL },
+      { tutorial: 'expenses', type: ACTION_TYPES.PASS_TUTORIAL },
+      { tutorial: 'welcome', type: ACTION_TYPES.PASS_TUTORIAL },
+    ])('$tutorial tutorial should dispatch correct action type', ({
+      tutorial,
+      type,
     }) => {
       // This is more of a structural test - checking they call the right dispatcher
       const mockDispatcher = jest.fn();

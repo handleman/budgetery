@@ -36,7 +36,7 @@ export default function WelcomeScreen() {
     }
 
     const savePeriodHandler = () => {
-        router.navigate('tabs')
+        router.navigate('/tabs')
     }
 
     const selectMonthHandler = (value: number) => {

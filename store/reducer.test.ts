@@ -1,4 +1,5 @@
-import { appReducer, ACTION_TYPES } from './reducer';
+import { appReducer, daylyBudgetReducer } from './reducer';
+import { ACTION_TYPES } from './enums';
 import { TUTORIAL_NAMES } from './enums';
 import { Store, IncomeItem, ExpenseItem, ObligationItem, CurrentPeriod } from './types';
 
@@ -225,6 +226,7 @@ describe('appReducer', () => {
         expect(Math.abs(result.daylyBudget - (31000 / 31))).toBeLessThan(0.01);
       });
     });
+  }); // close Budget Calculator Reducers
 
   describe('addIncomeItemReducer integration tests', () => {
     it('should add income item and update all derived fields', () => {
