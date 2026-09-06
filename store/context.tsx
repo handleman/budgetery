@@ -1,8 +1,8 @@
-import React, { createContext } from 'react';
-import { ACTION_TYPES, TUTORIAL_NAMES, CURRENT_MIGRATION_VERSION } from './enums';
+import React, { createContext, useReducer, useEffect, useRef } from 'react';
+import { ACTION_TYPES, TUTORIAL_NAMES } from './enums';
 import { AppContext, CurrentPeriod, ExpenseItem, IncomeItem, ObligationItem, Store } from './types';
 import { appReducer } from './reducer';
-import { PersistenceService } from '../persistence/service';
+import { PersistenceService } from './persistence/service';
 
 // Create singleton persistence service
 const persistence = new PersistenceService();
@@ -28,19 +28,21 @@ const defaultStore: Store = {
     remains: 0,
 };
 
-export const appContext = createContext<AppContext>({
+export const defaultAppContextValue: AppContext = {
     store: defaultStore,
     mutators: {
         passIncomeTutorial: () => { },
         passObligationsTutorial: () => { },
         passExpensesTutorial: () => { },
         passWelcomeTutorial: () => { },
-        setCurrentPeriod: ({ name: string, month: number }) => { },
+        setCurrentPeriod: (_value: CurrentPeriod) => { },
         addIncomeItem: (value: IncomeItem) => { },
         addObligationItem: (value: ObligationItem) => { },
         addExpenseItem: (value: ExpenseItem) => { },
     }
-});
+};
+
+export const appContext = createContext<AppContext>(defaultAppContextValue);
 
 const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [store, dispatch] = useReducer(appReducer, defaultStore);
@@ -55,7 +57,7 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
                 const hydratedStore = await persistence.load();
                 
                 if (hydratedStore && persistence.isValidStore(hydratedStore)) {
-                    dispatch({ type: 'LOAD_STORE', payload: hydratedStore });
+                    dispatch({ type: ACTION_TYPES.LOAD_STORE, payload: hydratedStore });
                     
                     // Ensure the loaded store is persisted back in case of any changes
                     await persistence.save(hydratedStore);

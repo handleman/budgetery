@@ -1,10 +1,10 @@
-import AsyncStorage, { AsyncStorageInstance } from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IStorageAdapter, StorageOperation } from './types';
 import { Store } from '../types';
 
 export class AsyncStorageAdapter implements IStorageAdapter {
     private readonly storageKey = 'budgetery_store_v1';
-    private storageRef: AsyncStorageInstance;
+    private storageRef!: typeof AsyncStorage;
     
     async init(): Promise<void> {
         try {
@@ -42,13 +42,7 @@ export class AsyncStorageAdapter implements IStorageAdapter {
             
             await this.storageRef.setItem(
                 this.storageKey, 
-                JSON.stringify(cleanedStore),
-                {
-                    // Optional: set persistence to avoid data loss on memory pressure
-                    skipMerge: true,
-                    // Set longer TTL for reliability
-                    expirationHint: null,
-                }
+                JSON.stringify(cleanedStore)
             );
         } catch (error) {
             console.error('Failed to persist state:', error);
@@ -66,9 +60,9 @@ export class AsyncStorageAdapter implements IStorageAdapter {
         }
     }
 
-    async transaction<T>(operations: StorageOperation[]): Promise<void> {
+    async transaction<T>(operations: StorageOperation[]): Promise<T | void> {
         if (operations.length === 0) {
-            return;
+            return {} as T;
         }
 
         try {
@@ -104,7 +98,8 @@ export class AsyncStorageAdapter implements IStorageAdapter {
 
         // Process item arrays - convert to serializable format
         ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
-            const items = (store[key] || []) as Array<{ date?: Date | string; amount: number; label: string; isPercentage?: boolean }>;
+            const storeRecord = store as unknown as Record<string, unknown>;
+            const items = (storeRecord[key] as Array<{ date?: Date | string; amount: number; label: string; isPercentage?: boolean }> || []) as Array<{ date?: Date | string; amount: number; label: string; isPercentage?: boolean }>;
             
             result[key] = items.map((item) => ({
                 date: item.date instanceof Date ? item.date.toISOString() : (item.date || ''),
@@ -116,15 +111,17 @@ export class AsyncStorageAdapter implements IStorageAdapter {
 
         // Handle numeric fields
         ['totalBudget', 'remainingBudget', 'daylyBudget'].forEach((key) => {
-            const value = store[key];
+            const storeRecord = store as unknown as Record<string, unknown>;
+            const value = storeRecord[key];
             result[key] = typeof value === 'number' ? Number(value) || 0 : 0;
         });
 
         // Handle boolean flags
         ['incomeTutorialPassed', 'obligationsTutorialPassed', 
          'expensesTutorialPassed', 'welcomeTutorialPassed'].forEach((key) => {
+            const storeRecord = store as unknown as Record<string, unknown>;
             if (store.hasOwnProperty(key)) {
-                result[key] = !!store[key];
+                result[key] = !!storeRecord[key];
             }
         });
 

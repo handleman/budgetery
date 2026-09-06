@@ -62,7 +62,8 @@ export class StorageRegistry {
                     }
                     
                     // For web, we may also want to add a "load demo data" mode
-                    const loadDemoData = await ((globalThis as unknown) as Window & typeof globalThis).expoConfig?.loadDemoData || false;
+                    const globalWindow = (globalThis as unknown) as Record<string, any>;
+                    const loadDemoData = globalWindow.expoConfig?.loadDemoData || false;
                     if (loadDemoData) {
                         // Load some sample data for testing on first run
                         const sampleStore = await this.loadSampleData();
@@ -147,7 +148,6 @@ export class StorageRegistry {
      */
     private async loadSampleData(): Promise<any | null> {
         try {
-            const { Store } = await import('../types');
             const defaultStore: any = {
                 incomeTutorialPassed: false,
                 obligationsTutorialPassed: false,

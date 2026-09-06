@@ -1,4 +1,4 @@
-import { Store } from '../types';
+import { Store } from './types';
 
 export type migrationVersion = 1;
 export const CURRENT_MIGRATION_VERSION: migrationVersion = 1 as migrationVersion;

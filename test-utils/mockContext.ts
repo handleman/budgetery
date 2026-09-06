@@ -1,5 +1,6 @@
 // Mock context for testing - avoids circular dependencies in unit tests
-import { Store, IncomeItem, ExpenseItem, ObligationItem, CurrentPeriod, TUTORIAL_NAMES } from '../store/types';
+import { Store, IncomeItem, ExpenseItem, ObligationItem, CurrentPeriod } from '../store/types';
+import { TUTORIAL_NAMES } from '../store/enums';
 
 export const createMockStore = (customValues?: Partial<Store>): Store => ({
   incomeTutorialPassed: false,

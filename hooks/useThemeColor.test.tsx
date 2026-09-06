@@ -4,7 +4,9 @@ import { useThemeColor } from './useThemeColor';
 import { Colors } from '@/constants/Colors';
 
 // Mock the useColorScheme hook to control theme testing
-import { __esModule } from 'react-native';
+jest.mock('react-native', () => ({
+  useColorScheme: jest.fn(),
+}));
 
 describe('useThemeColor', () => {
   
@@ -83,7 +85,7 @@ describe('useThemeColor', () => {
 
     it('should accept valid color names as second parameter', () => {
       Object.keys(Colors.light).forEach((colorName) => {
-        const testColor = Colors.light[colorName];
+        const testColor = Colors.light[colorName as keyof typeof Colors.light];
         const tree = renderer.create(<div>test</div>).toJSON();
         expect(tree).toBeDefined();
       });

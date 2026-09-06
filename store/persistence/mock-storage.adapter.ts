@@ -4,6 +4,7 @@ import { Store } from '../types';
 export class MockStorageAdapter implements IStorageAdapter {
     // In-memory storage for testing
     private readonly storageKey = 'budgetery_store_v1';
+    private data: Record<string, any> = {};
     
     async load(): Promise<Store | null> {
         return this.data[this.storageKey] || 
@@ -55,10 +56,11 @@ export class MockStorageAdapter implements IStorageAdapter {
         }
 
         ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
-            const items = store[key] || [];
+            const storeRecord = store as unknown as Record<string, unknown>;
+            const items = (storeRecord[key] as unknown[]) || [];
             
             if (Array.isArray(items)) {
-                result[key] = items.map((item: any) => ({
+                result[key] = (items as any[]).map((item: any) => ({
                     date: item.date instanceof Date ? item.date.toISOString() : '',
                     amount: typeof item.amount === 'number' ? item.amount : 0,
                     label: item.label || '',
@@ -70,7 +72,8 @@ export class MockStorageAdapter implements IStorageAdapter {
         });
 
         ['totalBudget', 'remainingBudget', 'dayilyBudget'].forEach((key) => {
-            const value = store[key];
+            const storeRecord = store as unknown as Record<string, unknown>;
+            const value = storeRecord[key];
             result[key] = typeof value === 'number' ? Number(value) || 0 : (key.endsWith('udget') ? 0 : null);
         });
 

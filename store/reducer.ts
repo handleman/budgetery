@@ -129,6 +129,11 @@ function addExpenseItemReducer(store: Store, payload: ExpenseItem): Store {
 export function appReducer(store: Store, action: Action): Store {
     const { payload } = action;
     switch (action.type) {
+        case ACTION_TYPES.LOAD_STORE:
+            if (payload && typeof payload === 'object' && 'incomeItems' in (payload as Store)) {
+                return payload as Store;
+            }
+            break;
         case ACTION_TYPES.PASS_TUTORIAL:
             if (payload === null || payload === undefined) break;
             switch (payload) {

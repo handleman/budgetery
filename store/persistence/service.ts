@@ -233,7 +233,8 @@ export class PersistenceService implements IPersistenceManager {
 
         // Process item arrays - convert to serializable format
         ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
-            const items = store[key] as Array<{ date?: Date | string; amount: number; label: string; isPercentage?: boolean }>;
+            const storeRecord = store as unknown as Record<string, unknown>;
+            const items = storeRecord[key] as Array<{ date?: Date | string; amount: number; label: string; isPercentage?: boolean }>;
             
             if (Array.isArray(items)) {
                 result[key] = items.map((item) => ({
@@ -251,7 +252,8 @@ export class PersistenceService implements IPersistenceManager {
 
         // Handle numeric fields safely
         ['totalBudget', 'remainingBudget', 'dayilyBudget'].forEach((key) => {
-            const value = store[key];
+            const storeRecord = store as unknown as Record<string, unknown>;
+            const value = storeRecord[key];
             result[key] = typeof value === 'number' ? Number(value) || 0 : (key.endsWith('udget') ? 0 : null);
         });
 

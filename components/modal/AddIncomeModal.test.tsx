@@ -1,6 +1,5 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
-import { act } from 'react-dom/test-utils';
 import AddIncomeModal from './AddIncomeModal';
 import { appContext } from '@/store/context';
 import { IncomeItem } from '@/store/types';

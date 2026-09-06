@@ -88,5 +88,5 @@ export type AppContext = {
 
 export type Action = {
     type: ACTION_TYPES,
-    payload?: ExpenseItem | IncomeItem | ObligationItem | CurrentPeriod | TUTORIAL_NAMES,
+    payload?: ExpenseItem | IncomeItem | ObligationItem | CurrentPeriod | TUTORIAL_NAMES | Store,
 }

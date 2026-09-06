@@ -1,6 +1,5 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
-import { act } from 'react-dom/test-utils';
 import AddObligationModal from './AddObligationModal';
 import { appContext } from '@/store/context';
 import { ObligationItem } from '@/store/types';
