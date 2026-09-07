@@ -105,6 +105,7 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
                   },
                 ]
               }
+              testID="obligations-empty"
             >
               <View
                 style={
@@ -186,7 +187,7 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
                     "shadowRadius": 0,
                   }
                 }
-                testID="button-container-outer-layer"
+                testID="obligations-empty-action-container-outer-layer"
               >
                 <View
                   collapsable={false}
@@ -208,7 +209,7 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
                       "shadowRadius": 0,
                     }
                   }
-                  testID="button-container"
+                  testID="obligations-empty-action-container"
                 >
                   <View
                     accessibilityRole="button"
@@ -251,7 +252,7 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
                         },
                       ]
                     }
-                    testID="button"
+                    testID="obligations-empty-action"
                   >
                     <View
                       style={
@@ -311,7 +312,7 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
                             ],
                           ]
                         }
-                        testID="button-text"
+                        testID="obligations-empty-action-text"
                       >
                         Get started!
                       </Text>

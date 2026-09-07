@@ -18,6 +18,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Income',
+          tabBarButtonTestID: 'tab-income',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'wallet' : 'wallet-outline'} color={color} />
           ),
@@ -27,6 +28,7 @@ export default function TabLayout() {
         name="obligations"
         options={{
           title: 'Obligations',
+          tabBarButtonTestID: 'tab-obligations',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'alert-circle' : 'alert-circle-outline'} color={color} />
           ),
@@ -36,6 +38,7 @@ export default function TabLayout() {
         name="expenses"
         options={{
           title: 'Expenses',
+          tabBarButtonTestID: 'tab-expenses',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'basket' : 'basket-outline'} color={color} />
           ),

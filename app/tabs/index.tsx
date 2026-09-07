@@ -8,7 +8,7 @@ import { appContext } from '@/store/context';
 import AddIncomeModal from '@/components/modal/AddIncomeModal';
 import { IncomeItem } from '@/store/types';
 import Hr from '@/components/Hr';
-import { AppButton, AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
 
 export default function IncomeScreen() {
 
@@ -71,11 +71,12 @@ export default function IncomeScreen() {
             <ThemedView>
               <AppCard testID="income-list-card">
                 <AppCardTitle title="Income sources" subtitle={`${incomes.length} items`} />
-                {incomes.map(income => (
+                {incomes.map((income, index) => (
                   <ThemedView key={income.date.getMilliseconds()}>
                     <AppListRow
                       title={`${income.label} — ${income.amount}`}
                       description={income.date.toISOString()}
+                      testID={`income-row-${index}`}
                     />
                     <AppDivider />
                   </ThemedView>
@@ -99,10 +100,6 @@ export default function IncomeScreen() {
                   </ThemedText>
                 </ThemedView>
               </AppCard>
-              <AppButton
-                title='Add more!'
-                onPress={addMoreHandler}
-              />
               <AppFAB onPress={addMoreHandler} label="Add income" testID="income-fab" />
             </ThemedView>
           ) : (
@@ -112,6 +109,7 @@ export default function IncomeScreen() {
               actionLabel="Get started!"
               onAction={getStartedHandler}
               adornment={<HelloWave />}
+              testID="income-empty"
             />
           )
         }

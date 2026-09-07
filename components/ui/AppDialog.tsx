@@ -21,7 +21,11 @@ export function AppDialog({ visible, onDismiss, title, children, actions = [], t
         {actions.length > 0 && (
           <Dialog.Actions>
             {actions.map((a) => (
-              <Button key={a.label} onPress={a.onPress}>
+              <Button
+                key={a.label}
+                onPress={a.onPress}
+                testID={testID ? `${testID}-action-${a.label.toLowerCase()}` : undefined}
+              >
                 {a.label}
               </Button>
             ))}

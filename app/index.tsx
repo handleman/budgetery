@@ -87,6 +87,7 @@ export default function WelcomeScreen() {
                             <AppButton
                                 title='Apply!'
                                 onPress={savePeriodHandler}
+                                testID="welcome-apply"
                             />
                         </ThemedView>
 
@@ -98,6 +99,7 @@ export default function WelcomeScreen() {
                             <AppButton
                                 title='Get started!'
                                 onPress={getStartedHandler}
+                                testID="welcome-get-started"
                             />
                         </ThemedView>
                     </>

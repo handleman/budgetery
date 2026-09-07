@@ -10,18 +10,24 @@ type Props = {
   actionLabel: string;
   onAction: () => void;
   adornment?: React.ReactNode;
+  /** Stable selector root: container gets `testID`, action gets `${testID}-action`. */
+  testID?: string;
 };
 
 /** Adapter: tutorial/empty state block. */
-export function AppEmptyState({ title, description, actionLabel, onAction, adornment }: Props) {
+export function AppEmptyState({ title, description, actionLabel, onAction, adornment, testID }: Props) {
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} testID={testID}>
       <ThemedView style={styles.titleRow}>
         <Text variant="titleLarge">{title}</Text>
         {adornment}
       </ThemedView>
       {description ? <Text variant="bodyMedium">{description}</Text> : null}
-      <AppButton title={actionLabel} onPress={onAction} />
+      <AppButton
+        title={actionLabel}
+        onPress={onAction}
+        testID={testID ? `${testID}-action` : undefined}
+      />
     </ThemedView>
   );
 }

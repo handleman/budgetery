@@ -8,7 +8,7 @@ import { appContext } from '@/store/context';
 import { ExpenseItem } from '@/store/types';
 import AddExpenseModal from '@/components/modal/AddExpenseModal';
 import Hr from '@/components/Hr';
-import { AppButton, AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
 
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
@@ -64,11 +64,12 @@ export default function ExpensesScreen() {
               <AppCard testID="expenses-list-card">
                 <AppCardTitle title="Expenses" subtitle={`${expenses.length} items`} />
                 {
-                  expenses.map(expense => (
+                  expenses.map((expense, index) => (
                     <ThemedView key={expense.date.getMilliseconds()}>
                       <AppListRow
                         title={`${expense.label} — ${expense.amount}`}
                         description={expense.date.toISOString()}
+                        testID={`expenses-row-${index}`}
                       />
                       <AppDivider />
                     </ThemedView>
@@ -88,10 +89,6 @@ export default function ExpensesScreen() {
                   </ThemedText>
                 </ThemedView>
               </AppCard>
-              <AppButton
-                title='Add more!'
-                onPress={addMoreHandler}
-              />
               <AppFAB onPress={addMoreHandler} label="Add expense" testID="expenses-fab" />
             </ThemedView>
           ) : (
@@ -100,6 +97,7 @@ export default function ExpensesScreen() {
               description="You can enter several values in a row, separated by comma — your casual daily expenses"
               actionLabel="Add one!"
               onAction={getStartedHandler}
+              testID="expenses-empty"
             />
           )
         }

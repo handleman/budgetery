@@ -886,7 +886,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                     "shadowRadius": 0,
                   }
                 }
-                testID="button-container-outer-layer"
+                testID="add-obligation-dialog-action-back-container-outer-layer"
               >
                 <View
                   collapsable={false}
@@ -908,7 +908,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                       "shadowRadius": 0,
                     }
                   }
-                  testID="button-container"
+                  testID="add-obligation-dialog-action-back-container"
                 >
                   <View
                     accessibilityRole="button"
@@ -951,7 +951,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                         },
                       ]
                     }
-                    testID="button"
+                    testID="add-obligation-dialog-action-back"
                   >
                     <View
                       style={
@@ -1012,7 +1012,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                             ],
                           ]
                         }
-                        testID="button-text"
+                        testID="add-obligation-dialog-action-back-text"
                       >
                         Back
                       </Text>
@@ -1036,7 +1036,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                     "shadowRadius": 0,
                   }
                 }
-                testID="button-container-outer-layer"
+                testID="add-obligation-dialog-action-save-container-outer-layer"
               >
                 <View
                   collapsable={false}
@@ -1058,7 +1058,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                       "shadowRadius": 0,
                     }
                   }
-                  testID="button-container"
+                  testID="add-obligation-dialog-action-save-container"
                 >
                   <View
                     accessibilityRole="button"
@@ -1101,7 +1101,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                         },
                       ]
                     }
-                    testID="button"
+                    testID="add-obligation-dialog-action-save"
                   >
                     <View
                       style={
@@ -1162,7 +1162,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                             ],
                           ]
                         }
-                        testID="button-text"
+                        testID="add-obligation-dialog-action-save-text"
                       >
                         Save
                       </Text>

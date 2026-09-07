@@ -784,7 +784,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
                     "shadowRadius": 0,
                   }
                 }
-                testID="button-container-outer-layer"
+                testID="add-income-dialog-action-back-container-outer-layer"
               >
                 <View
                   collapsable={false}
@@ -806,7 +806,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
                       "shadowRadius": 0,
                     }
                   }
-                  testID="button-container"
+                  testID="add-income-dialog-action-back-container"
                 >
                   <View
                     accessibilityRole="button"
@@ -849,7 +849,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
                         },
                       ]
                     }
-                    testID="button"
+                    testID="add-income-dialog-action-back"
                   >
                     <View
                       style={
@@ -910,7 +910,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
                             ],
                           ]
                         }
-                        testID="button-text"
+                        testID="add-income-dialog-action-back-text"
                       >
                         Back
                       </Text>
@@ -934,7 +934,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
                     "shadowRadius": 0,
                   }
                 }
-                testID="button-container-outer-layer"
+                testID="add-income-dialog-action-save-container-outer-layer"
               >
                 <View
                   collapsable={false}
@@ -956,7 +956,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
                       "shadowRadius": 0,
                     }
                   }
-                  testID="button-container"
+                  testID="add-income-dialog-action-save-container"
                 >
                   <View
                     accessibilityRole="button"
@@ -999,7 +999,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
                         },
                       ]
                     }
-                    testID="button"
+                    testID="add-income-dialog-action-save"
                   >
                     <View
                       style={
@@ -1060,7 +1060,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
                             ],
                           ]
                         }
-                        testID="button-text"
+                        testID="add-income-dialog-action-save-text"
                       >
                         Save
                       </Text>

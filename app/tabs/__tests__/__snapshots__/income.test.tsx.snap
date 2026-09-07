@@ -105,6 +105,7 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                   },
                 ]
               }
+              testID="income-empty"
             >
               <View
                 style={
@@ -222,7 +223,7 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                     "shadowRadius": 0,
                   }
                 }
-                testID="button-container-outer-layer"
+                testID="income-empty-action-container-outer-layer"
               >
                 <View
                   collapsable={false}
@@ -244,7 +245,7 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                       "shadowRadius": 0,
                     }
                   }
-                  testID="button-container"
+                  testID="income-empty-action-container"
                 >
                   <View
                     accessibilityRole="button"
@@ -287,7 +288,7 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                         },
                       ]
                     }
-                    testID="button"
+                    testID="income-empty-action"
                   >
                     <View
                       style={
@@ -347,7 +348,7 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                             ],
                           ]
                         }
-                        testID="button-text"
+                        testID="income-empty-action-text"
                       >
                         Get started!
                       </Text>

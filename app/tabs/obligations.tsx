@@ -6,7 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ObligationItem } from '@/store/types';
 import AddObligationModal from '@/components/modal/AddObligationModal';
-import { AppButton, AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
 
 export default function ObligationScreen() {
   const ctx = useContext(appContext);
@@ -69,11 +69,12 @@ export default function ObligationScreen() {
               <AppCard testID="obligations-list-card">
                 <AppCardTitle title="Obligations" subtitle={`${obligations.length} items`} />
                 {
-                  obligations.map(obligation => (
+                  obligations.map((obligation, index) => (
                     <ThemedView key={obligation.date.getMilliseconds()}>
                       <AppListRow
                         title={`${obligation.label} — ${obligation.amount}${obligation.isPercentage ? '%' : ''}`}
                         description={obligation.date.toISOString()}
+                        testID={`obligations-row-${index}`}
                       />
                       <AppDivider />
                     </ThemedView>
@@ -97,10 +98,6 @@ export default function ObligationScreen() {
                   </ThemedText>
                 </ThemedView>
               </AppCard>
-              <AppButton
-                title='Add more!'
-                onPress={addMoreHandler}
-              />
               <AppFAB onPress={addMoreHandler} label="Add obligation" testID="obligations-fab" />
             </ThemedView>
           ) : (
@@ -109,6 +106,7 @@ export default function ObligationScreen() {
               description="Your monthly obligatory payments — rent, loan interest or subscriptions"
               actionLabel="Get started!"
               onAction={getStartedHandler}
+              testID="obligations-empty"
             />
           )
         }
