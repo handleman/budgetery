@@ -11,9 +11,13 @@ const AddObligationModal: React.FC<{ isVisible: boolean; onClose: () => void }> 
     const [label, setLabel] = useState<string>('');
     const [isPercentage, setIsPercentage] = useState<boolean>(false);
     const onSubmit = () => {
+        if (!Number.isFinite(amount) || label.trim() === '') return;
         const currentDate = new Date();
-        const obligationItem = { date: currentDate, amount, label, isPercentage }
+        const obligationItem = { date: currentDate, amount, label: label.trim(), isPercentage }
         ctx.mutators.addObligationItem(obligationItem);
+        setAmount(0);
+        setLabel('');
+        setIsPercentage(false);
         onClose();
     }
     const toggleSwitch = () => {

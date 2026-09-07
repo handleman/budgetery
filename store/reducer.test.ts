@@ -245,6 +245,53 @@ describe('appReducer', () => {
       expect(result.daylyBudget).toBeGreaterThanOrEqual(0);
       expect(result.incomeItems.length).toBe(1);
     });
+
+    it('should recompute remains when income is added after expenses', () => {
+      const withExpense = appReducer(initialStore, {
+        type: ACTION_TYPES.ADD_EXPENSE,
+        payload: { date: new Date(), amount: 200, label: 'Food' } as ExpenseItem,
+      } as any);
+      const result = appReducer(withExpense, {
+        type: ACTION_TYPES.ADD_INCOME,
+        payload: { date: new Date(), amount: 1000, label: 'Salary' } as IncomeItem,
+      } as any);
+
+      expect(result.totalBudget).toBe(1000);
+      expect(result.remainingBudget).toBe(1000);
+      expect(result.totalExpenses).toBe(200);
+      expect(result.remains).toBe(800);
+    });
+
+    it('should recompute remains when a plain obligation is added', () => {
+      const withIncome = appReducer(initialStore, {
+        type: ACTION_TYPES.ADD_INCOME,
+        payload: { date: new Date(), amount: 1000, label: 'Salary' } as IncomeItem,
+      } as any);
+      const result = appReducer(withIncome, {
+        type: ACTION_TYPES.ADD_OBLIGATION,
+        payload: { date: new Date(), amount: 300, label: 'Rent', isPercentage: false } as ObligationItem,
+      } as any);
+
+      expect(result.totalObligations).toBe(300);
+      expect(result.remainingBudget).toBe(700);
+      expect(result.remains).toBe(700);
+    });
+
+    it('should recompute remains when a percentage obligation is added', () => {
+      const withIncome = appReducer(initialStore, {
+        type: ACTION_TYPES.ADD_INCOME,
+        payload: { date: new Date(), amount: 5000, label: 'Salary' } as IncomeItem,
+      } as any);
+      const result = appReducer(withIncome, {
+        type: ACTION_TYPES.ADD_OBLIGATION,
+        payload: { date: new Date(), amount: 10, label: 'Tax', isPercentage: true } as ObligationItem,
+      } as any);
+
+      expect(result.totalPercentageObligations).toBe(500);
+      expect(result.totalObligations).toBe(500);
+      expect(result.remainingBudget).toBe(4500);
+      expect(result.remains).toBe(4500);
+    });
   });
 
 });

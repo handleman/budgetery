@@ -9,9 +9,12 @@ const AddExpenseModal: React.FC<{ isVisible: boolean; onClose: () => void }> = (
     const [amount, setAmount] = useState<number>(0);
     const [label, setLabel] = useState<string>('');
     const onSubmit = () => {
+        if (!Number.isFinite(amount) || label.trim() === '') return;
         const currentDate = new Date();
-        const expenseItem = { date: currentDate, amount, label }
+        const expenseItem = { date: currentDate, amount, label: label.trim() }
         ctx.mutators.addExpenseItem(expenseItem);
+        setAmount(0);
+        setLabel('');
         onClose();
     }
     return (

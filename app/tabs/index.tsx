@@ -53,8 +53,8 @@ export default function IncomeScreen() {
   }, [remainingBudget]);
 
   useEffect(() => {
-    setDaylyBudgetValue(daylyBudgetValue);
-  }, [daylyBudgetValue]);
+    setDaylyBudgetValue(daylyBudget);
+  }, [daylyBudget]);
 
   return (
     <>
@@ -72,7 +72,7 @@ export default function IncomeScreen() {
               <AppCard testID="income-list-card">
                 <AppCardTitle title="Income sources" subtitle={`${incomes.length} items`} />
                 {incomes.map((income, index) => (
-                  <ThemedView key={income.date.getMilliseconds()}>
+                  <ThemedView key={`${income.date.getTime()}-${index}`}>
                     <AppListRow
                       title={`${income.label} — ${income.amount}`}
                       description={income.date.toISOString()}

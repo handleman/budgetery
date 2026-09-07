@@ -2,7 +2,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { AppButton, AppMenuSelect, AppTextInput } from "@/components/ui";
 import { appContext } from "@/store/context";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { StyleSheet, useColorScheme } from 'react-native';
 import { useRouter } from 'expo-router';
 const monthNames = [
@@ -35,7 +35,12 @@ export default function WelcomeScreen() {
         setTutorialPassed(true);
     }
 
+    const isPeriodValid = selectedMonth !== null && selectedPeriodName.trim() !== '';
     const savePeriodHandler = () => {
+        if (!isPeriodValid || selectedMonth === null) return;
+        // Save synchronously before navigating (derived budget model: totals
+        // come from income sum; the period only scopes calculations).
+        ctx.mutators.setCurrentPeriod({ name: selectedPeriodName.trim(), month: selectedMonth });
         router.navigate('/tabs')
     }
 
@@ -45,11 +50,6 @@ export default function WelcomeScreen() {
         const monthName = monthNames.find(item => item.value === value)?.label || '';
         setSelectedPeriodName(monthName);
     }
-    useEffect(() => {
-        if (selectedMonth && selectedPeriodName.trim() !== '') {
-            ctx.mutators.setCurrentPeriod({ name: selectedPeriodName, month: selectedMonth });
-        }
-    }, [selectedMonth, selectedPeriodName]);
     return (
         <ThemedView style={styles.container}>
             <ThemedView style={styles.content}>
@@ -80,6 +80,7 @@ export default function WelcomeScreen() {
                             <AppButton
                                 title='Apply!'
                                 onPress={savePeriodHandler}
+                                disabled={!isPeriodValid}
                                 testID="welcome-apply"
                             />
                         </ThemedView>
