@@ -21,6 +21,15 @@
         "PATH": "{env:PATH}"
       },
       "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp"
+      ],
+      "enabled": true
     }
   },
   "agent": {

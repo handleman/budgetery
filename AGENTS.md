@@ -97,6 +97,11 @@ navigate("http://localhost:8081/tabs/obligations")
 - [ ] Console logs for errors/warnings
 - [ ] Tab switching functionality works after hydration
 
+### Browser Tool Choice (browser-mcp vs Playwright)
+- **browser-mcp**: ref-based only (`browser_snapshot` → `sXeYZ` ref → `browser_click`/`hover`/`type`); refs are ephemeral and CDP input dispatch can hang — use for quick reads (navigate, snapshot, screenshot, console logs)
+- **Playwright MCP** (`.opencode/opencode.json`, server `playwright`): selector-based — ALWAYS prefer for interactions, targeting `data-testid` selectors (see TestID Convention); e.g. `getByTestId("income-fab")` instead of snapshot refs
+- After editing MCP config: quit and restart opencode (no hot-reload); first Playwright run needs a browser (`npx playwright install chromium`)
+
 ## Git Remote Reference
 **Remote name:** `budgetery` (not "origin")  
 **Push command:** `git push budgetery main`

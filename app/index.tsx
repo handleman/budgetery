@@ -1,10 +1,9 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { AppButton, AppTextInput } from "@/components/ui";
+import { AppButton, AppMenuSelect, AppTextInput } from "@/components/ui";
 import { appContext } from "@/store/context";
 import { useContext, useEffect, useState } from "react";
 import { StyleSheet, useColorScheme } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 import { useRouter } from 'expo-router';
 const monthNames = [
     { label: 'January', value: 1 },
@@ -40,18 +39,10 @@ export default function WelcomeScreen() {
         router.navigate('/tabs')
     }
 
-    const selectMonthHandler = (value: number | string | null) => {
-        // RNPickerSelect hands back the raw DOM <select> value (string) on
-        // web but the numeric item value on native — coerce so the lookup
-        // and the month state stay numeric on both platforms.
-        const numeric = typeof value === 'number' ? value : Number(value);
-        if (!numeric) {
-            setSelectedMonth(null);
-            setSelectedPeriodName('');
-            return;
-        }
-        setSelectedMonth(numeric);
-        const monthName = monthNames.find(item => item.value === numeric)?.label || '';
+    const selectMonthHandler = (value: number) => {
+        // AppMenuSelect always passes a numeric option value on every platform.
+        setSelectedMonth(value);
+        const monthName = monthNames.find(item => item.value === value)?.label || '';
         setSelectedPeriodName(monthName);
     }
     useEffect(() => {
@@ -67,10 +58,12 @@ export default function WelcomeScreen() {
                         <ThemedView>
                             <ThemedText type="title">Please select the Month</ThemedText>
                             <ThemedText>that you want to start tracking</ThemedText>
-                            <RNPickerSelect
-                                onValueChange={selectMonthHandler}
-                                items={monthNames}
-                                placeholder={{ label: 'Select a month', value: null }}
+                            <AppMenuSelect
+                                placeholder="Select a month"
+                                value={selectedMonth}
+                                options={monthNames}
+                                onSelect={selectMonthHandler}
+                                testID="month-picker"
                             />
                         </ThemedView>
                         <ThemedView>
