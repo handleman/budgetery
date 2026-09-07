@@ -122,6 +122,14 @@ git add src/**/*.tsx   # Only source code, exclude tests/config
 - State stored as a Context + reducer in `store/`
 - Tabs live in `app/tabs/`: `index.tsx`, `expenses.tsx`, `obligations.tsx`
 
+## TestID Convention (stable selectors) MANDATORY
+- Every interactive element MUST have a `testID`: buttons, FABs, inputs, switches, dialogs (+ actions), tab buttons, list rows/cards, empty-state actions
+- On web, `react-native-web` renders `testID` as a `data-testid` DOM attribute — this is the stable selector for browser automation (devtools, Playwright `getByTestId`, `querySelector('[data-testid="..."]")`); browser-mcp accessibility refs (`sXeYZ`) are ephemeral, never rely on them across sessions
+- Naming: kebab-case `<screen>-<element>[-<action>]` (e.g. `welcome-apply`, `income-fab`, `add-expense-dialog-action-save`, `obligation-percentage-switch`); list rows take an index suffix (`expenses-row-0`)
+- `components/ui` adapters MUST accept and forward `testID`; `AppDialog` auto-derives action IDs (`${testID}-action-${label}`), `AppEmptyState` maps `testID` to container + `${testID}-action` button
+- Tab buttons get `tabBarButtonTestID` in `app/tabs/_layout.tsx` (`tab-income`, `tab-obligations`, `tab-expenses`)
+- One primary action per screen state (FAB for list screens) — never two buttons with the same handler
+
 ## Writing Design & Documentation Plans
 - All design implementation plans (e.g., test plans, architecture docs) MUST be written as `.md` files in `docs/` folder
 - Place strategic documentation including use cases, feature specs, and architectural decisions in `docs/design/`
