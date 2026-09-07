@@ -50,8 +50,8 @@ export default function ObligationScreen() {
   }, [remainingBudget]);
 
   useEffect(() => {
-    setDaylyBudgetValue(daylyBudgetValue);
-  }, [daylyBudgetValue]);
+    setDaylyBudgetValue(daylyBudget);
+  }, [daylyBudget]);
 
   return (
     <>
@@ -70,10 +70,10 @@ export default function ObligationScreen() {
                 <AppCardTitle title="Obligations" subtitle={`${obligations.length} items`} />
                 {
                   obligations.map((obligation, index) => (
-                    <ThemedView key={obligation.date.getMilliseconds()}>
+                    <ThemedView key={`${obligation.date.getTime()}-${index}`}>
                       <AppListRow
                         title={`${obligation.label} — ${obligation.amount}${obligation.isPercentage ? '%' : ''}`}
-                        description={obligation.date.toISOString()}
+                        description={obligation.isPercentage ? `${obligation.amount}% of total income` : undefined}
                         testID={`obligations-row-${index}`}
                       />
                       <AppDivider />

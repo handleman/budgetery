@@ -65,7 +65,7 @@ export default function ExpensesScreen() {
                 <AppCardTitle title="Expenses" subtitle={`${expenses.length} items`} />
                 {
                   expenses.map((expense, index) => (
-                    <ThemedView key={expense.date.getMilliseconds()}>
+                    <ThemedView key={`${expense.date.getTime()}-${index}`}>
                       <AppListRow
                         title={`${expense.label} — ${expense.amount}`}
                         description={expense.date.toISOString()}

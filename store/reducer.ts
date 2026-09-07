@@ -69,11 +69,15 @@ function addIncomeItemReducer(store: Store, payload: IncomeItem): Store {
         incomeItems: [...store.incomeItems, payload],
     };
 
-    return daylyBudgetReducer(
-        remainingBudgetReducer(
-            totalObligationsReducer(
-                totalPercentageObligationsReducer(
-                    totalBudgetReducer(incomeAddedStore)
+    // Derived budget model: totalBudget = Σ income. Adding income changes
+    // remainingBudget, so remains (remaining − totalExpenses) must recompute too.
+    return remainsReducer(
+        daylyBudgetReducer(
+            remainingBudgetReducer(
+                totalObligationsReducer(
+                    totalPercentageObligationsReducer(
+                        totalBudgetReducer(incomeAddedStore)
+                    )
                 )
             )
         )
@@ -88,18 +92,22 @@ function addObligationItemReducer(store: Store, payload: ObligationItem): Store 
     const { isPercentage } = payload;
 
     if (isPercentage) {
-        return daylyBudgetReducer(
-            remainingBudgetReducer(
-                totalObligationsReducer(
-                    totalPercentageObligationsReducer(obligationAddedStore)
+        return remainsReducer(
+            daylyBudgetReducer(
+                remainingBudgetReducer(
+                    totalObligationsReducer(
+                        totalPercentageObligationsReducer(obligationAddedStore)
+                    )
                 )
             )
         );
     }
-    return daylyBudgetReducer(
-        remainingBudgetReducer(
-            totalObligationsReducer(
-                obligationAddedStore
+    return remainsReducer(
+        daylyBudgetReducer(
+            remainingBudgetReducer(
+                totalObligationsReducer(
+                    obligationAddedStore
+                )
             )
         )
     );

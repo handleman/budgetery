@@ -59,6 +59,22 @@ describe('Type Guards', () => {
     it('should return false when value is null', () => {
       expect(isIncomeItemPassed(null)).toBe(false);
     });
+
+    it('should return true for zero amount (valid finite number)', () => {
+      expect(isIncomeItemPassed({ date: new Date(), amount: 0, label: 'Gift' })).toBe(true);
+    });
+
+    it('should return false for NaN amount', () => {
+      expect(isIncomeItemPassed({ date: new Date(), amount: NaN, label: 'Gift' })).toBe(false);
+    });
+
+    it('should return false for blank label', () => {
+      expect(isIncomeItemPassed({ date: new Date(), amount: 10, label: '   ' })).toBe(false);
+    });
+
+    it('should return false for invalid Date', () => {
+      expect(isIncomeItemPassed({ date: new Date('invalid'), amount: 10, label: 'Gift' })).toBe(false);
+    });
   });
 
   describe('isExpenseItemPassed', () => {
@@ -189,6 +205,14 @@ describe('Type Guards', () => {
     it('should return true for undefined object with valid properties', () => {
       const period = { name: 'September', month: 9 };
       expect(isCurrentPeriodPassed(period)).toBe(true);
+    });
+
+    it('should return false for month 0 (unset sentinel)', () => {
+      expect(isCurrentPeriodPassed({ name: '', month: 0 } as any)).toBe(false);
+    });
+
+    it('should return false for out-of-range month', () => {
+      expect(isCurrentPeriodPassed({ name: 'X', month: 13 } as any)).toBe(false);
     });
   });
 });
