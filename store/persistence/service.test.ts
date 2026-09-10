@@ -9,6 +9,8 @@ function makeStore(overrides?: Partial<Store>): Store {
     expensesTutorialPassed: false,
     welcomeTutorialPassed: true,
     currentPeriod: { name: 'October', month: 10 },
+    periods: [{ id: '2026-10-october', name: 'October', month: 10, year: 2026 }],
+    currentPeriodId: '2026-10-october',
     incomeItems: [{ date: new Date('2026-10-01T00:00:00.000Z'), amount: 5000, label: 'Salary' }],
     obligationItems: [
       { date: new Date('2026-10-02T00:00:00.000Z'), amount: 1500, label: 'Rent', isPercentage: false },

@@ -1,9 +1,10 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { AppButton, AppMenuSelect, AppTextInput } from "@/components/ui";
+import { TutorialProgress } from "@/components/tutorial/TutorialProgress";
+import { AppButton, AppCard, AppCardTitle, AppMenuSelect, AppTextInput } from "@/components/ui";
 import { appContext } from "@/store/context";
 import { useContext, useState } from "react";
-import { StyleSheet, useColorScheme } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 const monthNames = [
     { label: 'January', value: 1 },
@@ -20,11 +21,10 @@ const monthNames = [
     { label: 'December', value: 12 },
 ];
 
-//todo: set Apply button inactive without filled data
-
 export default function WelcomeScreen() {
     const ctx = useContext(appContext);
-    const [tutorialPassed, setTutorialPassed] = useState<boolean>(ctx.store.welcomeTutorialPassed);
+    const { welcomeTutorialPassed, incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed, periods, currentPeriodId, currentPeriod } = ctx.store;
+    const [tutorialPassed, setTutorialPassed] = useState<boolean>(welcomeTutorialPassed);
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [selectedPeriodName, setSelectedPeriodName] = useState<string>('');
     const router = useRouter();
@@ -36,12 +36,22 @@ export default function WelcomeScreen() {
     }
 
     const isPeriodValid = selectedMonth !== null && selectedPeriodName.trim() !== '';
+    const hasPeriod = periods.length > 0 || currentPeriod.name !== '';
     const savePeriodHandler = () => {
         if (!isPeriodValid || selectedMonth === null) return;
-        // Save synchronously before navigating (derived budget model: totals
-        // come from income sum; the period only scopes calculations).
-        ctx.mutators.setCurrentPeriod({ name: selectedPeriodName.trim(), month: selectedMonth });
-        router.navigate('/tabs')
+        // startNewMonth creates the PeriodRecord (per-period isolation),
+        // re-shows tab tutorials and scopes all calculations to the month.
+        ctx.mutators.startNewMonth({ name: selectedPeriodName.trim(), month: selectedMonth });
+        if (!incomeTutorialPassed) {
+            router.replace('/tabs');
+        } else {
+            router.replace('/tabs/expenses');
+        }
+    }
+
+    const selectPeriodHandler = (id: string) => {
+        ctx.mutators.selectPeriod(id);
+        router.replace('/tabs/expenses');
     }
 
     const selectMonthHandler = (value: number) => {
@@ -55,9 +65,39 @@ export default function WelcomeScreen() {
             <ThemedView style={styles.content}>
                 {tutorialPassed ? (
                     <>
+                        <TutorialProgress
+                            flags={{
+                                welcome: tutorialPassed,
+                                income: incomeTutorialPassed,
+                                obligations: obligationsTutorialPassed,
+                                expenses: expensesTutorialPassed,
+                            }}
+                        />
+                        {periods.length > 0 && (
+                            <AppCard testID="month-list">
+                                <AppCardTitle title="Tracked months" subtitle={`${periods.length} months`} />
+                                {periods.map((period, index) => (
+                                    <Pressable
+                                        key={period.id}
+                                        onPress={() => selectPeriodHandler(period.id)}
+                                        testID={`month-row-${index}`}
+                                    >
+                                        <ThemedView style={styles.monthRow}>
+                                            <ThemedText type="defaultSemiBold">
+                                                {period.name} {period.year}
+                                                {period.id === currentPeriodId ? ' •' : ''}
+                                            </ThemedText>
+                                        </ThemedView>
+                                    </Pressable>
+                                ))}
+                            </AppCard>
+                        )}
                         <ThemedView>
-                            <ThemedText type="title">Please select the Month</ThemedText>
-                            <ThemedText>that you want to start tracking</ThemedText>
+                            <ThemedText type="title">
+                                {hasPeriod ? 'Start tracking a new month' : 'Please select the Month'}
+                            </ThemedText>
+                            {!hasPeriod && <ThemedText>that you want to start tracking</ThemedText>}
+                            <ThemedText>Your budget is the sum of all income you enter.</ThemedText>
                             <AppMenuSelect
                                 placeholder="Select a month"
                                 value={selectedMonth}
@@ -78,10 +118,10 @@ export default function WelcomeScreen() {
                         </ThemedView>
                         <ThemedView>
                             <AppButton
-                                title='Apply!'
+                                title={hasPeriod ? 'Start new month!' : 'Apply!'}
                                 onPress={savePeriodHandler}
                                 disabled={!isPeriodValid}
-                                testID="welcome-apply"
+                                testID={hasPeriod ? 'start-new-month-button' : 'welcome-apply'}
                             />
                         </ThemedView>
 
@@ -113,5 +153,7 @@ const styles = StyleSheet.create({
         gap: 16,
         overflow: 'hidden',
     },
+    monthRow: {
+        paddingVertical: 10,
+    },
 });
-

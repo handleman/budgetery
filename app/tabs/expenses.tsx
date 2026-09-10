@@ -1,23 +1,31 @@
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { appContext } from '@/store/context';
+import { visibleExpenses } from '@/store/reducer';
+import { groupExpensesByDay } from '@/store/expenseGrouping';
+import { computeOverlapWarnings } from '@/store/expensesOverlap';
 import { ExpenseItem } from '@/store/types';
 import AddExpenseModal from '@/components/modal/AddExpenseModal';
+import { ExpenseDayCard } from '@/components/expenses/ExpenseDayCard';
 import Hr from '@/components/Hr';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
+import { AppEmptyState, AppFAB, StickyTotalsBar } from '@/components/ui';
 
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
-  const { expenseItems, expensesTutorialPassed, remains, totalExpenses } = ctx.store;
+  const { expensesTutorialPassed, remains, totalExpenses, daylyBudget } = ctx.store;
   const [tutorialPassed, setTutorialPassed] = useState<boolean>(expensesTutorialPassed);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
-  const [remainsValue, setRemainsValue] = useState<number>(remains);
-  const [totalExpensesValue, setTotalExpensesValue] = useState<number>(totalExpenses);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingItem, setEditingItem] = useState<ExpenseItem | null>(null);
+  const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
+
+  // Period-scoped visible items; grouping + warnings derive from these.
+  const expenses = useMemo(() => visibleExpenses(ctx.store), [ctx.store]);
+  const groups = useMemo(() => groupExpensesByDay(expenses), [expenses]);
+  const warnings = useMemo(() => computeOverlapWarnings(groups, daylyBudget), [groups, daylyBudget]);
 
   const getStartedHandler = () => {
     ctx.mutators.passExpensesTutorial();
@@ -25,31 +33,35 @@ export default function ExpensesScreen() {
   }
 
   const addMoreHandler = () => {
+    setEditingIndex(null);
+    setEditingItem(null);
     setModalVisible(true);
   }
+  const editHandler = (visibleIndex: number) => {
+    setEditingIndex(visibleIndex);
+    setEditingItem(expenses[visibleIndex] ?? null);
+    setModalVisible(true);
+  };
   const closeModal = () => {
     setModalVisible(false);
+    setEditingIndex(null);
+    setEditingItem(null);
+  };
+
+  const toggleDay = (dayKey: string) => {
+    setExpandedDays((prev) => ({ ...prev, [dayKey]: !(prev[dayKey] ?? true) }));
   };
 
 
   useEffect(() => {
-    setExpenses(expenseItems);
     if (tutorialPassed !== expensesTutorialPassed) {
       setTutorialPassed(expensesTutorialPassed);
     }
 
-  }, [expenseItems, expensesTutorialPassed]);
-
-  useEffect(() => {
-    setRemainsValue(remains);
-  }, [remains]);
-
-  useEffect(() => {
-    setTotalExpensesValue(totalExpenses);
-  }, [totalExpenses]);
+  }, [expensesTutorialPassed]);
 
   return (
-    <>
+    <ThemedView style={styles.screen}>
       <ParallaxScrollView
         headerBackgroundColor={{ light: '#6F888C', dark: '#6F888C' }}
         headerImage={
@@ -61,35 +73,23 @@ export default function ExpensesScreen() {
         {
           tutorialPassed ? (
             <ThemedView>
-              <AppCard testID="expenses-list-card">
-                <AppCardTitle title="Expenses" subtitle={`${expenses.length} items`} />
-                {
-                  expenses.map((expense, index) => (
-                    <ThemedView key={`${expense.date.getTime()}-${index}`}>
-                      <AppListRow
-                        title={`${expense.label} — ${expense.amount}`}
-                        description={expense.date.toISOString()}
-                        testID={`expenses-row-${index}`}
-                      />
-                      <AppDivider />
-                    </ThemedView>
-                  ))
-                }
-              </AppCard>
+              {groups.map((group) => {
+                const warning = warnings.get(group.dayKey);
+                return (
+                  <ExpenseDayCard
+                    key={group.dayKey}
+                    group={group}
+                    warned={warning?.warned ?? false}
+                    overrunFrom={warning?.overrunFrom}
+                    expanded={expandedDays[group.dayKey] ?? true}
+                    onToggle={() => toggleDay(group.dayKey)}
+                    onEditItem={editHandler}
+                  />
+                );
+              })}
               <Hr />
-              <AppCard testID="expenses-totals-card">
-                <ThemedView>
-                  <ThemedText>
-                    Remains: {remainsValue}
-                  </ThemedText>
-                </ThemedView>
-                <ThemedView>
-                  <ThemedText>
-                    Total expenses {totalExpensesValue}
-                  </ThemedText>
-                </ThemedView>
-              </AppCard>
               <AppFAB onPress={addMoreHandler} label="Add expense" testID="expenses-fab" />
+              <View style={styles.footerSpacer} />
             </ThemedView>
           ) : (
             <AppEmptyState
@@ -102,12 +102,24 @@ export default function ExpensesScreen() {
           )
         }
       </ParallaxScrollView>
-      <AddExpenseModal isVisible={isModalVisible} onClose={closeModal} />
-    </>
+      {tutorialPassed && (
+        <StickyTotalsBar
+          testID="expenses-totals-bar"
+          items={[
+            { label: 'Total expenses', value: totalExpenses, testID: 'expenses-totals-bar-total' },
+            { label: 'Remains', value: remains, testID: 'expenses-totals-bar-remains' },
+          ]}
+        />
+      )}
+      <AddExpenseModal isVisible={isModalVisible} onClose={closeModal} editingIndex={editingIndex} initial={editingItem} />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -123,5 +135,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  footerSpacer: {
+    height: 8,
   },
 });

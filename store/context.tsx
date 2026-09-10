@@ -16,6 +16,8 @@ const defaultStore: Store = {
         name: '',
         month: 0,
     },
+    periods: [],
+    currentPeriodId: null,
     incomeItems: [],
     obligationItems: [],
     expenseItems: [],
@@ -37,8 +39,17 @@ export const defaultAppContextValue: AppContext = {
         passWelcomeTutorial: () => { },
         setCurrentPeriod: (_value: CurrentPeriod) => { },
         addIncomeItem: (value: IncomeItem) => { },
+        updateIncomeItem: (_index: number, _value: IncomeItem) => { },
+        removeIncomeItem: (_index: number) => { },
         addObligationItem: (value: ObligationItem) => { },
+        updateObligationItem: (_index: number, _value: ObligationItem) => { },
+        removeObligationItem: (_index: number) => { },
         addExpenseItem: (value: ExpenseItem) => { },
+        addExpenseItems: (values: ExpenseItem[]) => { },
+        updateExpenseItem: (_index: number, _value: ExpenseItem) => { },
+        removeExpenseItem: (_index: number) => { },
+        selectPeriod: (_id: string) => { },
+        startNewMonth: (_value: CurrentPeriod) => { },
     }
 };
 
@@ -99,11 +110,38 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     function addIncomeItem(passed: IncomeItem) {
         dispatch({ type: ACTION_TYPES.ADD_INCOME, payload: passed });
     }
+    function updateIncomeItem(index: number, passed: IncomeItem) {
+        dispatch({ type: ACTION_TYPES.UPDATE_INCOME, payload: { index, item: passed } });
+    }
+    function removeIncomeItem(index: number) {
+        dispatch({ type: ACTION_TYPES.REMOVE_INCOME, payload: index });
+    }
     function addObligationItem(passed: ObligationItem) {
         dispatch({ type: ACTION_TYPES.ADD_OBLIGATION, payload: passed });
     }
+    function updateObligationItem(index: number, passed: ObligationItem) {
+        dispatch({ type: ACTION_TYPES.UPDATE_OBLIGATION, payload: { index, item: passed } });
+    }
+    function removeObligationItem(index: number) {
+        dispatch({ type: ACTION_TYPES.REMOVE_OBLIGATION, payload: index });
+    }
     function addExpenseItem(passed: ExpenseItem) {
         dispatch({ type: ACTION_TYPES.ADD_EXPENSE, payload: passed });
+    }
+    function addExpenseItems(passed: ExpenseItem[]) {
+        dispatch({ type: ACTION_TYPES.ADD_EXPENSE, payload: passed });
+    }
+    function updateExpenseItem(index: number, passed: ExpenseItem) {
+        dispatch({ type: ACTION_TYPES.UPDATE_EXPENSE, payload: { index, item: passed } });
+    }
+    function removeExpenseItem(index: number) {
+        dispatch({ type: ACTION_TYPES.REMOVE_EXPENSE, payload: index });
+    }
+    function selectPeriod(id: string) {
+        dispatch({ type: ACTION_TYPES.SELECT_PERIOD, payload: id });
+    }
+    function startNewMonth(passed: CurrentPeriod) {
+        dispatch({ type: ACTION_TYPES.START_NEW_MONTH, payload: passed });
     }
 
     const value = {
@@ -115,8 +153,17 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
             passWelcomeTutorial,
             setCurrentPeriod,
             addIncomeItem,
+            updateIncomeItem,
+            removeIncomeItem,
             addObligationItem,
+            updateObligationItem,
+            removeObligationItem,
             addExpenseItem,
+            addExpenseItems,
+            updateExpenseItem,
+            removeExpenseItem,
+            selectPeriod,
+            startNewMonth,
         }
     }
 
