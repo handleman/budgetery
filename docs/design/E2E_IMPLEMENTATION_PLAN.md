@@ -1,5 +1,11 @@
 # E2E Remaining Work — Implementation Plan
 
+> Status 2026-09-10: ALL PHASES COMPLETE — 20/20 green headless ×3 runs.
+> Phase A unblocked via atomic in-page menu select (round-trip latency was
+> the whole blocker). I/B/E/C implemented against current testIDs
+> (`*-totals-bar`, `expenses-day-*[-warned]`). Phase F workflow added.
+> Kept below as implementation record.
+
 Parent strategy: `docs/design/E2E_PLAYWRIGHT_DESIGN.md`.
 Current state: O1/O2/O4 green headless; O3/N1/N2 skipped (menu overlay);
 I/B/E/C suites are `.skip` placeholders; no CI workflow yet.

@@ -6,11 +6,9 @@ import { setupPeriod } from '../helpers/flows';
  * Bottom navbar navigation: income / obligations / expenses.
  * Usecase: "navigate between screens by bottom bar".
  *
- * SKIP (2026-09-07): setup depends on the month-picker overlay, which the
- * headless runner cannot drive reliably yet (see onboarding O3 note).
- * Re-enable together with O3.
+ * Unblocked together with O3 (atomic menu select in e2e/helpers/flows.ts).
  */
-test.describe.skip('navigation', () => {
+test.describe('navigation', () => {
   test.beforeEach(async ({ page }) => {
     await setupPeriod(page, { month: 9, periodLabel: 'September' });
   });
@@ -32,7 +30,7 @@ test.describe.skip('navigation', () => {
     await page.getByTestId(tid.tabs.expenses).click();
     await expect(
       page.getByTestId(tid.expenses.empty).or(
-        page.getByTestId(tid.expenses.listCard),
+        page.getByTestId(tid.expenses.fab),
       ),
     ).toBeVisible();
 
