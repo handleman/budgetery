@@ -23,32 +23,6 @@ function renderTree(element: React.ReactElement) {
 
 describe('AddExpenseModal', () => {
 
-  const mockDispatch = jest.fn();
-
-  const mockStore: any = {
-    expenseItems: [],
-    remainingBudget: 0,
-    totalExpenses: 0,
-  };
-
-  const mockMutators = {
-    addExpenseItem: (item: any) => {
-      mockDispatch({ type: 'ADD_EXPENSE', payload: item });
-    },
-    passIncomeTutorial: () => {},
-    passObligationsTutorial: () => {},
-    passExpensesTutorial: () => {},
-    passWelcomeTutorial: () => {},
-    setCurrentPeriod: () => {},
-    addIncomeItem: () => {},
-    addObligationItem: () => {},
-  };
-
-  const mockContextValue = {
-    store: mockStore,
-    mutators: mockMutators,
-  };
-
   describe('Component Structure', () => {
     it('should render when visible is true', () => {
       const tree = renderTree(

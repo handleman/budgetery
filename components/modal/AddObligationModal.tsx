@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
@@ -23,7 +23,11 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
     const [isRecurring, setIsRecurring] = useState<boolean>(false);
     const [dateText, setDateText] = useState<string>(toDayKey(new Date()));
 
-    useEffect(() => {
+    // Prefill on open (transition closed→open) during render — the React-endorsed
+    // alternative to setState-in-effect. The editing target never changes while open.
+    const [wasVisible, setWasVisible] = useState(false);
+    if (isVisible !== wasVisible) {
+        setWasVisible(isVisible);
         if (isVisible) {
             if (initial) {
                 setAmountText(String(initial.amount));
@@ -39,7 +43,7 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
                 setDateText(toDayKey(new Date()));
             }
         }
-    }, [isVisible, editingIndex]);
+    }
 
     const closeAndReset = () => {
         setAmountText('');

@@ -208,7 +208,7 @@ type SerializableItem = {
     isPercentage?: boolean;
 };
 
-function cleanItems(items: unknown): Array<Record<string, unknown>> {
+function cleanItems(items: unknown): Record<string, unknown>[] {
     if (!Array.isArray(items)) return [];
     return (items as SerializableItem[]).map((item) => ({
         date:
@@ -251,7 +251,7 @@ function cleanStoreForStorage(store: Store): Store {
             month,
         },
         periods: Array.isArray((store as unknown as Record<string, unknown>)['periods'])
-            ? ((store as unknown as Record<string, unknown>)['periods'] as Array<Record<string, unknown>>).map((p) => ({
+            ? ((store as unknown as Record<string, unknown>)['periods'] as Record<string, unknown>[]).map((p) => ({
                 id: typeof p['id'] === 'string' ? p['id'] : '',
                 name: typeof p['name'] === 'string' ? p['name'] : '',
                 month: typeof p['month'] === 'number' ? p['month'] : 0,

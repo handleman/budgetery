@@ -1,4 +1,4 @@
-import { calculateTotal, TOTAL_LENGTH } from './sample';
+import { calculateTotal } from './sample';
 
 describe('calculateTotal', () => {
   it('should sum up item lengths', () => {

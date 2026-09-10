@@ -101,18 +101,13 @@ export class StorageRegistry {
             if ('IndexedDB' in globalThis || 'indexedDB' in navigator) {
                 return 'web';
             }
-            
-            // React Native AsyncStorage usually means mobile
-            try {
-                require('react-native');
-                const expoPlatformFromRuntime = ((globalThis as any).__expo_runtime_platform);
-                if (expoPlatformFromRuntime) {
-                    return expoPlatformFromRuntime;
-                }
-                return 'other';
-            } catch (e) {
-                return 'other';
-            }
+
+            // No runtime signal at all: default to 'other' and let the caller
+            // fall back to the AsyncStorage-compatible adapter. (A legacy
+            // require('react-native') probe lived here; it was dead logic —
+            // reaching this branch already proves __expo_runtime_platform
+            // is unset, so it always returned 'other'.)
+            return 'other';
         }
 
         if (expoPlatform.includes('ios')) return 'ios';
@@ -188,16 +183,7 @@ export class StorageRegistry {
      * Check if storage is initialized and ready
      */
     public async isReady(): Promise<boolean> {
-        if (this.currentAdapter) {
-            try {
-                // Just a light check - doesn't need actual operations
-                return true;
-            } catch (error) {
-                console.error('[StorageRegistry] Storage readiness check failed:', error);
-                return false;
-            }
-        }
-        return false;
+        return this.currentAdapter !== null;
     }
 
     /**

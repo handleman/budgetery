@@ -2,8 +2,6 @@ import * as React from 'react';
 import renderer from 'react-test-renderer';
 import { PaperProvider } from 'react-native-paper';
 import AddIncomeModal from './AddIncomeModal';
-import { appContext } from '@/store/context';
-import { IncomeItem } from '@/store/types';
 
 // AddIncomeModal now renders Paper Dialog via Portal when visible, which
 // requires the Paper theme context. Hidden dialogs render null (AppDialog).
@@ -24,34 +22,6 @@ function renderTree(element: React.ReactElement) {
 }
 
 describe('AddIncomeModal', () => {
-
-  const mockDispatch = jest.fn();
-
-  const mockStore: any = {
-    incomeItems: [],
-    remainingBudget: 0,
-    totalBudget: 0,
-    totalObligations: 0,
-    daylyBudget: 0,
-  };
-
-  const mockMutators = {
-    addIncomeItem: (item: IncomeItem) => {
-      mockDispatch({ type: 'ADD_INCOME', payload: item });
-    },
-    passIncomeTutorial: () => {},
-    passObligationsTutorial: () => {},
-    passExpensesTutorial: () => {},
-    passWelcomeTutorial: () => {},
-    setCurrentPeriod: () => {},
-    addObligationItem: () => {},
-    addExpenseItem: () => {},
-  };
-
-  const mockContextValue = {
-    store: mockStore,
-    mutators: mockMutators,
-  };
 
   describe('Component Structure', () => {
     it('should render when visible is true', () => {
@@ -114,12 +84,7 @@ describe('AddIncomeModal', () => {
   describe('On Submit Handler', () => {
 
     it('should dispatch action when Save button is pressed with valid data', () => {
-      const testAmount = 100;
-      const testLabel = 'Test Income';
-
-      // We need to simulate the onSubmit function being called
-      // This would require more complex mocking
-
+      // Would require interactive mocking of dialog inputs; structural check only.
       const tree = renderTree(
         <AddIncomeModal isVisible={false} onClose={() => {}} />,
       );
@@ -128,13 +93,7 @@ describe('AddIncomeModal', () => {
     });
 
     it('should dispatch addIncomeItem action with correct payload structure', () => {
-      const expectedIncomeItem: IncomeItem = {
-        date: new Date(),
-        amount: 100,
-        label: 'Test Label',
-      };
-
-      // This is a structural test
+      // Structural test for the IncomeItem payload shape (date/amount/label).
       const tree = renderTree(
         <AddIncomeModal isVisible={false} onClose={() => {}} />,
       );

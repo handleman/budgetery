@@ -2,7 +2,7 @@ import { Image, StyleSheet, View } from 'react-native';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { appContext } from '@/store/context';
 import { visibleExpenses } from '@/store/reducer';
 import { groupExpensesByDay } from '@/store/expenseGrouping';
@@ -16,7 +16,8 @@ import { AppEmptyState, AppFAB, StickyTotalsBar } from '@/components/ui';
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
   const { expensesTutorialPassed, remains, totalExpenses, daylyBudget } = ctx.store;
-  const [tutorialPassed, setTutorialPassed] = useState<boolean>(expensesTutorialPassed);
+  // Tutorial flag is derived from the store directly — no mirror state.
+  const tutorialPassed = expensesTutorialPassed;
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingItem, setEditingItem] = useState<ExpenseItem | null>(null);
@@ -51,14 +52,6 @@ export default function ExpensesScreen() {
   const toggleDay = (dayKey: string) => {
     setExpandedDays((prev) => ({ ...prev, [dayKey]: !(prev[dayKey] ?? true) }));
   };
-
-
-  useEffect(() => {
-    if (tutorialPassed !== expensesTutorialPassed) {
-      setTutorialPassed(expensesTutorialPassed);
-    }
-
-  }, [expensesTutorialPassed]);
 
   return (
     <ThemedView style={styles.screen}>

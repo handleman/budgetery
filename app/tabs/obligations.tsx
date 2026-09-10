@@ -13,7 +13,8 @@ export default function ObligationScreen() {
   const ctx = useContext(appContext);
   const router = useRouter();
   const { obligationsTutorialPassed, incomeTutorialPassed, expensesTutorialPassed, totalObligations, remainingBudget, daylyBudget, remains, totalBudget } = ctx.store;
-  const [tutorialPassed, setTutorialPassed] = useState<boolean>(obligationsTutorialPassed);
+  // Tutorial flag is derived from the store directly — no mirror state.
+  const tutorialPassed = obligationsTutorialPassed;
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingItem, setEditingItem] = useState<ObligationItem | null>(null);
@@ -43,17 +44,10 @@ export default function ObligationScreen() {
 
 
   useEffect(() => {
-    if (tutorialPassed !== obligationsTutorialPassed) {
-      setTutorialPassed(obligationsTutorialPassed);
-    }
-
-  }, [obligationsTutorialPassed]);
-
-  useEffect(() => {
     if (incomeTutorialPassed && obligationsTutorialPassed && expensesTutorialPassed) {
       router.replace('/tabs/expenses');
     }
-  }, [incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed]);
+  }, [incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed, router]);
 
   const obligationSubtitle = (obligation: ObligationItem): string | undefined => {
     if (!obligation.isPercentage) return undefined;

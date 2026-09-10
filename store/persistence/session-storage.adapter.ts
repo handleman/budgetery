@@ -93,7 +93,7 @@ export class SessionStorageAdapter implements IStorageAdapter {
                     name: store.currentPeriod.name || '',
                     month: Number(store.currentPeriod.month),
                 };
-            } catch (e) {
+            } catch {
                 result.currentPeriod = store.currentPeriod;
             }
         } else if (store.currentPeriod && typeof store.currentPeriod.month === 'number') {
