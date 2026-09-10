@@ -20,13 +20,10 @@ test.describe('onboarding', () => {
     await expect(page.getByTestId(tid.welcome.apply)).toBeVisible();
   });
 
-  // SKIP (2026-09-07): month-picker flow is implemented and verified manually
-  // (select -> label autofill -> Apply -> /tabs), but the Paper Menu overlay
-  // cannot be driven reliably by the headless runner yet: it auto-closes
-  // ~100ms after opening and its entrance animation never reports "stable",
-  // so the option click times out. Re-enable once the overlay is
-  // automation-ready. See docs/design/E2E_PLAYWRIGHT_DESIGN.md §8.
-  test.skip('O3: select month + label navigates to tabs', async ({ page }) => {
+  // Unblocked 2026-09-10: the Paper Menu overlay auto-dismisses ~50–110ms
+  // after opening headless, so multi-round-trip flows race it. Fixed with an
+  // atomic in-page open+select (e2e/helpers/flows.ts selectMenuOption).
+  test('O3: select month + label navigates to tabs', async ({ page }) => {
     await setupPeriod(page, { month: 9, periodLabel: 'September' });
     await expect(page.getByTestId(tid.tabs.income)).toBeVisible();
     await expect(page.getByTestId(tid.tabs.obligations)).toBeVisible();

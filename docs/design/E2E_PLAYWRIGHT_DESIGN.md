@@ -79,12 +79,12 @@ Canonical IDs live in `e2e/helpers/selectors.ts`:
 
 | Area | testIDs |
 |---|---|
-| Welcome | `welcome-get-started`, `month-picker`, `period-label-input`, `welcome-apply` |
+| Welcome | `welcome-get-started`, `month-picker[-anchor/-option-N]`, `period-label-input`, `welcome-apply` (+`start-new-month-button`, `month-list`/`month-row-N`, `tutorial-progress` after a period exists) |
 | Tabs | `tab-income`, `tab-obligations`, `tab-expenses` |
-| Income | `income-empty`, `income-empty-action`, `income-fab`, `income-row-0…`, `income-totals-card` |
-| Obligations | `obligations-empty(-action)`, `obligations-fab`, `obligations-row-0…`, `obligation-percentage-switch`, `obligation-amount-input`, `obligation-label-input` |
-| Expenses | `expenses-empty(-action)`, `expenses-fab`, `expenses-row-0…`, `expenses-totals-card` |
-| Dialogs | `add-{income,obligation,expense}-dialog-action-save/back`, `{income,obligation,expense}-{amount,label}-input` |
+| Income | `income-empty(-action)`, `income-fab`, `income-row-0…`, `income-totals-bar(-total/-remaining/-daily/-remains)`, `income-projections` |
+| Obligations | `obligations-empty(-action)`, `obligations-fab`, `obligations-row-0…`, `obligation-percentage-switch`, `obligation-recurring-switch`, `obligation-{amount,label,date}-input`, `obligations-totals-bar-*` |
+| Expenses | `expenses-empty(-action)`, `expenses-fab`, `expenses-day-{yyyy-mm-dd}[-warned]`, `expenses-row-N`, `expenses-totals-bar(-total/-remains)` |
+| Dialogs | `add-{income,obligation,expense}-dialog-action-save/back/delete`, `{income,obligation,expense}-{amount,label}-input`, `{income,obligation,expense}-date-input` |
 
 If a flow needs a selector not in the map, **add the `testID` to app code first**
 (AGENTS.md rule), then reference it — never fall back to fragile selectors.
@@ -118,9 +118,16 @@ No authenticated sessions, no seeded backend — the app is fully client-side.
 | # | Usecase | Steps (testIDs) | Expect |
 |---|---|---|---|
 | O1 | First run shows tutorial, then income tab | `goto /` → `welcome-get-started` visible | Title "You don't have any data yet" |
-| O2 | Complete welcome → month picker | click `welcome-get-started` → `month-picker` visible | Month prompt + `period-label-input` + `welcome-apply` |
-| O3 | Select month + label → tabs | pick month via `month-picker`, fill `period-label-input`, click `welcome-apply` | URL `/tabs`, `tab-income/obligations/expenses` visible |
+| O2 | Complete welcome → month picker | click `welcome-get-started` → `month-picker-anchor` visible | Month prompt + `period-label-input` + `welcome-apply` |
+| O3 | Select month + label → tabs | atomic menu select (`selectMenuOption`), fill `period-label-input`, click `welcome-apply` | URL `/tabs`, `tab-income/obligations/expenses` visible |
 | O4 | New month → tutorial again | clear storage, reload `/` | Tutorial shown again (O1) |
+
+Status (2026-09-10): all green headless, 3 consecutive runs. The Paper
+Menu overlay auto-dismisses ~50–110ms after opening, so option selection
+is done atomically in-page (`e2e/helpers/flows.ts selectMenuOption`;
+clicks the real anchor + real option, ~10ms). Paper Dialogs stay mounted
+while open — plain locator API is deterministic there
+(`e2e/helpers/dialogs.ts fillAndSave`).
 
 ### 7.2 `navigation.spec.ts` — bottom navbar
 
@@ -133,10 +140,10 @@ No authenticated sessions, no seeded backend — the app is fully client-side.
 
 | # | Usecase | Steps | Expect |
 |---|---|---|---|
-| I1 | Add income via empty state | `income-empty-action` → fill `income-amount-input` + `income-label-input` → `add-income-dialog-action-save` | `income-row-0` appears; `income-totals-card` shows total |
-| I2 | Add second source, total = sum | `income-fab` → add → assert | Totals card = amount₁ + amount₂ |
-| I3 | Totals sticky on scroll | scroll list | `income-totals-card` still visible (sticky bottom navbar) |
-| I4 | Daily + remaining budget shown | assert | `income-totals-card` contains Total / Remaining / Daily |
+| I1 | Add income via empty state | `income-empty-action` → fill `income-amount-input` + `income-label-input` → `add-income-dialog-action-save` | `income-row-0` appears; `income-totals-bar-total` shows total |
+| I2 | Add second source, total = sum | `income-fab` → add → assert | Totals bar = amount₁ + amount₂ |
+| I3 | Totals sticky on scroll | scroll list | `income-totals-bar` still intersects viewport (sticky bottom navbar) |
+| I4 | Daily + remaining budget shown | assert | Bar contains Total / Remaining / Daily |
 
 ### 7.4 `obligations.spec.ts` — Obligation Tracking
 
@@ -151,38 +158,32 @@ No authenticated sessions, no seeded backend — the app is fully client-side.
 
 | # | Usecase | Steps | Expect |
 |---|---|---|---|
-| E1 | Add expense, affects remains | `expenses-fab` (or empty action) → fill `expense-amount-input`/`expense-label-input` → save | `expenses-row-0` appears; `expenses-totals-card` total + remains updated |
-| E2 | Grouped by day, expandable | add 2 expenses same day | Single day card with both entries |
-| E3 | Over-budget day highlighted | expense > daily budget | Day card gets warning styling (accent class) |
-| E4 | Totals sticky bottom | scroll | `expenses-totals-card` pinned |
+| E1 | Add expense, affects remains | `expenses-fab` (or empty action) → fill `expense-amount-input`/`expense-label-input` → save | `expenses-row-0` appears; totals bar total + remains updated |
+| E2 | Grouped by day, expandable | add 2 expenses same day | Single `expenses-day-{today}` card with both entries + day total |
+| E3 | Over-budget day highlighted | expense > daily budget | `expenses-day-{today}-warned` card visible (testID hook, no CSS asserts) |
+| E4 | Totals sticky bottom | scroll | `expenses-totals-bar` pinned |
 
 ### 7.6 `calculations.spec.ts` — cross-screen consistency (State Management)
 
 | # | Usecase | Steps | Expect |
 |---|---|---|---|
-| C1 | Expense reduces remains on all screens | seed income → add obligation → add expense | `income-totals-card`, obligations totals, `expenses-totals-card` all agree on remains |
-| C2 | Persistence across reload | seed data → `page.reload()` | Rows + totals intact (AsyncStorage) |
+| C1 | Expense reduces remains on all screens | seed income → add obligation → add expense | `income-totals-bar-remains`, obligations remains, `expenses-totals-bar-remains` all agree |
+| C2 | Persistence across reload | seed data → wait for IndexedDB write → `page.reload()` | Rows + totals intact (IndexedDB on web; the save is async, so the spec polls the `Budgetery/budget_store` DB instead of reloading blindly) |
 
 ## 8. Initial scope (this change)
 
 1. ✅ This design doc.
 2. ✅ `playwright.config.ts` + `e2e/{fixtures,helpers,specs}/` skeleton.
-   Active smoke specs: O1, O2, O4 (tutorial visible / picker revealed /
-   tutorial repeats). Green headless.
 3. ✅ `@playwright/test` devDependency + scripts + gitignore + Jest ignore.
-4. ⏸️ Skipped until automation-ready: O3, N1, N2 (`test.skip`/`describe.skip`
-   with reason in code). Finding (2026-09-07): the month-picker flow itself
-   works — verified manually in a healthy browser (select September → label
-   autofills → Apply → `/tabs` with all three tabs). But the headless runner
-   cannot drive the Paper Menu overlay reliably: the menu auto-closes
-   ~50–110ms after opening with no input/resize/remount observed, and its
-   entrance animation never reports "stable", so option clicks time out
-   (normal, force, and synthetic alike). Re-enable when the overlay is
-   automation-ready (e.g. animation settles deterministically headless).
-5. ⏳ Full I/B/E/C suites (7.3–7.6): `.skip` placeholders referencing this doc,
-   implemented in follow-ups once dialog/menu web behavior is confirmed.
-6. ⏳ CI workflow (`.github/workflows/e2e.yml`): `npm ci` → `npx playwright install
-   chromium` → `npm run e2e:build` → `npm run e2e` — left for the CI change.
+4. ✅ O3/N1/N2 unblocked via atomic menu select (2026-09-10).
+5. ✅ Full I/B/E/C suites implemented (2026-09-10): 20/20 green headless,
+   3 consecutive runs. Helpers: `flows.ts` (`setupPeriod`,
+   `selectMenuOption`), `dialogs.ts` (`fillAndSave`, `expectStickyBottom`).
+6. ✅ CI workflow (`.github/workflows/e2e.yml`): `npm ci` → install
+   chromium → `npm run e2e:build` → `npm run e2e`, report upload on failure.
+
+Timeout policy: per-test `timeout: 15s`, `expect: 5s` — smoke specs assert in
+seconds; failures surface fast instead of hanging 30s per locator.
 
 Timeout policy: per-test `timeout: 15s`, `expect: 5s` — smoke specs assert in
 seconds; failures surface fast instead of hanging 30s per locator.
