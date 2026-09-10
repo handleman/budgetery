@@ -22,7 +22,7 @@ export async function applyMigrations(store: Partial<Store>): Promise<Partial<St
         const pid = next['currentPeriodId'] as string | null;
         if (typeof pid === 'string' && pid) {
             for (const key of ['incomeItems', 'obligationItems', 'expenseItems'] as const) {
-                const items = next[key] as Array<{ periodId?: string }> | undefined;
+                const items = next[key] as { periodId?: string }[] | undefined;
                 if (Array.isArray(items)) {
                     next[key] = items.map((item) =>
                         item && !item.periodId ? { ...item, periodId: pid } : item,

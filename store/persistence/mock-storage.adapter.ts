@@ -50,7 +50,7 @@ export class MockStorageAdapter implements IStorageAdapter {
                     name: store.currentPeriod.name || '',
                     month: isNaN(monthNum) ? 0 : monthNum,
                 };
-            } catch (e) {}
+            } catch {}
         } else if (store.currentPeriod) {
             result.currentPeriod = store.currentPeriod;
         }

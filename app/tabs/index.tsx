@@ -18,7 +18,8 @@ export default function IncomeScreen() {
   const ctx = useContext(appContext);
   const { incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed, totalBudget, remainingBudget, daylyBudget, remains } = ctx.store;
   const router = useRouter();
-  const [tutorialPassed, setTutorialPassed] = useState<boolean>(incomeTutorialPassed);
+  // Tutorial flag is derived from the store directly — no mirror state.
+  const tutorialPassed = incomeTutorialPassed;
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingItem, setEditingItem] = useState<IncomeItem | null>(null);
@@ -55,19 +56,12 @@ export default function IncomeScreen() {
   };
 
 
-  useEffect(() => {
-    if (tutorialPassed !== incomeTutorialPassed) {
-      setTutorialPassed(incomeTutorialPassed);
-    }
-
-  }, [incomeTutorialPassed]);
-
   // After all tutorials passed, expenses is the default tab.
   useEffect(() => {
     if (incomeTutorialPassed && obligationsTutorialPassed && expensesTutorialPassed) {
       router.replace('/tabs/expenses');
     }
-  }, [incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed]);
+  }, [incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed, router]);
 
   return (
     <ThemedView style={styles.screen}>

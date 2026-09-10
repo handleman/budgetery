@@ -1,5 +1,5 @@
 import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
-import { Action, CurrentPeriod, IncomeItem, ExpenseItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, isPeriodRecordPassed, ObligationItem, PeriodRecord, Store, isExpenseItemPassed, IndexedItemUpdate } from "./types";
+import { Action, CurrentPeriod, IncomeItem, ExpenseItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, PeriodRecord, Store, isExpenseItemPassed, IndexedItemUpdate } from "./types";
 
 export function periodIdFor(store: Store): string | null {
     return store.currentPeriodId ?? null;
@@ -38,7 +38,7 @@ function stampPeriod<T extends { periodId?: string }>(store: Store, item: T): T 
 }
 
 export function remainsReducer(store: Store): Store {
-    const { remainingBudget, expenseItems, totalExpenses } = store;
+    const { remainingBudget, totalExpenses } = store;
     return {
         ...store,
         remains: remainingBudget - totalExpenses,

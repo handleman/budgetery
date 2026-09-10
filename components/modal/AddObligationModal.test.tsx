@@ -2,8 +2,6 @@ import * as React from 'react';
 import renderer from 'react-test-renderer';
 import { PaperProvider } from 'react-native-paper';
 import AddObligationModal from './AddObligationModal';
-import { appContext } from '@/store/context';
-import { ObligationItem } from '@/store/types';
 
 // AddObligationModal now renders Paper Dialog via Portal when visible, which
 // requires the Paper theme context. Hidden dialogs render null (AppDialog).
@@ -24,34 +22,6 @@ function renderTree(element: React.ReactElement) {
 }
 
 describe('AddObligationModal', () => {
-
-  const mockDispatch = jest.fn();
-
-  const mockStore: any = {
-    incomeItems: [],
-    remainingBudget: 0,
-    totalBudget: 10000, // Required for percentage calculations
-    totalObligations: 0,
-    daylyBudget: 0,
-  };
-
-  const mockMutators = {
-    addObligationItem: (item: ObligationItem) => {
-      mockDispatch({ type: 'ADD_OBLIGATION', payload: item });
-    },
-    passIncomeTutorial: () => {},
-    passObligationsTutorial: () => {},
-    passExpensesTutorial: () => {},
-    passWelcomeTutorial: () => {},
-    setCurrentPeriod: () => {},
-    addIncomeItem: () => {},
-    addExpenseItem: () => {},
-  };
-
-  const mockContextValue = {
-    store: mockStore,
-    mutators: mockMutators,
-  };
 
   describe('Component Structure', () => {
     it('should render with isPercentage switch and all inputs when visible is true', () => {

@@ -99,7 +99,7 @@ export class AsyncStorageAdapter implements IStorageAdapter {
         // Process item arrays - convert to serializable format
         ['incomeItems', 'obligationItems', 'expenseItems'].forEach((key) => {
             const storeRecord = store as unknown as Record<string, unknown>;
-            const items = (storeRecord[key] as Array<{ date?: Date | string; amount: number; label: string; isPercentage?: boolean }> || []) as Array<{ date?: Date | string; amount: number; label: string; isPercentage?: boolean }>;
+            const items = (storeRecord[key] as { date?: Date | string; amount: number; label: string; isPercentage?: boolean }[] || []) as { date?: Date | string; amount: number; label: string; isPercentage?: boolean }[];
             
             result[key] = items.map((item) => ({
                 date: item.date instanceof Date ? item.date.toISOString() : (item.date || ''),

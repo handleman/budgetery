@@ -1,36 +1,10 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
 import { defaultAppContextValue } from './context';
 import { ACTION_TYPES, TUTORIAL_NAMES } from './enums';
 import { IncomeItem, ExpenseItem, ObligationItem, CurrentPeriod } from './types';
 
 describe('appContext', () => {
-  
+
   describe('Mutators - Tutorial Functions', () => {
-    let rendererInstance: any;
-
-    beforeEach(() => {
-      // Create a fresh context instance for each test
-      const mockStore = {
-        incomeTutorialPassed: false,
-        obligationsTutorialPassed: false,
-        expensesTutorialPassed: false,
-        welcomeTutorialPassed: false,
-        currentPeriod: { name: '', month: 0 },
-        incomeItems: [],
-        obligationItems: [],
-        expenseItems: [],
-        totalBudget: 0,
-        totalPercentageObligations: 0,
-        totalObligations: 0,
-        totalExpenses: 0,
-        remainingBudget: 0,
-        daylyBudget: 0,
-        remains: 0,
-      };
-
-      rendererInstance = renderer.create(React.createElement('div')).toJSON();
-    });
 
     it('passIncomeTutorial should exist in mutators', () => {
       expect(defaultAppContextValue.mutators.passIncomeTutorial).toBeDefined();
@@ -116,14 +90,14 @@ describe('appContext', () => {
       tutorial,
       type,
     }) => {
-      // This is more of a structural test - checking they call the right dispatcher
       const mockDispatcher = jest.fn();
-      
+
       const mockMutator = () => {
         mockDispatcher({ type: type, payload: TUTORIAL_NAMES[tutorial as keyof typeof TUTORIAL_NAMES] } as any);
       };
 
-      expect(mockDispatcher).toBeDefined();
+      mockMutator();
+      expect(mockDispatcher).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -180,7 +180,7 @@ export class IndexedDBAdapter implements IStorageAdapter {
                         ? store.currentPeriod.month[0] 
                         : Number(store.currentPeriod.month),
                 };
-            } catch (e) {
+            } catch {
                 result.currentPeriod = store.currentPeriod;
             }
         } else if (store.currentPeriod && typeof store.currentPeriod.month === 'number') {
@@ -243,13 +243,13 @@ export class IndexedDBAdapter implements IStorageAdapter {
                                 if (!isNaN(parsed.getTime())) {
                                     return { ...item, date: parsed };
                                 }
-                            } catch (e) {}
+                            } catch {}
                         }
                         return item;
                     });
                 }
             });
-        } catch (e) {
+        } catch {
             // Ignore restore errors
         }
 

@@ -1,4 +1,4 @@
-import { appReducer, daylyBudgetReducer, totalBudgetReducer, totalExpensesReducer, totalObligationsReducer, remainingBudgetReducer, remainsReducer } from './reducer';
+import { appReducer, daylyBudgetReducer, totalBudgetReducer, totalExpensesReducer, totalObligationsReducer, totalPercentageObligationsReducer, remainingBudgetReducer, remainsReducer } from './reducer';
 import { ACTION_TYPES } from './enums';
 import { TUTORIAL_NAMES } from './enums';
 import { Store, IncomeItem, ExpenseItem, ObligationItem, CurrentPeriod } from './types';
@@ -134,20 +134,15 @@ describe('appReducer', () => {
         const store: Store = {
           ...initialStore,
           totalBudget: 10000,
-          totalObligations: 2300, // plain obligations
+          totalObligations: 0,
           obligationItems: [
             { date: new Date(), amount: 10, label: 'Insurance', isPercentage: true },
-            { date: new Date(), amount: 500, label: 'Mortgage Interest', isPercentage: true },
           ],
         };
 
-        const result = appReducer(store, {} as any);
-        // Should calculate: (10 + 500) / 100 * 10000 = 51000... wait that's wrong
-        // Recalculating: totalBudget * percentageObligations / 100
-        // = 10000 * (10 + 500) / 100 = 10000 * 5.1 = 51000... 
-        // Actually looking at code: percentageObligations = 510, so 10000 * 5.1 = 51000
-        // But totalObligations also has the plain sum... let me check the test again
-        
+        // 10% of 10000 = 1000.
+        const result = totalPercentageObligationsReducer(store);
+        expect(result.totalPercentageObligations).toBe(1000);
       });
     });
 
