@@ -8,4 +8,5 @@ export { AppEmptyState } from './AppEmptyState';
 export { AppDivider } from './AppDivider';
 export { AppMenuSelect } from './AppMenuSelect';
 export { AppSwitch } from './AppSwitch';
+export { StickyTotalsBar } from './StickyTotalsBar';
 export { getPaperTheme } from './paperTheme';

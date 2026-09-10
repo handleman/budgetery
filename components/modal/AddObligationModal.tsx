@@ -1,40 +1,100 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
 import { appContext } from '@/store/context';
 import { AppDialog, AppSwitch, AppTextInput } from '@/components/ui';
+import type { ObligationItem } from '@/store/types';
+import { parseDateInput, toDayKey } from '@/store/expenseGrouping';
 
-const AddObligationModal: React.FC<{ isVisible: boolean; onClose: () => void }> = ({ isVisible, onClose }) => {
+type Props = {
+    isVisible: boolean;
+    onClose: () => void;
+    editingIndex?: number | null;
+    initial?: ObligationItem | null;
+};
+
+const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = null, initial = null }) => {
     const ctx = useContext(appContext);
-    const [amount, setAmount] = useState<number>(0);
+    const isEditing = editingIndex !== null && editingIndex !== undefined && initial !== null;
+    const [amountText, setAmountText] = useState<string>('');
     const [label, setLabel] = useState<string>('');
     const [isPercentage, setIsPercentage] = useState<boolean>(false);
-    const onSubmit = () => {
-        if (!Number.isFinite(amount) || label.trim() === '') return;
-        const currentDate = new Date();
-        const obligationItem = { date: currentDate, amount, label: label.trim(), isPercentage }
-        ctx.mutators.addObligationItem(obligationItem);
-        setAmount(0);
+    const [isRecurring, setIsRecurring] = useState<boolean>(false);
+    const [dateText, setDateText] = useState<string>(toDayKey(new Date()));
+
+    useEffect(() => {
+        if (isVisible) {
+            if (initial) {
+                setAmountText(String(initial.amount));
+                setLabel(initial.label);
+                setIsPercentage(initial.isPercentage);
+                setIsRecurring(initial.isRecurring === true);
+                setDateText(toDayKey(initial.date));
+            } else {
+                setAmountText('');
+                setLabel('');
+                setIsPercentage(false);
+                setIsRecurring(false);
+                setDateText(toDayKey(new Date()));
+            }
+        }
+    }, [isVisible, editingIndex]);
+
+    const closeAndReset = () => {
+        setAmountText('');
         setLabel('');
         setIsPercentage(false);
+        setIsRecurring(false);
+        setDateText(toDayKey(new Date()));
         onClose();
-    }
+    };
+
+    const onSubmit = () => {
+        const amount = Number(amountText);
+        if (!Number.isFinite(amount) || amount === 0 || label.trim() === '') return;
+        const date = parseDateInput(dateText);
+        const obligationItem = { date, amount, label: label.trim(), isPercentage, isRecurring };
+        if (isEditing && editingIndex !== null && editingIndex !== undefined) {
+            ctx.mutators.updateObligationItem(editingIndex, obligationItem);
+        } else {
+            ctx.mutators.addObligationItem(obligationItem);
+        }
+        closeAndReset();
+    };
+
+    const onDelete = () => {
+        if (isEditing && editingIndex !== null && editingIndex !== undefined) {
+            ctx.mutators.removeObligationItem(editingIndex);
+        }
+        closeAndReset();
+    };
+
     const toggleSwitch = () => {
         setIsPercentage((old) => {
             return !old;
         });
     }
+    const toggleRecurring = () => {
+        setIsRecurring((old) => !old);
+    }
+    const actions = isEditing
+        ? [
+            { label: 'Back', onPress: closeAndReset },
+            { label: 'Delete', onPress: onDelete },
+            { label: 'Save', onPress: onSubmit },
+        ]
+        : [
+            { label: 'Back', onPress: closeAndReset },
+            { label: 'Save', onPress: onSubmit },
+        ];
     return (
         <AppDialog
             visible={isVisible}
-            onDismiss={onClose}
-            title="Add obligation"
+            onDismiss={closeAndReset}
+            title={isEditing ? 'Edit obligation' : 'Add obligation'}
             testID="add-obligation-dialog"
-            actions={[
-                { label: 'Back', onPress: onClose },
-                { label: 'Save', onPress: onSubmit },
-            ]}
+            actions={actions}
         >
             <ThemedView>
                 <ThemedText>You may choose between exact amount or relative percentage</ThemedText>
@@ -50,11 +110,19 @@ const AddObligationModal: React.FC<{ isVisible: boolean; onClose: () => void }> 
 
             </ThemedView>
             <ThemedView style={styles.inputContainer}>
+                <AppSwitch
+                    onValueChange={toggleRecurring}
+                    value={isRecurring}
+                    testID="obligation-recurring-switch"
+                />
+                <ThemedText style={styles.label}>Recurring monthly (carried into new months)</ThemedText>
+            </ThemedView>
+            <ThemedView style={styles.inputContainer}>
                 <AppTextInput
                     label="Amount"
                     keyboardType="numeric"
-                    value={amount > 0 ? amount?.toString() : ''}
-                    onChangeText={(text) => setAmount(Number(text))}
+                    value={amountText}
+                    onChangeText={setAmountText}
                     testID="obligation-amount-input"
                 />
             </ThemedView>
@@ -64,6 +132,14 @@ const AddObligationModal: React.FC<{ isVisible: boolean; onClose: () => void }> 
                     value={label}
                     onChangeText={setLabel}
                     testID="obligation-label-input"
+                />
+            </ThemedView>
+            <ThemedView style={styles.inputContainer}>
+                <AppTextInput
+                    label="Date (YYYY-MM-DD, today by default)"
+                    value={dateText}
+                    onChangeText={setDateText}
+                    testID="obligation-date-input"
                 />
             </ThemedView>
         </AppDialog>

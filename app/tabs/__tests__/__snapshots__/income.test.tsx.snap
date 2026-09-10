@@ -33,66 +33,63 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
         ]
       }
     >
-      <RCTScrollView
-        scrollEventThrottle={16}
+      <View
+        style={
+          [
+            {
+              "backgroundColor": "#fff",
+            },
+            {
+              "flex": 1,
+            },
+          ]
+        }
       >
-        <View>
-          <View
-            style={
-              [
-                {
-                  "height": 250,
-                  "overflow": "hidden",
-                },
-                {
-                  "backgroundColor": "#18C521",
-                },
-                {
-                  "transform": [
-                    {
-                      "translateY": 0,
-                    },
-                    {
-                      "scale": 0,
-                    },
-                  ],
-                },
-              ]
-            }
-          >
-            <Image
-              source={
-                {
-                  "testUri": "../../../assets/images/income-back.jpeg",
-                }
-              }
+        <RCTScrollView
+          scrollEventThrottle={16}
+        >
+          <View>
+            <View
               style={
-                {
-                  "bottom": 0,
-                  "height": 200,
-                  "left": 0,
-                  "position": "absolute",
-                  "resizeMode": "cover",
-                  "width": "100%",
-                }
+                [
+                  {
+                    "height": 250,
+                    "overflow": "hidden",
+                  },
+                  {
+                    "backgroundColor": "#18C521",
+                  },
+                  {
+                    "transform": [
+                      {
+                        "translateY": 0,
+                      },
+                      {
+                        "scale": 0,
+                      },
+                    ],
+                  },
+                ]
               }
-            />
-          </View>
-          <View
-            style={
-              [
-                {
-                  "backgroundColor": "#fff",
-                },
-                {
-                  "flex": 1,
-                  "gap": 16,
-                  "overflow": "hidden",
-                  "padding": 32,
-                },
-              ]
-            }
-          >
+            >
+              <Image
+                source={
+                  {
+                    "testUri": "../../../assets/images/income-back.jpeg",
+                  }
+                }
+                style={
+                  {
+                    "bottom": 0,
+                    "height": 200,
+                    "left": 0,
+                    "position": "absolute",
+                    "resizeMode": "cover",
+                    "width": "100%",
+                  }
+                }
+              />
+            </View>
             <View
               style={
                 [
@@ -100,12 +97,13 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                     "backgroundColor": "#fff",
                   },
                   {
-                    "gap": 8,
-                    "padding": 16,
+                    "flex": 1,
+                    "gap": 16,
+                    "overflow": "hidden",
+                    "padding": 32,
                   },
                 ]
               }
-              testID="income-empty"
             >
               <View
                 style={
@@ -114,13 +112,89 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                       "backgroundColor": "#fff",
                     },
                     {
-                      "alignItems": "center",
-                      "flexDirection": "row",
                       "gap": 8,
+                      "padding": 16,
                     },
                   ]
                 }
+                testID="income-empty"
               >
+                <View
+                  style={
+                    [
+                      {
+                        "backgroundColor": "#fff",
+                      },
+                      {
+                        "alignItems": "center",
+                        "flexDirection": "row",
+                        "gap": 8,
+                      },
+                    ]
+                  }
+                >
+                  <Text
+                    style={
+                      [
+                        {
+                          "textAlign": "left",
+                        },
+                        {
+                          "color": "rgba(28, 27, 31, 1)",
+                          "writingDirection": "ltr",
+                        },
+                        [
+                          {
+                            "fontFamily": "System",
+                            "fontSize": 22,
+                            "fontWeight": "400",
+                            "letterSpacing": 0,
+                            "lineHeight": 28,
+                          },
+                          undefined,
+                        ],
+                      ]
+                    }
+                  >
+                    Income Sources
+                  </Text>
+                  <View
+                    style={
+                      {
+                        "transform": [
+                          {
+                            "rotate": "25deg",
+                          },
+                        ],
+                      }
+                    }
+                  >
+                    <Text
+                      style={
+                        [
+                          {
+                            "color": "#11181C",
+                          },
+                          {
+                            "fontSize": 16,
+                            "lineHeight": 24,
+                          },
+                          undefined,
+                          undefined,
+                          undefined,
+                          undefined,
+                          {
+                            "fontSize": 28,
+                            "lineHeight": 32,
+                            "marginTop": -6,
+                          },
+                        ]
+                      }
+                    >
+                      👋
+                    </Text>
+                  </View>
+                </View>
                 <Text
                   style={
                     [
@@ -134,108 +208,24 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                       [
                         {
                           "fontFamily": "System",
-                          "fontSize": 22,
+                          "fontSize": 14,
                           "fontWeight": "400",
-                          "letterSpacing": 0,
-                          "lineHeight": 28,
+                          "letterSpacing": 0.25,
+                          "lineHeight": 20,
                         },
                         undefined,
                       ],
                     ]
                   }
                 >
-                  Income Sources
+                  Your monthly income sources — set the whole budget by adding different incomes (salary, cashback, present, etc.)
                 </Text>
-                <View
-                  style={
-                    {
-                      "transform": [
-                        {
-                          "rotate": "25deg",
-                        },
-                      ],
-                    }
-                  }
-                >
-                  <Text
-                    style={
-                      [
-                        {
-                          "color": "#11181C",
-                        },
-                        {
-                          "fontSize": 16,
-                          "lineHeight": 24,
-                        },
-                        undefined,
-                        undefined,
-                        undefined,
-                        undefined,
-                        {
-                          "fontSize": 28,
-                          "lineHeight": 32,
-                          "marginTop": -6,
-                        },
-                      ]
-                    }
-                  >
-                    👋
-                  </Text>
-                </View>
-              </View>
-              <Text
-                style={
-                  [
-                    {
-                      "textAlign": "left",
-                    },
-                    {
-                      "color": "rgba(28, 27, 31, 1)",
-                      "writingDirection": "ltr",
-                    },
-                    [
-                      {
-                        "fontFamily": "System",
-                        "fontSize": 14,
-                        "fontWeight": "400",
-                        "letterSpacing": 0.25,
-                        "lineHeight": 20,
-                      },
-                      undefined,
-                    ],
-                  ]
-                }
-              >
-                Your monthly income sources — set the whole budget by adding different incomes (salary, cashback, present, etc.)
-              </Text>
-              <View
-                collapsable={false}
-                style={
-                  {
-                    "backgroundColor": "rgba(103, 80, 164, 1)",
-                    "borderRadius": 20,
-                    "shadowColor": "#000",
-                    "shadowOffset": {
-                      "height": 0,
-                      "width": 0,
-                    },
-                    "shadowOpacity": 0,
-                    "shadowRadius": 0,
-                  }
-                }
-                testID="income-empty-action-container-outer-layer"
-              >
                 <View
                   collapsable={false}
                   style={
                     {
                       "backgroundColor": "rgba(103, 80, 164, 1)",
-                      "borderColor": "transparent",
                       "borderRadius": 20,
-                      "borderStyle": "solid",
-                      "borderWidth": 0,
-                      "flex": undefined,
-                      "minWidth": 64,
                       "shadowColor": "#000",
                       "shadowOffset": {
                         "height": 0,
@@ -245,121 +235,144 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                       "shadowRadius": 0,
                     }
                   }
-                  testID="income-empty-action-container"
+                  testID="income-empty-action-container-outer-layer"
                 >
                   <View
-                    accessibilityRole="button"
-                    accessibilityState={
-                      {
-                        "busy": undefined,
-                        "checked": undefined,
-                        "disabled": false,
-                        "expanded": undefined,
-                        "selected": undefined,
-                      }
-                    }
-                    accessibilityValue={
-                      {
-                        "max": undefined,
-                        "min": undefined,
-                        "now": undefined,
-                        "text": undefined,
-                      }
-                    }
-                    accessible={true}
                     collapsable={false}
-                    focusable={true}
-                    onBlur={[Function]}
-                    onClick={[Function]}
-                    onFocus={[Function]}
-                    onResponderGrant={[Function]}
-                    onResponderMove={[Function]}
-                    onResponderRelease={[Function]}
-                    onResponderTerminate={[Function]}
-                    onResponderTerminationRequest={[Function]}
-                    onStartShouldSetResponder={[Function]}
                     style={
-                      [
-                        {
-                          "overflow": "hidden",
+                      {
+                        "backgroundColor": "rgba(103, 80, 164, 1)",
+                        "borderColor": "transparent",
+                        "borderRadius": 20,
+                        "borderStyle": "solid",
+                        "borderWidth": 0,
+                        "flex": undefined,
+                        "minWidth": 64,
+                        "shadowColor": "#000",
+                        "shadowOffset": {
+                          "height": 0,
+                          "width": 0,
                         },
-                        {
-                          "borderRadius": 20,
-                        },
-                      ]
+                        "shadowOpacity": 0,
+                        "shadowRadius": 0,
+                      }
                     }
-                    testID="income-empty-action"
+                    testID="income-empty-action-container"
                   >
                     <View
+                      accessibilityRole="button"
+                      accessibilityState={
+                        {
+                          "busy": undefined,
+                          "checked": undefined,
+                          "disabled": false,
+                          "expanded": undefined,
+                          "selected": undefined,
+                        }
+                      }
+                      accessibilityValue={
+                        {
+                          "max": undefined,
+                          "min": undefined,
+                          "now": undefined,
+                          "text": undefined,
+                        }
+                      }
+                      accessible={true}
+                      collapsable={false}
+                      focusable={true}
+                      onBlur={[Function]}
+                      onClick={[Function]}
+                      onFocus={[Function]}
+                      onResponderGrant={[Function]}
+                      onResponderMove={[Function]}
+                      onResponderRelease={[Function]}
+                      onResponderTerminate={[Function]}
+                      onResponderTerminationRequest={[Function]}
+                      onStartShouldSetResponder={[Function]}
                       style={
                         [
                           {
-                            "alignItems": "center",
-                            "flexDirection": "row",
-                            "justifyContent": "center",
+                            "overflow": "hidden",
                           },
-                          undefined,
+                          {
+                            "borderRadius": 20,
+                          },
                         ]
                       }
+                      testID="income-empty-action"
                     >
-                      <Text
-                        numberOfLines={1}
-                        selectable={false}
+                      <View
                         style={
                           [
                             {
-                              "textAlign": "left",
+                              "alignItems": "center",
+                              "flexDirection": "row",
+                              "justifyContent": "center",
                             },
-                            {
-                              "color": "rgba(28, 27, 31, 1)",
-                              "writingDirection": "ltr",
-                            },
+                            undefined,
+                          ]
+                        }
+                      >
+                        <Text
+                          numberOfLines={1}
+                          selectable={false}
+                          style={
                             [
                               {
-                                "fontFamily": "System",
-                                "fontSize": 14,
-                                "fontWeight": "500",
-                                "letterSpacing": 0.1,
-                                "lineHeight": 20,
+                                "textAlign": "left",
+                              },
+                              {
+                                "color": "rgba(28, 27, 31, 1)",
+                                "writingDirection": "ltr",
                               },
                               [
                                 {
-                                  "marginHorizontal": 16,
-                                  "marginVertical": 9,
-                                  "textAlign": "center",
-                                },
-                                false,
-                                {
-                                  "marginHorizontal": 24,
-                                  "marginVertical": 10,
-                                },
-                                undefined,
-                                false,
-                                {
-                                  "color": "rgba(255, 255, 255, 1)",
                                   "fontFamily": "System",
                                   "fontSize": 14,
                                   "fontWeight": "500",
                                   "letterSpacing": 0.1,
                                   "lineHeight": 20,
                                 },
-                                undefined,
+                                [
+                                  {
+                                    "marginHorizontal": 16,
+                                    "marginVertical": 9,
+                                    "textAlign": "center",
+                                  },
+                                  false,
+                                  {
+                                    "marginHorizontal": 24,
+                                    "marginVertical": 10,
+                                  },
+                                  undefined,
+                                  false,
+                                  {
+                                    "color": "rgba(255, 255, 255, 1)",
+                                    "fontFamily": "System",
+                                    "fontSize": 14,
+                                    "fontWeight": "500",
+                                    "letterSpacing": 0.1,
+                                    "lineHeight": 20,
+                                  },
+                                  undefined,
+                                ],
                               ],
-                            ],
-                          ]
-                        }
-                        testID="income-empty-action-text"
-                      >
-                        Get started!
-                      </Text>
+                            ]
+                          }
+                          testID="income-empty-action-text"
+                        >
+                          Get started!
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
               </View>
             </View>
           </View>
-        </View>
-      </RCTScrollView>
+        </RCTScrollView>
+      </View>
     </View>
   </View>
 </RNCSafeAreaProvider>

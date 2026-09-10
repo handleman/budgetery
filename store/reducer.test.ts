@@ -10,6 +10,8 @@ describe('appReducer', () => {
     expensesTutorialPassed: false,
     welcomeTutorialPassed: false,
     currentPeriod: { name: '', month: 0 },
+    periods: [],
+    currentPeriodId: null,
     incomeItems: [],
     obligationItems: [],
     expenseItems: [],
@@ -291,6 +293,112 @@ describe('appReducer', () => {
       expect(result.totalObligations).toBe(500);
       expect(result.remainingBudget).toBe(4500);
       expect(result.remains).toBe(4500);
+    });
+  });
+
+  describe('update/remove actions', () => {
+    it('should update an expense item and recompute totals', () => {
+      const withExpense = appReducer(initialStore, {
+        type: ACTION_TYPES.ADD_EXPENSE,
+        payload: { date: new Date(), amount: 100, label: 'Food' } as ExpenseItem,
+      } as any);
+      const result = appReducer(withExpense, {
+        type: ACTION_TYPES.UPDATE_EXPENSE,
+        payload: { index: 0, item: { date: new Date(), amount: 250, label: 'Food' } as ExpenseItem },
+      } as any);
+
+      expect(result.totalExpenses).toBe(250);
+    });
+
+    it('should remove an expense item and recompute remains', () => {
+      const withExpense = appReducer(initialStore, {
+        type: ACTION_TYPES.ADD_EXPENSE,
+        payload: { date: new Date(), amount: 100, label: 'Food' } as ExpenseItem,
+      } as any);
+      const result = appReducer(withExpense, {
+        type: ACTION_TYPES.REMOVE_EXPENSE,
+        payload: 0,
+      } as any);
+
+      expect(result.totalExpenses).toBe(0);
+      expect(result.expenseItems.length).toBe(0);
+    });
+
+    it('should update and remove income items', () => {
+      const withIncome = appReducer(initialStore, {
+        type: ACTION_TYPES.ADD_INCOME,
+        payload: { date: new Date(), amount: 1000, label: 'Salary' } as IncomeItem,
+      } as any);
+      const updated = appReducer(withIncome, {
+        type: ACTION_TYPES.UPDATE_INCOME,
+        payload: { index: 0, item: { date: new Date(), amount: 2000, label: 'Salary' } as IncomeItem },
+      } as any);
+      expect(updated.totalBudget).toBe(2000);
+      const removed = appReducer(updated, { type: ACTION_TYPES.REMOVE_INCOME, payload: 0 } as any);
+      expect(removed.totalBudget).toBe(0);
+    });
+
+    it('should ignore out-of-range remove indexes', () => {
+      const result = appReducer(initialStore, { type: ACTION_TYPES.REMOVE_EXPENSE, payload: 5 } as any);
+      expect(result.expenseItems.length).toBe(0);
+    });
+  });
+
+  describe('multi-month periods', () => {
+    it('should create a period on START_NEW_MONTH and reset tab tutorials', () => {
+      const result = appReducer(initialStore, {
+        type: ACTION_TYPES.START_NEW_MONTH,
+        payload: { name: 'October', month: 10 } as CurrentPeriod,
+      } as any);
+
+      expect(result.periods.length).toBe(1);
+      expect(result.currentPeriodId).toBe(result.periods[0].id);
+      expect(result.currentPeriod).toEqual({ name: 'October', month: 10 });
+      expect(result.incomeTutorialPassed).toBe(false);
+      expect(result.totalBudget).toBe(0);
+    });
+
+    it('should isolate items per period and switch with SELECT_PERIOD', () => {
+      const october = appReducer(initialStore, {
+        type: ACTION_TYPES.START_NEW_MONTH,
+        payload: { name: 'October', month: 10 } as CurrentPeriod,
+      } as any);
+      const withIncome = appReducer(october, {
+        type: ACTION_TYPES.ADD_INCOME,
+        payload: { date: new Date(), amount: 3000, label: 'Salary' } as IncomeItem,
+      } as any);
+      expect(withIncome.totalBudget).toBe(3000);
+
+      const november = appReducer(withIncome, {
+        type: ACTION_TYPES.START_NEW_MONTH,
+        payload: { name: 'November', month: 11 } as CurrentPeriod,
+      } as any);
+      // New month starts empty (old items retained but hidden).
+      expect(november.totalBudget).toBe(0);
+      expect(november.expenseItems.length).toBe(0);
+      expect(november.incomeItems.length).toBe(1);
+
+      const backToOctober = appReducer(november, {
+        type: ACTION_TYPES.SELECT_PERIOD,
+        payload: october.currentPeriodId ?? november.periods[0].id,
+      } as any);
+      expect(backToOctober.totalBudget).toBe(3000);
+    });
+
+    it('should carry recurring obligations into the new month', () => {
+      const october = appReducer(initialStore, {
+        type: ACTION_TYPES.START_NEW_MONTH,
+        payload: { name: 'October', month: 10 } as CurrentPeriod,
+      } as any);
+      const withObligation = appReducer(october, {
+        type: ACTION_TYPES.ADD_OBLIGATION,
+        payload: { date: new Date(), amount: 500, label: 'Rent', isPercentage: false, isRecurring: true } as ObligationItem,
+      } as any);
+      const november = appReducer(withObligation, {
+        type: ACTION_TYPES.START_NEW_MONTH,
+        payload: { name: 'November', month: 11 } as CurrentPeriod,
+      } as any);
+      expect(november.totalObligations).toBe(500);
     });
   });
 

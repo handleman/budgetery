@@ -1,26 +1,36 @@
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'expo-router';
 import { appContext } from '@/store/context';
+import { visibleIncome } from '@/store/reducer';
+import { projectIncome, IncomeProjection } from '@/store/projections';
+import { IncomeProjections } from '@/components/income/IncomeProjections';
 import AddIncomeModal from '@/components/modal/AddIncomeModal';
 import { IncomeItem } from '@/store/types';
 import Hr from '@/components/Hr';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow, StickyTotalsBar } from '@/components/ui';
 
 export default function IncomeScreen() {
 
   const ctx = useContext(appContext);
-  const { incomeItems, incomeTutorialPassed, totalBudget, remainingBudget, daylyBudget } = ctx.store;
+  const { incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed, totalBudget, remainingBudget, daylyBudget, remains } = ctx.store;
+  const router = useRouter();
   const [tutorialPassed, setTutorialPassed] = useState<boolean>(incomeTutorialPassed);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [total, setTotal] = useState<number>(totalBudget);
-  const [remainingBudgetValue, setRemainingBudgetValue] = useState<number>(remainingBudget);
-  const [daylyBudgetValue, setDaylyBudgetValue] = useState<number>(daylyBudget);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingItem, setEditingItem] = useState<IncomeItem | null>(null);
 
-  const [incomes, setIncomes] = useState<IncomeItem[]>([]);
+  const incomes = useMemo(() => visibleIncome(ctx.store), [ctx.store]);
+  const projections = useMemo(() => projectIncome(ctx.store), [ctx.store]);
+
+  const addProjectionHandler = (projection: IncomeProjection) => {
+    const now = new Date();
+    const day = Math.min(projection.modalDay, 28);
+    ctx.mutators.addIncomeItem({ date: new Date(now.getFullYear(), now.getMonth(), day), amount: projection.avgAmount, label: projection.label });
+  };
 
 
   const getStartedHandler = () => {
@@ -29,35 +39,38 @@ export default function IncomeScreen() {
 
   }
   const addMoreHandler = () => {
+    setEditingIndex(null);
+    setEditingItem(null);
     setModalVisible(true);
   }
+  const editHandler = (visibleIndex: number) => {
+    setEditingIndex(visibleIndex);
+    setEditingItem(incomes[visibleIndex] ?? null);
+    setModalVisible(true);
+  };
   const closeModal = () => {
     setModalVisible(false);
+    setEditingIndex(null);
+    setEditingItem(null);
   };
 
 
   useEffect(() => {
-    setIncomes(incomeItems);
     if (tutorialPassed !== incomeTutorialPassed) {
       setTutorialPassed(incomeTutorialPassed);
     }
 
-  }, [incomeItems, incomeTutorialPassed]);
+  }, [incomeTutorialPassed]);
 
+  // After all tutorials passed, expenses is the default tab.
   useEffect(() => {
-    setTotal(totalBudget);
-  }, [totalBudget]);
-
-  useEffect(() => {
-    setRemainingBudgetValue(remainingBudget);
-  }, [remainingBudget]);
-
-  useEffect(() => {
-    setDaylyBudgetValue(daylyBudget);
-  }, [daylyBudget]);
+    if (incomeTutorialPassed && obligationsTutorialPassed && expensesTutorialPassed) {
+      router.replace('/tabs/expenses');
+    }
+  }, [incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed]);
 
   return (
-    <>
+    <ThemedView style={styles.screen}>
       <ParallaxScrollView
         headerBackgroundColor={{ dark: '#0E863D', light: '#18C521' }}
         headerImage={
@@ -77,30 +90,16 @@ export default function IncomeScreen() {
                       title={`${income.label} — ${income.amount}`}
                       description={income.date.toISOString()}
                       testID={`income-row-${index}`}
+                      onPress={() => editHandler(index)}
                     />
                     <AppDivider />
                   </ThemedView>
                 ))}
               </AppCard>
               <Hr />
-              <AppCard testID="income-totals-card">
-                <ThemedView>
-                  <ThemedText>
-                    Total amount: {total}
-                  </ThemedText>
-                </ThemedView>
-                <ThemedView>
-                  <ThemedText>
-                    Remaining budget: {remainingBudgetValue}
-                  </ThemedText>
-                </ThemedView>
-                <ThemedView>
-                  <ThemedText>
-                    Daily budget: {daylyBudgetValue}
-                  </ThemedText>
-                </ThemedView>
-              </AppCard>
+              <IncomeProjections projections={projections} onAdd={addProjectionHandler} />
               <AppFAB onPress={addMoreHandler} label="Add income" testID="income-fab" />
+              <View style={styles.footerSpacer} />
             </ThemedView>
           ) : (
             <AppEmptyState
@@ -115,12 +114,26 @@ export default function IncomeScreen() {
         }
 
       </ParallaxScrollView>
-      <AddIncomeModal isVisible={isModalVisible} onClose={closeModal} />
-    </>
+      {tutorialPassed && (
+        <StickyTotalsBar
+          testID="income-totals-bar"
+          items={[
+            { label: 'Total', value: totalBudget, testID: 'income-totals-bar-total' },
+            { label: 'Remaining', value: remainingBudget, testID: 'income-totals-bar-remaining' },
+            { label: 'Daily', value: Math.round(daylyBudget * 100) / 100, testID: 'income-totals-bar-daily' },
+            { label: 'Remains', value: remains, testID: 'income-totals-bar-remains' },
+          ]}
+        />
+      )}
+      <AddIncomeModal isVisible={isModalVisible} onClose={closeModal} editingIndex={editingIndex} initial={editingItem} />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -133,5 +146,8 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
     resizeMode: 'cover',
+  },
+  footerSpacer: {
+    height: 8,
   },
 });

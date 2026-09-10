@@ -8,6 +8,8 @@ export const createMockStore = (customValues?: Partial<Store>): Store => ({
   expensesTutorialPassed: false,
   welcomeTutorialPassed: false,
   currentPeriod: { name: '', month: 0 },
+  periods: customValues?.periods ?? [],
+  currentPeriodId: customValues?.currentPeriodId ?? null,
   incomeItems: [],
   obligationItems: [],
   expenseItems: [],
@@ -20,15 +22,24 @@ export const createMockStore = (customValues?: Partial<Store>): Store => ({
   remains: customValues?.remains ?? 0,
 });
 
-export const createMockMutators = (): { [key: string]: (payload?: any) => void } => ({
+export const createMockMutators = (): { [key: string]: (...args: any[]) => void } => ({
   passIncomeTutorial: () => {},
   passObligationsTutorial: () => {},
   passExpensesTutorial: () => {},
   passWelcomeTutorial: () => {},
   setCurrentPeriod: (payload: CurrentPeriod) => {},
   addIncomeItem: (payload: IncomeItem) => {},
+  updateIncomeItem: (index: number, payload: IncomeItem) => {},
+  removeIncomeItem: (index: number) => {},
   addObligationItem: (payload: ObligationItem) => {},
+  updateObligationItem: (index: number, payload: ObligationItem) => {},
+  removeObligationItem: (index: number) => {},
   addExpenseItem: (payload: ExpenseItem) => {},
+  addExpenseItems: (payload: ExpenseItem[]) => {},
+  updateExpenseItem: (index: number, payload: ExpenseItem) => {},
+  removeExpenseItem: (index: number) => {},
+  selectPeriod: (id: string) => {},
+  startNewMonth: (payload: CurrentPeriod) => {},
 });
 
 export const createMockContext = (): { store: Store; mutators: any } => ({

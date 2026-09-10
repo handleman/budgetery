@@ -220,6 +220,10 @@ function cleanItems(items: unknown): Array<Record<string, unknown>> {
         amount: typeof item.amount === 'number' ? item.amount : 0,
         label: typeof item.label === 'string' ? item.label : '',
         isPercentage: item.isPercentage === true,
+        isRecurring: (item as { isRecurring?: boolean }).isRecurring === true,
+        periodId: typeof (item as unknown as { periodId?: unknown }).periodId === 'string'
+            ? (item as unknown as { periodId: string }).periodId
+            : undefined,
     }));
 }
 
@@ -246,6 +250,18 @@ function cleanStoreForStorage(store: Store): Store {
             name: store.currentPeriod?.name || '',
             month,
         },
+        periods: Array.isArray((store as unknown as Record<string, unknown>)['periods'])
+            ? ((store as unknown as Record<string, unknown>)['periods'] as Array<Record<string, unknown>>).map((p) => ({
+                id: typeof p['id'] === 'string' ? p['id'] : '',
+                name: typeof p['name'] === 'string' ? p['name'] : '',
+                month: typeof p['month'] === 'number' ? p['month'] : 0,
+                year: typeof p['year'] === 'number' ? p['year'] : new Date().getFullYear(),
+            }))
+            : [],
+        currentPeriodId:
+            typeof (store as unknown as Record<string, unknown>)['currentPeriodId'] === 'string'
+                ? (store as unknown as Record<string, unknown>)['currentPeriodId']
+                : ((store as unknown as Record<string, unknown>)['currentPeriodId'] ?? null),
         incomeItems: cleanItems(record['incomeItems']),
         obligationItems: cleanItems(record['obligationItems']),
         expenseItems: cleanItems(record['expenseItems']),
@@ -275,13 +291,20 @@ function restoreDates(store: Store): Store {
         const items = restored[key];
         if (Array.isArray(items)) {
             restored[key] = items.map((item: any) => {
-                if (item && typeof item.date === 'string' && item.date) {
-                    const parsed = new Date(item.date);
+                const next = { ...item };
+                if (next && typeof next.date === 'string' && next.date) {
+                    const parsed = new Date(next.date);
                     if (!isNaN(parsed.getTime())) {
-                        return { ...item, date: parsed };
+                        next.date = parsed;
                     }
                 }
-                return item;
+                if (typeof next.isRecurring !== 'boolean') {
+                    delete next.isRecurring;
+                }
+                if (typeof next.periodId !== 'string') {
+                    delete next.periodId;
+                }
+                return next;
             });
         }
     });
@@ -295,6 +318,13 @@ function restoreDates(store: Store): Store {
  */
 function normalizeStore(store: any): Store {
     const record = (store || {}) as Record<string, unknown>;
+    const periods = Array.isArray(record['periods'])
+        ? (record['periods'] as any[]).filter(
+            (p) => p && typeof p.id === 'string' && typeof p.name === 'string' && typeof p.month === 'number',
+        )
+        : [];
+    const currentPeriodId =
+        typeof record['currentPeriodId'] === 'string' ? (record['currentPeriodId'] as string) : null;
     return {
         incomeTutorialPassed: record['incomeTutorialPassed'] === true,
         obligationsTutorialPassed: record['obligationsTutorialPassed'] === true,
@@ -304,6 +334,8 @@ function normalizeStore(store: any): Store {
             name: (record['currentPeriod'] as any)?.name || '',
             month: toNumber((record['currentPeriod'] as any)?.month),
         },
+        periods,
+        currentPeriodId,
         incomeItems: Array.isArray(record['incomeItems']) ? (record['incomeItems'] as Store['incomeItems']) : [],
         obligationItems: Array.isArray(record['obligationItems']) ? (record['obligationItems'] as Store['obligationItems']) : [],
         expenseItems: Array.isArray(record['expenseItems']) ? (record['expenseItems'] as Store['expenseItems']) : [],

@@ -115,6 +115,8 @@ function makeStore(): Store {
     expensesTutorialPassed: false,
     welcomeTutorialPassed: true,
     currentPeriod: { name: 'September', month: 9 },
+    periods: [{ id: '2026-9-september', name: 'September', month: 9, year: 2026 }],
+    currentPeriodId: '2026-9-september',
     incomeItems: [{ date: new Date('2026-09-01T00:00:00.000Z'), amount: 5000, label: 'Salary' }],
     obligationItems: [],
     expenseItems: [],
