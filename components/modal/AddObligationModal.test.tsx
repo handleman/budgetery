@@ -23,6 +23,16 @@ function renderTree(element: React.ReactElement) {
 
 describe('AddObligationModal', () => {
 
+  // The dialog defaults its date field to today — pin the clock so the
+  // snapshot is stable regardless of when the suite runs (local noon
+  // keeps toDayKey on the same calendar day in every timezone).
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date(2026, 8, 10, 12, 0, 0));
+  });
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   describe('Component Structure', () => {
     it('should render with isPercentage switch and all inputs when visible is true', () => {
       const tree = renderTree(
