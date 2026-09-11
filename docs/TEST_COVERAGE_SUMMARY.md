@@ -1,112 +1,38 @@
-# Budgetery - Final Test Coverage Summary
+# Budgetery - Test Coverage Summary
 
-## Files Created (14 new test files)
+## Strategy (2026-09-11)
 
-### Core Store Tests
-1. `store/reducer.test.ts` - All reducer logic including budget calculations
-2. `store/types.test.ts` - Type guard validators
-3. `store/context.test.tsx` - Context mutator functions
-4. `store/enums.test.ts` - Enum validation
+Two layers, no overlap:
 
-### Modal Component Tests
-5. `components/modal/AddIncomeModal.test.tsx`
-6. `components/modal/AddObligationModal.test.tsx`  
-7. `components/modal/AddExpenseModal.test.tsx`
+- **Jest unit tests** (`npx jest --silent --runInBand`) — pure store logic only:
+  fast, mocked, zero rendering. Anything involving UI lives in E2E.
+- **Playwright E2E** (`npm run e2e:build && npm run e2e`) — all user flows
+  (onboarding O1–O4, navigation N1–N2, income I1–I4, obligations B1–B4,
+  expenses E1–E4, calculations C1–C2). See `docs/design/E2E_PLAYWRIGHT_DESIGN.md`.
 
-### Screen Tests (Tab Screens)
-8. `app/tabs/__tests__/income.test.tsx` (new directory created)
-9. `app/tabs/__tests__/obligations.test.tsx`
-10. `app/tabs/__tests__/expenses.test.tsx`
+Deliberately removed (were overlapping E2E or snapshot-only):
+`app/tabs/__tests__/`, `components/modal/*.test.tsx`,
+`components/{HelloWave,ThemedView}.test.tsx`, `components/__tests__/`,
+`components/ui/AppMenuSelect.test.tsx`, `store/context.test.tsx`,
+`store/sample.test.ts`, `hooks/useThemeColor.test.tsx`, `test-utils/`.
+No snapshot tests remain (`Snapshots: 0`).
 
-### Shared Components
-11. `components/Hr.test.tsx`
-12. `components/ThemedView.test.tsx`
-13. `components/HelloWave.test.tsx` (animation skipped)
+## Jest suites (7 files, `store/` only)
 
-### Hook Tests
-14. `hooks/useThemeColor.test.tsx`
+1. `store/reducer.test.ts` — tutorial flags, budget calculators, add/update/remove,
+   multi-month isolation, recurring carry-over
+2. `store/expenses.test.ts` — day grouping, CSV parsing, date parsing, overlap warnings
+3. `store/projections.test.ts` — salary projections from prior-period date patterns
+4. `store/types.test.ts` — type-guard validators
+5. `store/enums.test.ts` — enum validation
+6. `store/persistence/service.test.ts` — save/load round-trip, retry, validation
+7. `store/persistence/indexed-db.adapter.test.ts` — IndexedDB save/load (web adapter)
 
-### Test Utilities
-15. `test-utils/mockContext.ts` - Mock helpers for tests
-
----
-
-## Existing Test Files
-- `components/__tests__/ThemedText-test.tsx` (already exists)
-- `store/sample.test.ts` (sample/placeholder file)
-
----
-
-## Complete File List
+## Run
 
 ```bash
-find . -name "*.test.*" -o -name "*-test.ts*" 2>/dev/null | grep -v node_modules | sort
+npx tsc --noEmit                                  # typecheck
+npx jest --silent --runInBand                     # unit tests (NOT npm test: --watchAll hangs non-interactively)
+npx expo export --platform web --output-dir dist  # production build
+npm run e2e:build && npm run e2e                  # end-to-end (Chromium, dist/)
 ```
-
-Expected output:
-- `./app/tabs/__tests__/expenses.test.tsx`
-- `./app/tabs/__tests__/income.test.tsx`
-- `./app/tabs/__tests__/obligations.test.tsx`
-- `./components/Hr.test.tsx`
-- `./components/HelloWave.test.tsx`
-- `./components/ThemedView.test.tsx`
-- `./components/__tests__/ThemedText-test.tsx` (existing)
-- `./components/modal/AddExpenseModal.test.tsx`
-- `./components/modal/AddIncomeModal.test.tsx`
-- `./components/modal/AddObligationModal.test.tsx`
-- `./hooks/useThemeColor.test.tsx`
-- `./store/context.test.tsx`
-- `./store/enums.test.ts`
-- `./store/reducer.test.ts`
-- `./store/sample.test.ts` (existing placeholder)
-- `./store/types.test.ts`
-
----
-
-## Coverage Metrics Summary
-
-| Category | Files Tested | Priority | Coverage Gap |
-|----------|--------------|----------|--------------|
-| Store Reducers | 1 | HIGH | ~85% remaining |
-| Type Guards | 1 | HIGH | 100% (no coverage) |
-| Context Mutators | 1 | HIGH | 100% (no coverage) |
-| Enums | 1 | MEDIUM | 100% (no coverage) |
-| AddIncomeModal | 1 | MEDIUM | 100% (no coverage) |
-| AddObligationModal | 1 | MEDIUM | 100% (no coverage) |
-| AddExpenseModal | 1 | MEDIUM | 100% (no coverage) |
-| IncomeScreen | 1 | MEDIUM | 100% (no coverage) |
-| ObligationsScreen | 1 | MEDIUM | 100% (no coverage) |
-| ExpensesScreen | 1 | MEDIUM | 100% (no coverage) |
-| Hr Component | 1 | LOW | 100% (no coverage) |
-| ThemedView | 1 | LOW | 100% (no coverage) |
-| HelloWave | 1 | LOW | Animation skipped |
-| useThemeColor | 1 | LOW | 100% (no coverage) |
-
-**Total new test files created: 14** (excluding existing ones)
-
----
-
-## Next Steps to Run Tests
-
-```bash
-# Install dependencies if needed
-npm install
-
-# Run all tests
-npm test -- --coverage    # If jest config exists
-# Or manually with Jest CLI
-npx jest --watch           # Interactive mode
-npx jest store/            # Store logic tests
-npx jest components/       # Component tests
-npx jest app/tabs/         # Screen tests
-```
-
----
-
-## Notes
-
-1. **Mock Context**: The `test-utils/mockContext.ts` helps avoid circular imports
-2. **React Native Testing**: For full interactive testing, consider using `@testing-library/react-native` instead of `react-test-renderer`
-3. **Snapshot Tests**: Use `.toMatchSnapshot()` for UI components to verify rendering
-4. **Animation Components**: HelloWave uses reanimated - skip complex animation tests unless specifically required
-
