@@ -15,6 +15,10 @@ export function getPaperTheme(scheme: 'light' | 'dark'): MD3Theme {
     colors: {
       ...base.colors,
       primary: brand.tint,
+      // Explicit containers: without these, components fall back to MD3
+      // baseline lavender (seen on FABs). Tinted to match brand primary.
+      primaryContainer: scheme === 'dark' ? '#004E64' : '#BFE3F0',
+      onPrimaryContainer: scheme === 'dark' ? '#D6F2FC' : '#062A36',
       background: brand.background,
       surface: brand.background,
       onSurface: brand.text,

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Checkbox } from 'react-native-paper';
 import { ThemedText } from '../ThemedText';
-import { AppCard, AppCardTitle } from '../ui';
+import { AppCard, AppCardTitle, AppCheckbox } from '../ui';
 
 export type TutorialFlags = {
   welcome: boolean;
@@ -30,7 +29,7 @@ export function TutorialProgress({ flags }: { flags: TutorialFlags }) {
       <View style={styles.list}>
         {STEPS.map((step) => (
           <View key={step.key} style={styles.row} testID={step.testID}>
-            <Checkbox status={flags[step.key] ? 'checked' : 'unchecked'} />
+            <AppCheckbox checked={flags[step.key]} />
             <ThemedText>{step.label}</ThemedText>
           </View>
         ))}

@@ -10,8 +10,7 @@ import { projectIncome, IncomeProjection } from '@/store/projections';
 import { IncomeProjections } from '@/components/income/IncomeProjections';
 import AddIncomeModal from '@/components/modal/AddIncomeModal';
 import { IncomeItem } from '@/store/types';
-import Hr from '@/components/Hr';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow, StickyTotalsBar } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
 
 export default function IncomeScreen() {
 
@@ -66,7 +65,7 @@ export default function IncomeScreen() {
   return (
     <ThemedView style={styles.screen}>
       <ParallaxScrollView
-        headerBackgroundColor={{ dark: '#0E863D', light: '#18C521' }}
+        headerBackgroundColor={{ dark: screenGamma.income.headerDark, light: screenGamma.income.header }}
         headerImage={
           <Image
             source={require('@/assets/images/income-back.jpeg')}
@@ -82,7 +81,7 @@ export default function IncomeScreen() {
                   <ThemedView key={`${income.date.getTime()}-${index}`}>
                     <AppListRow
                       title={`${income.label} — ${income.amount}`}
-                      description={income.date.toISOString()}
+                      description={income.date.toLocaleDateString()}
                       testID={`income-row-${index}`}
                       onPress={() => editHandler(index)}
                     />
@@ -90,9 +89,9 @@ export default function IncomeScreen() {
                   </ThemedView>
                 ))}
               </AppCard>
-              <Hr />
+              <AppDivider />
               <IncomeProjections projections={projections} onAdd={addProjectionHandler} />
-              <AppFAB onPress={addMoreHandler} label="Add income" testID="income-fab" />
+              <AppFAB onPress={addMoreHandler} label="Add income" testID="income-fab" backgroundColor={screenGamma.income.cta} color={screenGamma.income.onCta} />
               <View style={styles.footerSpacer} />
             </ThemedView>
           ) : (
@@ -103,6 +102,8 @@ export default function IncomeScreen() {
               onAction={getStartedHandler}
               adornment={<HelloWave />}
               testID="income-empty"
+              buttonColor={screenGamma.income.cta}
+              textColor={screenGamma.income.onCta}
             />
           )
         }

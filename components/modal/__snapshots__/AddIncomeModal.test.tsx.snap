@@ -119,7 +119,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
           style={
             {
               "backgroundColor": "rgb(238, 232, 244)",
-              "borderRadius": 28,
+              "borderRadius": 4,
               "marginHorizontal": 26,
               "marginVertical": 0,
               "opacity": 1,
@@ -139,7 +139,7 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
             style={
               {
                 "backgroundColor": "rgb(238, 232, 244)",
-                "borderRadius": 28,
+                "borderRadius": 4,
                 "elevation": 24,
                 "flex": undefined,
                 "justifyContent": "flex-start",
@@ -217,14 +217,9 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
             >
               <View
                 style={
-                  [
-                    {
-                      "backgroundColor": "#fff",
-                    },
-                    {
-                      "marginBottom": 16,
-                    },
-                  ]
+                  {
+                    "marginBottom": 16,
+                  }
                 }
               >
                 <View
@@ -486,14 +481,9 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
               </View>
               <View
                 style={
-                  [
-                    {
-                      "backgroundColor": "#fff",
-                    },
-                    {
-                      "marginBottom": 16,
-                    },
-                  ]
+                  {
+                    "marginBottom": 16,
+                  }
                 }
               >
                 <View
@@ -754,14 +744,9 @@ exports[`AddIncomeModal Component Structure should render when visible is true 1
               </View>
               <View
                 style={
-                  [
-                    {
-                      "backgroundColor": "#fff",
-                    },
-                    {
-                      "marginBottom": 16,
-                    },
-                  ]
+                  {
+                    "marginBottom": 16,
+                  }
                 }
               >
                 <View

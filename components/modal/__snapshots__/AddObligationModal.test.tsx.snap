@@ -119,7 +119,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
           style={
             {
               "backgroundColor": "rgb(238, 232, 244)",
-              "borderRadius": 28,
+              "borderRadius": 4,
               "marginHorizontal": 26,
               "marginVertical": 0,
               "opacity": 1,
@@ -139,7 +139,7 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
             style={
               {
                 "backgroundColor": "rgb(238, 232, 244)",
-                "borderRadius": 28,
+                "borderRadius": 4,
                 "elevation": 24,
                 "flex": undefined,
                 "justifyContent": "flex-start",
@@ -215,31 +215,36 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                 ]
               }
             >
-              <View
-                style={
-                  [
-                    {
-                      "backgroundColor": "#fff",
-                    },
-                    undefined,
-                  ]
-                }
-              >
+              <View>
                 <Text
                   style={
                     [
                       {
-                        "color": "#11181C",
+                        "textAlign": "left",
                       },
                       {
-                        "fontSize": 16,
-                        "lineHeight": 24,
+                        "color": "rgba(28, 27, 31, 1)",
+                        "fontFamily": "System",
+                        "fontWeight": "400",
+                        "letterSpacing": 0,
                       },
-                      undefined,
-                      undefined,
-                      undefined,
-                      undefined,
-                      undefined,
+                      {
+                        "writingDirection": "ltr",
+                      },
+                      [
+                        {
+                          "color": "#11181C",
+                        },
+                        {
+                          "fontSize": 16,
+                          "lineHeight": 24,
+                        },
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                      ],
                     ]
                   }
                 >
@@ -249,17 +254,31 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                   style={
                     [
                       {
-                        "color": "#11181C",
+                        "textAlign": "left",
                       },
                       {
-                        "fontSize": 16,
-                        "lineHeight": 24,
+                        "color": "rgba(28, 27, 31, 1)",
+                        "fontFamily": "System",
+                        "fontWeight": "400",
+                        "letterSpacing": 0,
                       },
-                      undefined,
-                      undefined,
-                      undefined,
-                      undefined,
-                      undefined,
+                      {
+                        "writingDirection": "ltr",
+                      },
+                      [
+                        {
+                          "color": "#11181C",
+                        },
+                        {
+                          "fontSize": 16,
+                          "lineHeight": 24,
+                        },
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                      ],
                     ]
                   }
                 >
@@ -268,14 +287,9 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
               </View>
               <View
                 style={
-                  [
-                    {
-                      "backgroundColor": "#fff",
-                    },
-                    {
-                      "marginBottom": 16,
-                    },
-                  ]
+                  {
+                    "marginBottom": 16,
+                  }
                 }
               >
                 <RCTSwitch
@@ -297,20 +311,34 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                   style={
                     [
                       {
-                        "color": "#11181C",
+                        "textAlign": "left",
                       },
                       {
-                        "fontSize": 16,
-                        "lineHeight": 24,
+                        "color": "rgba(28, 27, 31, 1)",
+                        "fontFamily": "System",
+                        "fontWeight": "400",
+                        "letterSpacing": 0,
                       },
-                      undefined,
-                      undefined,
-                      undefined,
-                      undefined,
                       {
-                        "fontSize": 16,
-                        "marginBottom": 8,
+                        "writingDirection": "ltr",
                       },
+                      [
+                        {
+                          "color": "#11181C",
+                        },
+                        {
+                          "fontSize": 16,
+                          "lineHeight": 24,
+                        },
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                        {
+                          "fontSize": 16,
+                          "marginBottom": 8,
+                        },
+                      ],
                     ]
                   }
                 >
@@ -319,14 +347,9 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
               </View>
               <View
                 style={
-                  [
-                    {
-                      "backgroundColor": "#fff",
-                    },
-                    {
-                      "marginBottom": 16,
-                    },
-                  ]
+                  {
+                    "marginBottom": 16,
+                  }
                 }
               >
                 <RCTSwitch
@@ -348,20 +371,34 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
                   style={
                     [
                       {
-                        "color": "#11181C",
+                        "textAlign": "left",
                       },
                       {
-                        "fontSize": 16,
-                        "lineHeight": 24,
+                        "color": "rgba(28, 27, 31, 1)",
+                        "fontFamily": "System",
+                        "fontWeight": "400",
+                        "letterSpacing": 0,
                       },
-                      undefined,
-                      undefined,
-                      undefined,
-                      undefined,
                       {
-                        "fontSize": 16,
-                        "marginBottom": 8,
+                        "writingDirection": "ltr",
                       },
+                      [
+                        {
+                          "color": "#11181C",
+                        },
+                        {
+                          "fontSize": 16,
+                          "lineHeight": 24,
+                        },
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                        {
+                          "fontSize": 16,
+                          "marginBottom": 8,
+                        },
+                      ],
                     ]
                   }
                 >
@@ -370,14 +407,9 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
               </View>
               <View
                 style={
-                  [
-                    {
-                      "backgroundColor": "#fff",
-                    },
-                    {
-                      "marginBottom": 16,
-                    },
-                  ]
+                  {
+                    "marginBottom": 16,
+                  }
                 }
               >
                 <View
@@ -639,14 +671,9 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
               </View>
               <View
                 style={
-                  [
-                    {
-                      "backgroundColor": "#fff",
-                    },
-                    {
-                      "marginBottom": 16,
-                    },
-                  ]
+                  {
+                    "marginBottom": 16,
+                  }
                 }
               >
                 <View
@@ -907,14 +934,9 @@ exports[`AddObligationModal Component Structure should render with isPercentage 
               </View>
               <View
                 style={
-                  [
-                    {
-                      "backgroundColor": "#fff",
-                    },
-                    {
-                      "marginBottom": 16,
-                    },
-                  ]
+                  {
+                    "marginBottom": 16,
+                  }
                 }
               >
                 <View

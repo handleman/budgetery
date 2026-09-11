@@ -173,21 +173,35 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                       style={
                         [
                           {
-                            "color": "#11181C",
+                            "textAlign": "left",
                           },
                           {
-                            "fontSize": 16,
-                            "lineHeight": 24,
+                            "color": "rgba(28, 27, 31, 1)",
+                            "fontFamily": "System",
+                            "fontWeight": "400",
+                            "letterSpacing": 0,
                           },
-                          undefined,
-                          undefined,
-                          undefined,
-                          undefined,
                           {
-                            "fontSize": 28,
-                            "lineHeight": 32,
-                            "marginTop": -6,
+                            "writingDirection": "ltr",
                           },
+                          [
+                            {
+                              "color": "#11181C",
+                            },
+                            {
+                              "fontSize": 16,
+                              "lineHeight": 24,
+                            },
+                            undefined,
+                            undefined,
+                            undefined,
+                            undefined,
+                            {
+                              "fontSize": 28,
+                              "lineHeight": 32,
+                              "marginTop": -6,
+                            },
+                          ],
                         ]
                       }
                     >
@@ -224,7 +238,7 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                   collapsable={false}
                   style={
                     {
-                      "backgroundColor": "rgba(103, 80, 164, 1)",
+                      "backgroundColor": "#0E863D",
                       "borderRadius": 20,
                       "shadowColor": "#000",
                       "shadowOffset": {
@@ -241,7 +255,7 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                     collapsable={false}
                     style={
                       {
-                        "backgroundColor": "rgba(103, 80, 164, 1)",
+                        "backgroundColor": "#0E863D",
                         "borderColor": "transparent",
                         "borderRadius": 20,
                         "borderStyle": "solid",
@@ -348,7 +362,7 @@ exports[`IncomeScreen (app/tabs/index.tsx) Tutorial State Management should show
                                   undefined,
                                   false,
                                   {
-                                    "color": "rgba(255, 255, 255, 1)",
+                                    "color": "#FFFFFF",
                                     "fontFamily": "System",
                                     "fontSize": 14,
                                     "fontWeight": "500",

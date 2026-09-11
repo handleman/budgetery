@@ -7,7 +7,7 @@ import { visibleObligations } from '@/store/reducer';
 import { ThemedView } from '@/components/ThemedView';
 import { ObligationItem } from '@/store/types';
 import AddObligationModal from '@/components/modal/AddObligationModal';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow, StickyTotalsBar } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
 
 export default function ObligationScreen() {
   const ctx = useContext(appContext);
@@ -58,7 +58,7 @@ export default function ObligationScreen() {
   return (
     <ThemedView style={styles.screen}>
       <ParallaxScrollView
-        headerBackgroundColor={{ light: '#F43F38', dark: '#F43F38' }}
+        headerBackgroundColor={{ light: screenGamma.obligations.header, dark: screenGamma.obligations.headerDark }}
         headerImage={
           <Image
             source={require('@/assets/images/obligations-back.jpeg')}
@@ -84,7 +84,7 @@ export default function ObligationScreen() {
                   ))
                 }
               </AppCard>
-              <AppFAB onPress={addMoreHandler} label="Add obligation" testID="obligations-fab" />
+              <AppFAB onPress={addMoreHandler} label="Add obligation" testID="obligations-fab" backgroundColor={screenGamma.obligations.cta} color={screenGamma.obligations.onCta} />
               <View style={styles.footerSpacer} />
             </ThemedView>
           ) : (
@@ -94,6 +94,8 @@ export default function ObligationScreen() {
               actionLabel="Get started!"
               onAction={getStartedHandler}
               testID="obligations-empty"
+              buttonColor={screenGamma.obligations.cta}
+              textColor={screenGamma.obligations.onCta}
             />
           )
         }

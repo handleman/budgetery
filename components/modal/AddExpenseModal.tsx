@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { ThemedView } from '../ThemedView';
+import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import { appContext } from '@/store/context';
 import { AppDialog, AppTextInput } from '@/components/ui';
@@ -89,7 +88,7 @@ const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = n
             testID="add-expense-dialog"
             actions={actions}
         >
-            <ThemedView style={styles.inputContainer}>
+            <View style={styles.inputContainer}>
                 <AppTextInput
                     label={isEditing ? 'Amount' : 'Amount (comma-separated for several)'}
                     keyboardType="numeric"
@@ -97,27 +96,27 @@ const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = n
                     onChangeText={setAmountText}
                     testID="expense-amount-input"
                 />
-            </ThemedView>
-            <ThemedView style={styles.inputContainer}>
+            </View>
+            <View style={styles.inputContainer}>
                 <AppTextInput
                     label="Label"
                     value={label}
                     onChangeText={setLabel}
                     testID="expense-label-input"
                 />
-            </ThemedView>
-            <ThemedView style={styles.inputContainer}>
+            </View>
+            <View style={styles.inputContainer}>
                 <AppTextInput
                     label="Date (YYYY-MM-DD, today by default)"
                     value={dateText}
                     onChangeText={setDateText}
                     testID="expense-date-input"
                 />
-            </ThemedView>
+            </View>
             {!isEditing && (
-                <ThemedView>
+                <View>
                     <ThemedText style={styles.hint}>You can enter several values in a row, separated by comma.</ThemedText>
-                </ThemedView>
+                </View>
             )}
         </AppDialog>
     );

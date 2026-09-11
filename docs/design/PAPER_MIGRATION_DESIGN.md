@@ -176,8 +176,9 @@ Gate per screen: shot before/after in `visual/` (gitignored scratch),
 
 ### Observed gaps (screenshot evidence, 2026-09-10)
 
-Shots: `test-results/visual/` (v1–v10, scripted via temp `visual-tmp.spec.ts`,
-since deleted; recipe in §5 method). Headless Chromium 1280×720, light mode.
+Shots: `test-results/visual/` (v1–v10 first pass, s1–s7 second pass; scripted
+via temp specs, since deleted; recipe in §5 method). Headless Chromium
+1280×720, light mode unless noted.
 
 - **V-A Dialog corners pill-like (S1, critical).** v4/v7: `AppDialog` renders
   ~64px+ corner radius — reads as a pill, not MD3 (28dp). Fix: explicit
@@ -212,6 +213,24 @@ since deleted; recipe in §5 method). Headless Chromium 1280×720, light mode.
 - **Not broken:** welcome checklist card (v2), month/label inputs, empty-state
   copy, tab switching, totals math (31000/1033.33/7500-pattern values correct
   in every shot).
+
+### Round-2 verification (after S1–S3 implementation, same day)
+
+- V-A fixed (s1: dialog corners modest, theme roundness).
+- V-B fixed (s1: single-frame inputs, no white patchwork).
+- V-C fixed (s2/s3: green/red gamma CTAs; s4 slate expenses FAB).
+- V-E/V-F fixed (s2: hairline dividers, `9/10/2026` dates).
+- V-H fixed (w1/w2: Paper `BottomNavigation.Bar` with MD3 active pills).
+- **V-K (new): Accordion paints its own surface strip inside warned cards**
+  (s4: white title strip on pink card). Root cause: Paper hardcodes
+  `theme.colors.background` on an inner wrapper — `style` cannot reach it.
+  Fixed in `AppAccordion` via per-instance theme override (background
+  transparent); verified seamless (s8).
+- **V-L (new): dark-mode headless shots are test artifacts, not app bugs.**
+  Mid-session `emulateMedia(dark)` produced a half-dark render (s5/s6), but
+  emulate-then-reload renders fully light (s7) — RN web `useColorScheme`
+  resolves at load. Real S4 dark verification needs OS-level dark
+  (headed run or device); tracked as headed-only follow-up.
 
 ## 6. Explicit non-goals
 

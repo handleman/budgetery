@@ -5,17 +5,31 @@ exports[`renders correctly 1`] = `
   style={
     [
       {
-        "color": "#11181C",
+        "textAlign": "left",
       },
       {
-        "fontSize": 16,
-        "lineHeight": 24,
+        "color": "rgba(28, 27, 31, 1)",
+        "fontFamily": "System",
+        "fontWeight": "400",
+        "letterSpacing": 0,
       },
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
+      {
+        "writingDirection": "ltr",
+      },
+      [
+        {
+          "color": "#11181C",
+        },
+        {
+          "fontSize": 16,
+          "lineHeight": 24,
+        },
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
     ]
   }
 >

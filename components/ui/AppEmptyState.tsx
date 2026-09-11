@@ -12,10 +12,13 @@ type Props = {
   adornment?: React.ReactNode;
   /** Stable selector root: container gets `testID`, action gets `${testID}-action`. */
   testID?: string;
+  /** Action fill (screen gamma). Defaults to theme primary. */
+  buttonColor?: string;
+  textColor?: string;
 };
 
 /** Adapter: tutorial/empty state block. */
-export function AppEmptyState({ title, description, actionLabel, onAction, adornment, testID }: Props) {
+export function AppEmptyState({ title, description, actionLabel, onAction, adornment, testID, buttonColor, textColor }: Props) {
   return (
     <ThemedView style={styles.container} testID={testID}>
       <ThemedView style={styles.titleRow}>
@@ -27,6 +30,8 @@ export function AppEmptyState({ title, description, actionLabel, onAction, adorn
         title={actionLabel}
         onPress={onAction}
         testID={testID ? `${testID}-action` : undefined}
+        buttonColor={buttonColor}
+        textColor={textColor}
       />
     </ThemedView>
   );
