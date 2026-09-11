@@ -188,7 +188,7 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
                   collapsable={false}
                   style={
                     {
-                      "backgroundColor": "rgba(103, 80, 164, 1)",
+                      "backgroundColor": "#C62828",
                       "borderRadius": 20,
                       "shadowColor": "#000",
                       "shadowOffset": {
@@ -205,7 +205,7 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
                     collapsable={false}
                     style={
                       {
-                        "backgroundColor": "rgba(103, 80, 164, 1)",
+                        "backgroundColor": "#C62828",
                         "borderColor": "transparent",
                         "borderRadius": 20,
                         "borderStyle": "solid",
@@ -312,7 +312,7 @@ exports[`ObligationScreen (app/tabs/obligations.tsx) Tutorial State Management s
                                   undefined,
                                   false,
                                   {
-                                    "color": "rgba(255, 255, 255, 1)",
+                                    "color": "#FFFFFF",
                                     "fontFamily": "System",
                                     "fontSize": 14,
                                     "fontWeight": "500",

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { ThemedView } from '../ThemedView';
+import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import { appContext } from '@/store/context';
 import { AppDialog, AppSwitch, AppTextInput } from '@/components/ui';
@@ -100,11 +99,11 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
             testID="add-obligation-dialog"
             actions={actions}
         >
-            <ThemedView>
+            <View>
                 <ThemedText>You may choose between exact amount or relative percentage</ThemedText>
                 <ThemedText>(relative to total income)</ThemedText>
-            </ThemedView>
-            <ThemedView style={styles.inputContainer}>
+            </View>
+            <View style={styles.inputContainer}>
                 <AppSwitch
                     onValueChange={toggleSwitch}
                     value={isPercentage}
@@ -112,16 +111,16 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
                 />
                 <ThemedText style={styles.label}>Amount/Percentage</ThemedText>
 
-            </ThemedView>
-            <ThemedView style={styles.inputContainer}>
+            </View>
+            <View style={styles.inputContainer}>
                 <AppSwitch
                     onValueChange={toggleRecurring}
                     value={isRecurring}
                     testID="obligation-recurring-switch"
                 />
                 <ThemedText style={styles.label}>Recurring monthly (carried into new months)</ThemedText>
-            </ThemedView>
-            <ThemedView style={styles.inputContainer}>
+            </View>
+            <View style={styles.inputContainer}>
                 <AppTextInput
                     label="Amount"
                     keyboardType="numeric"
@@ -129,23 +128,23 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
                     onChangeText={setAmountText}
                     testID="obligation-amount-input"
                 />
-            </ThemedView>
-            <ThemedView style={styles.inputContainer}>
+            </View>
+            <View style={styles.inputContainer}>
                 <AppTextInput
                     label="Label"
                     value={label}
                     onChangeText={setLabel}
                     testID="obligation-label-input"
                 />
-            </ThemedView>
-            <ThemedView style={styles.inputContainer}>
+            </View>
+            <View style={styles.inputContainer}>
                 <AppTextInput
                     label="Date (YYYY-MM-DD, today by default)"
                     value={dateText}
                     onChangeText={setDateText}
                     testID="obligation-date-input"
                 />
-            </ThemedView>
+            </View>
         </AppDialog>
     );
 };

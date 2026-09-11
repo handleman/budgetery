@@ -1,4 +1,5 @@
-import { Text, type TextProps, StyleSheet } from 'react-native';
+import { type TextProps, StyleSheet } from 'react-native';
+import { Text as PaperText } from 'react-native-paper';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
 
@@ -13,12 +14,15 @@ export function ThemedText({
   lightColor,
   darkColor,
   type = 'default',
-  ...rest
+  children,
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
 
+  // NOTE: Paper v5 `Text` only accepts style/children/variant — RN-only props
+  // (onPress, numberOfLines, …) are part of the type for call-site compatibility
+  // but are not forwarded. No current usage passes them (verified 2026-09-10).
   return (
-    <Text
+    <PaperText
       style={[
         { color },
         type === 'default' ? styles.default : undefined,
@@ -28,8 +32,9 @@ export function ThemedText({
         type === 'link' ? styles.link : undefined,
         style,
       ]}
-      {...rest}
-    />
+    >
+      {children}
+    </PaperText>
   );
 }
 

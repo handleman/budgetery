@@ -10,8 +10,7 @@ import { computeOverlapWarnings } from '@/store/expensesOverlap';
 import { ExpenseItem } from '@/store/types';
 import AddExpenseModal from '@/components/modal/AddExpenseModal';
 import { ExpenseDayCard } from '@/components/expenses/ExpenseDayCard';
-import Hr from '@/components/Hr';
-import { AppEmptyState, AppFAB, StickyTotalsBar } from '@/components/ui';
+import { AppEmptyState, AppFAB, AppDivider, StickyTotalsBar, screenGamma } from '@/components/ui';
 
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
@@ -56,7 +55,7 @@ export default function ExpensesScreen() {
   return (
     <ThemedView style={styles.screen}>
       <ParallaxScrollView
-        headerBackgroundColor={{ light: '#6F888C', dark: '#6F888C' }}
+        headerBackgroundColor={{ light: screenGamma.expenses.header, dark: screenGamma.expenses.headerDark }}
         headerImage={
           <Image
             source={require('@/assets/images/expenses-back.jpeg')}
@@ -80,8 +79,8 @@ export default function ExpensesScreen() {
                   />
                 );
               })}
-              <Hr />
-              <AppFAB onPress={addMoreHandler} label="Add expense" testID="expenses-fab" />
+              <AppDivider />
+              <AppFAB onPress={addMoreHandler} label="Add expense" testID="expenses-fab" backgroundColor={screenGamma.expenses.cta} color={screenGamma.expenses.onCta} />
               <View style={styles.footerSpacer} />
             </ThemedView>
           ) : (
@@ -91,6 +90,8 @@ export default function ExpensesScreen() {
               actionLabel="Add one!"
               onAction={getStartedHandler}
               testID="expenses-empty"
+              buttonColor={screenGamma.expenses.cta}
+              textColor={screenGamma.expenses.onCta}
             />
           )
         }

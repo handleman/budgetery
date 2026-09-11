@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { ThemedView } from '../ThemedView';
+import { StyleSheet, View } from 'react-native';
 import { appContext } from '@/store/context';
 import { AppDialog, AppTextInput } from '@/components/ui';
 import type { IncomeItem } from '@/store/types';
@@ -84,7 +83,7 @@ const AddIncomeModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = nu
             testID="add-income-dialog"
             actions={actions}
         >
-            <ThemedView style={styles.inputContainer}>
+            <View style={styles.inputContainer}>
                 <AppTextInput
                     label="Amount"
                     keyboardType="numeric"
@@ -92,23 +91,23 @@ const AddIncomeModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = nu
                     onChangeText={setAmountText}
                     testID="income-amount-input"
                 />
-            </ThemedView>
-            <ThemedView style={styles.inputContainer}>
+            </View>
+            <View style={styles.inputContainer}>
                 <AppTextInput
                     label="Label"
                     value={label}
                     onChangeText={setLabel}
                     testID="income-label-input"
                 />
-            </ThemedView>
-            <ThemedView style={styles.inputContainer}>
+            </View>
+            <View style={styles.inputContainer}>
                 <AppTextInput
                     label="Date (YYYY-MM-DD, today by default)"
                     value={dateText}
                     onChangeText={setDateText}
                     testID="income-date-input"
                 />
-            </ThemedView>
+            </View>
         </AppDialog>
     );
 };

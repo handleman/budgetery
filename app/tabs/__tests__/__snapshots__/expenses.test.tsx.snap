@@ -187,7 +187,7 @@ exports[`ExpensesScreen (app/tabs/expenses.tsx) Tutorial State Management should
                   collapsable={false}
                   style={
                     {
-                      "backgroundColor": "rgba(103, 80, 164, 1)",
+                      "backgroundColor": "#455A5E",
                       "borderRadius": 20,
                       "shadowColor": "#000",
                       "shadowOffset": {
@@ -204,7 +204,7 @@ exports[`ExpensesScreen (app/tabs/expenses.tsx) Tutorial State Management should
                     collapsable={false}
                     style={
                       {
-                        "backgroundColor": "rgba(103, 80, 164, 1)",
+                        "backgroundColor": "#455A5E",
                         "borderColor": "transparent",
                         "borderRadius": 20,
                         "borderStyle": "solid",
@@ -311,7 +311,7 @@ exports[`ExpensesScreen (app/tabs/expenses.tsx) Tutorial State Management should
                                   undefined,
                                   false,
                                   {
-                                    "color": "rgba(255, 255, 255, 1)",
+                                    "color": "#FFFFFF",
                                     "fontFamily": "System",
                                     "fontSize": 14,
                                     "fontWeight": "500",

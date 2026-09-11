@@ -1,10 +1,10 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { TutorialProgress } from "@/components/tutorial/TutorialProgress";
-import { AppButton, AppCard, AppCardTitle, AppMenuSelect, AppTextInput } from "@/components/ui";
+import { AppButton, AppCard, AppCardTitle, AppListRow, AppMenuSelect, AppTextInput } from "@/components/ui";
 import { appContext } from "@/store/context";
 import { useContext, useState } from "react";
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 const monthNames = [
     { label: 'January', value: 1 },
@@ -77,18 +77,13 @@ export default function WelcomeScreen() {
                             <AppCard testID="month-list">
                                 <AppCardTitle title="Tracked months" subtitle={`${periods.length} months`} />
                                 {periods.map((period, index) => (
-                                    <Pressable
+                                    <AppListRow
                                         key={period.id}
+                                        title={`${period.name} ${period.year}`}
+                                        description={period.id === currentPeriodId ? 'Current month' : undefined}
                                         onPress={() => selectPeriodHandler(period.id)}
                                         testID={`month-row-${index}`}
-                                    >
-                                        <ThemedView style={styles.monthRow}>
-                                            <ThemedText type="defaultSemiBold">
-                                                {period.name} {period.year}
-                                                {period.id === currentPeriodId ? ' •' : ''}
-                                            </ThemedText>
-                                        </ThemedView>
-                                    </Pressable>
+                                    />
                                 ))}
                             </AppCard>
                         )}
@@ -152,8 +147,5 @@ const styles = StyleSheet.create({
         padding: 32,
         gap: 16,
         overflow: 'hidden',
-    },
-    monthRow: {
-        paddingVertical: 10,
     },
 });

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ThemedText } from '../ThemedText';
-import { AppCard, AppDivider, AppListRow } from '../ui';
+import { View } from 'react-native';
+import { AppAccordion, AppCard, AppDivider, AppListRow } from '../ui';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import type { DayGroup } from '@/store/expenseGrouping';
 import { formatDayKey } from '@/store/expenseGrouping';
@@ -16,28 +15,28 @@ type Props = {
 };
 
 /**
- * ExpenseDayCard — expandable card of one day's expenses. Warned days
- * (over daily budget + overlap window) render pale-red from the theme.
+ * ExpenseDayCard — expandable day section (Paper Accordion inside a Card).
+ * Warned days (over daily budget + overlap window) render pale-red.
  */
 export function ExpenseDayCard({ group, warned, overrunFrom, expanded, onToggle, onEditItem }: Props) {
   const warnBg = useThemeColor({ light: '#FDECEA', dark: '#57201C' }, 'background');
   const testID = `expenses-day-${group.dayKey}${warned ? '-warned' : ''}`;
+  const title = `${formatDayKey(group.dayKey)} — ${group.total} (${group.items.length})${warned ? ' ⚠' : ''}`;
+  const description =
+    warned && overrunFrom && overrunFrom !== group.dayKey
+      ? `Over budget overlap from ${formatDayKey(overrunFrom)}`
+      : undefined;
   return (
     <AppCard
       testID={testID}
       style={warned ? { backgroundColor: warnBg } : undefined}
     >
-      <View style={styles.header}>
-        <ThemedText type="defaultSemiBold" onPress={onToggle}>
-          {formatDayKey(group.dayKey)} — {group.total} ({group.items.length})
-          {warned ? ' ⚠' : ''}
-        </ThemedText>
-        <ThemedText onPress={onToggle}>{expanded ? '▾' : '▸'}</ThemedText>
-      </View>
-      {warned && overrunFrom && overrunFrom !== group.dayKey && (
-        <ThemedText style={styles.note}>Over budget overlap from {formatDayKey(overrunFrom)}</ThemedText>
-      )}
-      {expanded && (
+      <AppAccordion
+        title={title}
+        description={description}
+        expanded={expanded}
+        onPress={onToggle}
+      >
         <View>
           {group.items.map(({ item, listIndex }, i) => (
             <View key={`${item.date.getTime()}-${i}`}>
@@ -50,20 +49,7 @@ export function ExpenseDayCard({ group, warned, overrunFrom, expanded, onToggle,
             </View>
           ))}
         </View>
-      )}
+      </AppAccordion>
     </AppCard>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 4,
-  },
-  note: {
-    fontSize: 12,
-    opacity: 0.7,
-  },
-});
