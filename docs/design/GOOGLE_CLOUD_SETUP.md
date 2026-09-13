@@ -1,3 +1,9 @@
+---
+title: Cloud setup
+nav_order: 9
+parent: Design docs
+---
+
 # Google Cloud Setup for Budgetery Drive Sync — Step-by-Step Guide
 
 Goal: register the Budgetery app with Google so users can sign in and sync to **their own personal Google Drives**. This is free, takes ~15 minutes, and stores no user data — it only creates the app's identity (OAuth client IDs).

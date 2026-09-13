@@ -1,3 +1,9 @@
+---
+title: Drive sync
+nav_order: 8
+parent: Design docs
+---
+
 # Google Drive Sync + Configuration Screen — Design Plan
 
 ## 1. Usecase analysis (added in `7e22a04`)

@@ -1,3 +1,9 @@
+---
+title: 'E2E: implementation plan'
+nav_order: 3
+parent: Design docs
+---
+
 # E2E Remaining Work — Implementation Plan
 
 > Status 2026-09-10: ALL PHASES COMPLETE — 20/20 green headless ×3 runs.

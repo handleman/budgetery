@@ -1,3 +1,9 @@
+---
+title: UX library decision
+nav_order: 4
+parent: Design docs
+---
+
 # UX Library Decision & Implementation Design
 
 ## 1. Problem Statement

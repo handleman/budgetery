@@ -1,3 +1,9 @@
+---
+title: Paper migration
+nav_order: 5
+parent: Design docs
+---
+
 # React Native Paper Migration — UI Element Audit & Design Doc
 
 Date: 2026-09-10. Installed version: `react-native-paper@^5.15.3` (MD3 themes
