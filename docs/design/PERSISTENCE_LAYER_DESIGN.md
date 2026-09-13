@@ -1,3 +1,9 @@
+---
+title: Persistence layer
+nav_order: 6
+parent: Design docs
+---
+
 # Persistence Layer Design Document
 
 ## Overview

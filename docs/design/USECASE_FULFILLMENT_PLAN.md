@@ -1,3 +1,9 @@
+---
+title: Usecase fulfillment
+nav_order: 7
+parent: Design docs
+---
+
 # Usecase Fulfillment — Gap Analysis & Screen-by-Screen Design Plan
 
 Source of truth: `docs/design/usecases.md` vs codebase at `app/`, `store/`, `components/modal/`, `components/ui/`.

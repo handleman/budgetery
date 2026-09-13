@@ -1,3 +1,9 @@
+---
+title: Web visual testing
+nav_order: 2
+parent: Documentation
+---
+
 # Web Visual Testing Checklist
 
 The following tests should be run manually since browser MCP is not yet fully connected:

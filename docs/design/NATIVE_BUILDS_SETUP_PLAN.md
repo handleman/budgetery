@@ -1,3 +1,9 @@
+---
+title: Native builds
+nav_order: 10
+parent: Design docs
+---
+
 # Native Builds Setup Plan (iOS + Android) — implement someday
 
 Goal: produce installable native builds of Budgetery for on-device testing (required for Google sign-in verification — Expo Go auth is unreliable) and, later, store distribution. Until then the app stays web-first; nothing here blocks web development or the Drive sync web flow.

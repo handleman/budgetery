@@ -1,3 +1,9 @@
+---
+title: 'E2E: Playwright design'
+nav_order: 2
+parent: Design docs
+---
+
 # Playwright End-to-End Testing — Strategy & Structure Design
 
 ## 1. Goal
