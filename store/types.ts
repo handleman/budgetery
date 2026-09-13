@@ -1,4 +1,5 @@
 import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
+import { SyncConfig, SyncStatus } from "./sync/types";
 
 export type CurrentPeriod = {
     name: string;
@@ -104,6 +105,8 @@ export type Store = {
     remainingBudget: number;
     daylyBudget: number;
     remains: number;
+    syncConfig: SyncConfig;
+    syncStatus: SyncStatus;
 };
 
 export type AppContext = {
@@ -126,6 +129,8 @@ export type AppContext = {
         removeExpenseItem: (index: number) => void;
         selectPeriod: (id: string) => void;
         startNewMonth: (value: CurrentPeriod) => void;
+        setSyncConfig: (value: SyncConfig) => void;
+        setSyncStatus: (value: SyncStatus) => void;
     }
 }
 
@@ -136,5 +141,5 @@ export type IndexedItemUpdate<T> = {
 
 export type Action = {
     type: ACTION_TYPES,
-    payload?: ExpenseItem | ExpenseItem[] | IncomeItem | ObligationItem | CurrentPeriod | TUTORIAL_NAMES | Store | IndexedItemUpdate<ExpenseItem | IncomeItem | ObligationItem> | number | string,
+    payload?: ExpenseItem | ExpenseItem[] | IncomeItem | ObligationItem | CurrentPeriod | TUTORIAL_NAMES | Store | IndexedItemUpdate<ExpenseItem | IncomeItem | ObligationItem> | number | string | SyncConfig | SyncStatus,
 }

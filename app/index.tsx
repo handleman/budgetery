@@ -124,6 +124,14 @@ export default function WelcomeScreen() {
                         </ThemedView>
                     </>
                 )}
+                <ThemedView>
+                    <AppButton
+                        title="⚙ Configuration"
+                        mode="outlined"
+                        onPress={() => router.push('/config')}
+                        testID="welcome-config"
+                    />
+                </ThemedView>
             </ThemedView>
         </ThemedView>
     )

@@ -1,6 +1,7 @@
 import { PersistenceService } from './service';
 import { MockStorageAdapter } from './mock-storage.adapter';
 import { Store } from '../types';
+import { defaultSyncConfig, defaultSyncStatus } from '../sync/types';
 
 function makeStore(overrides?: Partial<Store>): Store {
   return {
@@ -23,6 +24,8 @@ function makeStore(overrides?: Partial<Store>): Store {
     remainingBudget: 3500,
     daylyBudget: 112.9,
     remains: 3450,
+    syncConfig: { ...defaultSyncConfig },
+    syncStatus: { ...defaultSyncStatus },
     ...overrides,
   };
 }

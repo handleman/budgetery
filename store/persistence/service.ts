@@ -2,6 +2,7 @@ import { IStorageAdapter } from './types';
 import { StorageRegistry } from './storage-registry';
 import { Store } from '../types';
 import { applyMigrations } from '../migrations';
+import { defaultSyncConfig, defaultSyncStatus, isSyncConfig, isSyncStatus } from '../sync/types';
 
 export interface IPersistenceManager {
     initialize(): Promise<void>;
@@ -271,6 +272,12 @@ function cleanStoreForStorage(store: Store): Store {
         remainingBudget: toNumber(record['remainingBudget']),
         daylyBudget: toNumber(record['daylyBudget']),
         remains: toNumber(record['remains']),
+        syncConfig: isSyncConfig(record['syncConfig'])
+            ? { ...(record['syncConfig'] as Store['syncConfig']) }
+            : { ...defaultSyncConfig },
+        syncStatus: isSyncStatus(record['syncStatus'])
+            ? { ...(record['syncStatus'] as Store['syncStatus']) }
+            : { ...defaultSyncStatus },
     };
 
     return cleaned as unknown as Store;
@@ -342,5 +349,7 @@ function normalizeStore(store: any): Store {
         remainingBudget: toNumber(record['remainingBudget']),
         daylyBudget: toNumber(record['daylyBudget'] ?? (record as any)['dayilyBudget']),
         remains: toNumber(record['remains']),
+        syncConfig: isSyncConfig(record['syncConfig']) ? record['syncConfig'] : { ...defaultSyncConfig },
+        syncStatus: isSyncStatus(record['syncStatus']) ? record['syncStatus'] : { ...defaultSyncStatus },
     };
 }

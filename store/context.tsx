@@ -1,6 +1,7 @@
 import React, { createContext, useReducer, useEffect, useRef } from 'react';
 import { ACTION_TYPES, TUTORIAL_NAMES } from './enums';
 import { AppContext, CurrentPeriod, ExpenseItem, IncomeItem, ObligationItem, Store } from './types';
+import { SyncConfig, SyncStatus, defaultSyncConfig, defaultSyncStatus } from './sync/types';
 import { appReducer } from './reducer';
 import { PersistenceService } from './persistence/service';
 
@@ -28,6 +29,8 @@ const defaultStore: Store = {
     remainingBudget: 0,
     daylyBudget: 0,
     remains: 0,
+    syncConfig: defaultSyncConfig,
+    syncStatus: defaultSyncStatus,
 };
 
 export const defaultAppContextValue: AppContext = {
@@ -50,6 +53,8 @@ export const defaultAppContextValue: AppContext = {
         removeExpenseItem: (_index: number) => { },
         selectPeriod: (_id: string) => { },
         startNewMonth: (_value: CurrentPeriod) => { },
+        setSyncConfig: (_value: SyncConfig) => { },
+        setSyncStatus: (_value: SyncStatus) => { },
     }
 };
 
@@ -143,6 +148,12 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     function startNewMonth(passed: CurrentPeriod) {
         dispatch({ type: ACTION_TYPES.START_NEW_MONTH, payload: passed });
     }
+    function setSyncConfig(passed: SyncConfig) {
+        dispatch({ type: ACTION_TYPES.SET_SYNC_CONFIG, payload: passed });
+    }
+    function setSyncStatus(passed: SyncStatus) {
+        dispatch({ type: ACTION_TYPES.SET_SYNC_STATUS, payload: passed });
+    }
 
     const value = {
         store,
@@ -162,8 +173,10 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
             addExpenseItems,
             updateExpenseItem,
             removeExpenseItem,
-            selectPeriod,
-            startNewMonth,
+        selectPeriod,
+        startNewMonth,
+        setSyncConfig,
+        setSyncStatus,
         }
     }
 

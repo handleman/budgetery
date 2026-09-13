@@ -79,7 +79,8 @@ Canonical IDs live in `e2e/helpers/selectors.ts`:
 
 | Area | testIDs |
 |---|---|
-| Welcome | `welcome-get-started`, `month-picker[-anchor/-option-N]`, `period-label-input`, `welcome-apply` (+`start-new-month-button`, `month-list`/`month-row-N` after a period exists) |
+| Welcome | `welcome-get-started`, `welcome-config`, `month-picker[-anchor/-option-N]`, `period-label-input`, `welcome-apply` (+`start-new-month-button`, `month-list`/`month-row-N` after a period exists) |
+| Config | `config-status`, `config-connect`, `config-disconnect`, `config-drive-folder` |
 | Tabs | `tab-income`, `tab-obligations`, `tab-expenses` |
 | Income | `income-empty(-action)`, `income-back-button`, `income-fab`, `income-row-0…`, `income-totals-bar(-total/-remaining/-daily/-remains)` |
 | Obligations | `obligations-empty(-action)`, `obligations-back-button`, `obligations-fab`, `obligations-row-0…`, `obligation-percentage-switch`, `obligation-{amount,label,date}-input`, `obligations-totals-bar-*` |

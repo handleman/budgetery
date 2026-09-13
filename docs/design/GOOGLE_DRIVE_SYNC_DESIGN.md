@@ -89,8 +89,8 @@ store/sync/
 
 ## 8. Milestones & testing
 
-- **M1 — shell**: `app/config.tsx` + welcome entry + `SyncConfig/Status` in store + docs. No network.
-- **M2 — auth**: `expo-auth-session` Google flow, `tokenStore` (SecureStore/memory), connect/disconnect + email display. Manual test on web + dev build.
+- **M1 — shell**: ✅ done (config screen, welcome entry, store fields, no network).
+- **M2 — auth**: ✅ done (expo-auth-session Google flow, tokenStore, connect/disconnect + email; verified end-to-end on web Sep 2026).
 - **M3 — folder + push/pull**: `driveClient` (list/create/upload/download), folder selection, manual sync, conflict backup. Unit tests with stubbed `fetch` (pure logic, no rendering — fits the Jest store-only strategy).
 - **M4 — auto-sync**: debounced push, pull-on-start, status/error surfacing, migration for new store fields.
 - **M5 — E2E + docs**: Playwright flows with a fake Drive transport (never hits real Google in CI), TEST_COVERAGE + README updates.
