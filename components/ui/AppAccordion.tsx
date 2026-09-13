@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { StyleSheet } from 'react-native';
 import { List, useTheme } from 'react-native-paper';
 import type { StyleProp, ViewStyle } from 'react-native';
 
@@ -33,7 +34,7 @@ export function AppAccordion({ title, description, expanded, onPress, children, 
       description={description}
       expanded={expanded}
       onPress={onPress}
-      style={[{ backgroundColor: 'transparent' }, style]}
+      style={[styles.header, style]}
       testID={testID}
       theme={theme}
     >
@@ -41,3 +42,11 @@ export function AppAccordion({ title, description, expanded, onPress, children, 
     </List.Accordion>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: 'transparent',
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+  },
+});
