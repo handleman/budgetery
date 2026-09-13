@@ -12,6 +12,7 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 - As a user I want to select which month I'm budgeting for and get relevant calculations
 - i want to be able to navigate between screens by bottom bar (bottom navbar)
 - i want to see in the bottom navbar: income, obligations, expenses
+- i want a round back button in the top-left corner of income, obligations and expenses screens leading back to the welcome screen with the tracked-months list
 - on first run should be tutorial shown after that income tab
 - after the tutorial passed default tab should be expenses
 - if i start tracking new month, i should see tutorial one more time
@@ -31,12 +32,12 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 - if i enter expense after overlap days went off so day card should be usual
 - if i enter expense i want to see remaining sum from allowed budget recalculated on all the related screens
 - i want to see total spend summary below all day cards and remaining sum (remains) to spend in this month
+- i want to see daily budget on the expenses page as well
 - remains and total spend should be sticked as  bottom navbar
 
 ## Income Management
 
 - As a user I want to add multiple income sources (salary, freelance, investments) and see combined total
-- As a user I want to set salary dates and get monthly income projections
 - want to see here total income sum of all entered
 - dayly budget
 - remaing budget which is total - obligations
@@ -44,7 +45,7 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 
 ## Obligation Tracking
 
-- As a user I want to add recurring obligations (rent, utilities, subscriptions) and see total obligation cost
+- As a user I want to add obligations (rent, utilities, subscriptions) and see total obligation cost
 - As a user I want to mark some obligations as percentage-based and get calculated amounts from total budget
 - i want to see dayly budget calculated
 - i want to see remaining budget calculated here
@@ -55,7 +56,6 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 ## Tutorial Onboarding
 
 - As a user I want to complete the welcome tutorial and progress through income/obligations/expenses modules
-- As a user I want to track my tutorial progress with checkboxes and feel guided through app features
 
 ## State Management
 

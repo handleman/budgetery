@@ -1,6 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { TutorialProgress } from "@/components/tutorial/TutorialProgress";
 import { AppButton, AppCard, AppCardTitle, AppListRow, AppMenuSelect, AppTextInput } from "@/components/ui";
 import { appContext } from "@/store/context";
 import { useContext, useState } from "react";
@@ -23,7 +22,7 @@ const monthNames = [
 
 export default function WelcomeScreen() {
     const ctx = useContext(appContext);
-    const { welcomeTutorialPassed, incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed, periods, currentPeriodId, currentPeriod } = ctx.store;
+    const { welcomeTutorialPassed, incomeTutorialPassed, periods, currentPeriodId, currentPeriod } = ctx.store;
     const [tutorialPassed, setTutorialPassed] = useState<boolean>(welcomeTutorialPassed);
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [selectedPeriodName, setSelectedPeriodName] = useState<string>('');
@@ -65,14 +64,6 @@ export default function WelcomeScreen() {
             <ThemedView style={styles.content}>
                 {tutorialPassed ? (
                     <>
-                        <TutorialProgress
-                            flags={{
-                                welcome: tutorialPassed,
-                                income: incomeTutorialPassed,
-                                obligations: obligationsTutorialPassed,
-                                expenses: expensesTutorialPassed,
-                            }}
-                        />
                         {periods.length > 0 && (
                             <AppCard testID="month-list">
                                 <AppCardTitle title="Tracked months" subtitle={`${periods.length} months`} />

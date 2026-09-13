@@ -1,4 +1,5 @@
 export { AppButton } from './AppButton';
+export { AppBackButton } from './AppBackButton';
 export { AppCard, AppCardTitle } from './AppCard';
 export { AppTextInput } from './AppTextInput';
 export { AppDialog } from './AppDialog';

@@ -220,7 +220,6 @@ function cleanItems(items: unknown): Record<string, unknown>[] {
         amount: typeof item.amount === 'number' ? item.amount : 0,
         label: typeof item.label === 'string' ? item.label : '',
         isPercentage: item.isPercentage === true,
-        isRecurring: (item as { isRecurring?: boolean }).isRecurring === true,
         periodId: typeof (item as unknown as { periodId?: unknown }).periodId === 'string'
             ? (item as unknown as { periodId: string }).periodId
             : undefined,
@@ -297,9 +296,6 @@ function restoreDates(store: Store): Store {
                     if (!isNaN(parsed.getTime())) {
                         next.date = parsed;
                     }
-                }
-                if (typeof next.isRecurring !== 'boolean') {
-                    delete next.isRecurring;
                 }
                 if (typeof next.periodId !== 'string') {
                     delete next.periodId;

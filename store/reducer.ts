@@ -197,16 +197,11 @@ function selectPeriodReducer(store: Store, id: string): Store {
 
 function startNewMonthReducer(store: Store, payload: CurrentPeriod): Store {
     const record = makePeriodRecord(payload);
-    // Carry recurring obligations into the new month as fresh items.
-    const carried: ObligationItem[] = visibleObligations(store)
-        .filter((o) => o.isRecurring === true)
-        .map((o) => ({ ...o, date: new Date(), periodId: record.id }));
     const next: Store = {
         ...store,
         periods: [...store.periods, record],
         currentPeriodId: record.id,
         currentPeriod: payload,
-        obligationItems: [...store.obligationItems, ...carried],
         // Re-showing tutorial: tab tutorials reset, welcome stays passed.
         incomeTutorialPassed: false,
         obligationsTutorialPassed: false,

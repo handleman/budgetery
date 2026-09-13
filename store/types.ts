@@ -24,7 +24,6 @@ export type ObligationItem = {
     amount: number;
     label: string;
     isPercentage: boolean;
-    isRecurring?: boolean;
     periodId?: string;
 }
 

@@ -1,31 +1,17 @@
 import { StyleSheet } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withRepeat,
-  withSequence,
-} from 'react-native-reanimated';
 
 import { ThemedText } from '@/components/ThemedText';
 
+/**
+ * Static wave adornment.
+ *
+ * Previously an animated `react-native-reanimated` loop; the animated view
+ * suspended during expo-router static rendering (React error #419), leaving
+ * the income tutorial screen empty in exported HTML. A static glyph renders
+ * identically on server and client.
+ */
 export function HelloWave() {
-  const rotationAnimation = useSharedValue(0);
-
-  rotationAnimation.value = withRepeat(
-    withSequence(withTiming(25, { duration: 150 }), withTiming(0, { duration: 150 })),
-    4 // Run the animation 4 times
-  );
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotationAnimation.value}deg` }],
-  }));
-
-  return (
-    <Animated.View style={animatedStyle}>
-      <ThemedText style={styles.text}>👋</ThemedText>
-    </Animated.View>
-  );
+  return <ThemedText style={styles.text}>👋</ThemedText>;
 }
 
 const styles = StyleSheet.create({

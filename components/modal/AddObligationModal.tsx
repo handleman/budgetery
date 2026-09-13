@@ -19,7 +19,6 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
     const [amountText, setAmountText] = useState<string>('');
     const [label, setLabel] = useState<string>('');
     const [isPercentage, setIsPercentage] = useState<boolean>(false);
-    const [isRecurring, setIsRecurring] = useState<boolean>(false);
     const [dateText, setDateText] = useState<string>(toDayKey(new Date()));
 
     // Prefill on open (transition closed→open) during render — the React-endorsed
@@ -32,13 +31,11 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
                 setAmountText(String(initial.amount));
                 setLabel(initial.label);
                 setIsPercentage(initial.isPercentage);
-                setIsRecurring(initial.isRecurring === true);
                 setDateText(toDayKey(initial.date));
             } else {
                 setAmountText('');
                 setLabel('');
                 setIsPercentage(false);
-                setIsRecurring(false);
                 setDateText(toDayKey(new Date()));
             }
         }
@@ -48,7 +45,6 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
         setAmountText('');
         setLabel('');
         setIsPercentage(false);
-        setIsRecurring(false);
         setDateText(toDayKey(new Date()));
         onClose();
     };
@@ -57,7 +53,7 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
         const amount = Number(amountText);
         if (!Number.isFinite(amount) || amount === 0 || label.trim() === '') return;
         const date = parseDateInput(dateText);
-        const obligationItem = { date, amount, label: label.trim(), isPercentage, isRecurring };
+        const obligationItem = { date, amount, label: label.trim(), isPercentage };
         if (isEditing && editingIndex !== null && editingIndex !== undefined) {
             ctx.mutators.updateObligationItem(editingIndex, obligationItem);
         } else {
@@ -77,9 +73,6 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
         setIsPercentage((old) => {
             return !old;
         });
-    }
-    const toggleRecurring = () => {
-        setIsRecurring((old) => !old);
     }
     const actions = isEditing
         ? [
@@ -111,14 +104,6 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
                 />
                 <ThemedText style={styles.label}>Amount/Percentage</ThemedText>
 
-            </View>
-            <View style={styles.inputContainer}>
-                <AppSwitch
-                    onValueChange={toggleRecurring}
-                    value={isRecurring}
-                    testID="obligation-recurring-switch"
-                />
-                <ThemedText style={styles.label}>Recurring monthly (carried into new months)</ThemedText>
             </View>
             <View style={styles.inputContainer}>
                 <AppTextInput

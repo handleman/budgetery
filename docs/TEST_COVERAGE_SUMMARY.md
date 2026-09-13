@@ -17,16 +17,15 @@ Deliberately removed (were overlapping E2E or snapshot-only):
 `store/sample.test.ts`, `hooks/useThemeColor.test.tsx`, `test-utils/`.
 No snapshot tests remain (`Snapshots: 0`).
 
-## Jest suites (7 files, `store/` only)
+## Jest suites (6 files, `store/` only)
 
 1. `store/reducer.test.ts` — tutorial flags, budget calculators, add/update/remove,
-   multi-month isolation, recurring carry-over
+   multi-month isolation
 2. `store/expenses.test.ts` — day grouping, CSV parsing, date parsing, overlap warnings
-3. `store/projections.test.ts` — salary projections from prior-period date patterns
-4. `store/types.test.ts` — type-guard validators
-5. `store/enums.test.ts` — enum validation
-6. `store/persistence/service.test.ts` — save/load round-trip, retry, validation
-7. `store/persistence/indexed-db.adapter.test.ts` — IndexedDB save/load (web adapter)
+3. `store/types.test.ts` — type-guard validators
+4. `store/enums.test.ts` — enum validation
+5. `store/persistence/service.test.ts` — save/load round-trip, retry, validation
+6. `store/persistence/indexed-db.adapter.test.ts` — IndexedDB save/load (web adapter)
 
 ## Run
 
