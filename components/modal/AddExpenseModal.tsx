@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import { appContext } from '@/store/context';
-import { AppDialog, AppTextInput } from '@/components/ui';
+import { AppDialog, AppDatePicker, AppTextInput } from '@/components/ui';
 import type { ExpenseItem } from '@/store/types';
 import { parseCommaAmounts, parseDateInput, toDayKey } from '@/store/expenseGrouping';
 
@@ -106,10 +106,10 @@ const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = n
                 />
             </View>
             <View style={styles.inputContainer}>
-                <AppTextInput
-                    label="Date (YYYY-MM-DD, today by default)"
+                <AppDatePicker
+                    label="Date (today by default)"
                     value={dateText}
-                    onChangeText={setDateText}
+                    onChange={setDateText}
                     testID="expense-date-input"
                 />
             </View>

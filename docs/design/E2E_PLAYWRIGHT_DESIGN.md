@@ -83,7 +83,7 @@ Canonical IDs live in `e2e/helpers/selectors.ts`:
 | Tabs | `tab-income`, `tab-obligations`, `tab-expenses` |
 | Income | `income-empty(-action)`, `income-back-button`, `income-fab`, `income-row-0…`, `income-totals-bar(-total/-remaining/-daily/-remains)` |
 | Obligations | `obligations-empty(-action)`, `obligations-back-button`, `obligations-fab`, `obligations-row-0…`, `obligation-percentage-switch`, `obligation-{amount,label,date}-input`, `obligations-totals-bar-*` |
-| Expenses | `expenses-empty(-action)`, `expenses-back-button`, `expenses-fab`, `expenses-day-{yyyy-mm-dd}[-warned]`, `expenses-row-N`, `expenses-totals-bar(-total/-daily/-remains)` |
+| Expenses | `expenses-empty(-action)`, `expenses-back-button`, `expenses-fab`, `expenses-day-{yyyy-mm-dd}[-warned]`, `expenses-row-N`, `expense-date-input` (+`-icon-button` opens the calendar), `expenses-totals-bar(-total/-daily/-remains)` |
 | Dialogs | `add-{income,obligation,expense}-dialog-action-save/back/delete`, `{income,obligation,expense}-{amount,label}-input`, `{income,obligation,expense}-date-input` |
 
 If a flow needs a selector not in the map, **add the `testID` to app code first**

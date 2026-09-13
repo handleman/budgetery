@@ -32,6 +32,7 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 - i want to be able to set expense, and label
 - i want to be able to see expenses grouped by day entered, expandable card consisting expenses for the day
 - i want to be able to add\edit expenses in the current day as default but may want to edit another day before today
+- i want to fill the expense date via a visual calendar picker (same calendar control on iOS, Android and web), future dates are not allowed
 - if my expense exceed dayly budget goal i want to see visual confirmation for example day card should be colored in theme's accent level as warning, for example become pale red
 - the next card should be accented as well untill there is not passes as much days as daily budget overlap (big_expense/day_budget = quatity of days should be passed until overlap warning will be taken off), and i am free to enter expense
 - if i enter the expenses on the next day after overlapped day with accented visual warning it should be accented untill (big_expense/day_budget = quatity of days should be passed until overlap warning will be taken off) newly added expenses should add to big_expense value
