@@ -6,11 +6,9 @@ import { useContext, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { appContext } from '@/store/context';
 import { visibleIncome } from '@/store/reducer';
-import { projectIncome, IncomeProjection } from '@/store/projections';
-import { IncomeProjections } from '@/components/income/IncomeProjections';
 import AddIncomeModal from '@/components/modal/AddIncomeModal';
 import { IncomeItem } from '@/store/types';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
 
 export default function IncomeScreen() {
 
@@ -24,13 +22,6 @@ export default function IncomeScreen() {
   const [editingItem, setEditingItem] = useState<IncomeItem | null>(null);
 
   const incomes = useMemo(() => visibleIncome(ctx.store), [ctx.store]);
-  const projections = useMemo(() => projectIncome(ctx.store), [ctx.store]);
-
-  const addProjectionHandler = (projection: IncomeProjection) => {
-    const now = new Date();
-    const day = Math.min(projection.modalDay, 28);
-    ctx.mutators.addIncomeItem({ date: new Date(now.getFullYear(), now.getMonth(), day), amount: projection.avgAmount, label: projection.label });
-  };
 
 
   const getStartedHandler = () => {
@@ -64,6 +55,7 @@ export default function IncomeScreen() {
 
   return (
     <ThemedView style={styles.screen}>
+      <AppBackButton onPress={() => router.replace('/')} testID="income-back-button" />
       <ParallaxScrollView
         headerBackgroundColor={{ dark: screenGamma.income.headerDark, light: screenGamma.income.header }}
         headerImage={
@@ -90,7 +82,6 @@ export default function IncomeScreen() {
                 ))}
               </AppCard>
               <AppDivider />
-              <IncomeProjections projections={projections} onAdd={addProjectionHandler} />
               <AppFAB onPress={addMoreHandler} label="Add income" testID="income-fab" backgroundColor={screenGamma.income.cta} color={screenGamma.income.onCta} />
               <View style={styles.footerSpacer} />
             </ThemedView>

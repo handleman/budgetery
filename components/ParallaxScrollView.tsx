@@ -1,11 +1,5 @@
 import type { PropsWithChildren, ReactElement } from 'react';
-import { StyleSheet, useColorScheme } from 'react-native';
-import Animated, {
-  interpolate,
-  useAnimatedRef,
-  useAnimatedStyle,
-  useScrollViewOffset,
-} from 'react-native-reanimated';
+import { ScrollView, StyleSheet, View, useColorScheme } from 'react-native';
 
 import { ThemedView } from '@/components/ThemedView';
 
@@ -16,45 +10,38 @@ type Props = PropsWithChildren<{
   headerBackgroundColor: { dark: string; light: string };
 }>;
 
+/**
+ * Static header + scrollable content.
+ *
+ * Previously this used react-native-reanimated (useScrollViewOffset /
+ * Animated.ScrollView) for a parallax effect, but the animated scroll view
+ * suspends during expo-router static rendering: the whole tab screen fell
+ * into a Suspense boundary (React error #419), so exported HTML contained
+ * an empty `<template>` — no tutorial content, no header image — and
+ * Ionicons in the tab bar stayed empty until client hydration recovered.
+ * A plain ScrollView renders identically on server and client, so headers,
+ * tutorial copy and icons are present in every run (`npm run web`,
+ * `expo export`, native dev).
+ */
 export default function ParallaxScrollView({
   children,
   headerImage,
   headerBackgroundColor,
 }: Props) {
   const colorScheme = useColorScheme() === 'dark' ? 'dark' : 'light';
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const scrollOffset = useScrollViewOffset(scrollRef);
-
-  const headerAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75]
-          ),
-        },
-        {
-          scale: interpolate(scrollOffset.value, [-HEADER_HEIGHT, 0, HEADER_HEIGHT], [2, 1, 1]),
-        },
-      ],
-    };
-  });
 
   return (
     <ThemedView style={styles.container}>
-      <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
-        <Animated.View
+      <ScrollView>
+        <View
           style={[
             styles.header,
             { backgroundColor: headerBackgroundColor[colorScheme] },
-            headerAnimatedStyle,
           ]}>
           {headerImage}
-        </Animated.View>
+        </View>
         <ThemedView style={styles.content}>{children}</ThemedView>
-      </Animated.ScrollView>
+      </ScrollView>
     </ThemedView>
   );
 }
@@ -64,7 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 250,
+    height: HEADER_HEIGHT,
     overflow: 'hidden',
   },
   content: {

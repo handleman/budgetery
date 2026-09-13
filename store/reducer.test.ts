@@ -380,21 +380,5 @@ describe('appReducer', () => {
       expect(backToOctober.totalBudget).toBe(3000);
     });
 
-    it('should carry recurring obligations into the new month', () => {
-      const october = appReducer(initialStore, {
-        type: ACTION_TYPES.START_NEW_MONTH,
-        payload: { name: 'October', month: 10 } as CurrentPeriod,
-      } as any);
-      const withObligation = appReducer(october, {
-        type: ACTION_TYPES.ADD_OBLIGATION,
-        payload: { date: new Date(), amount: 500, label: 'Rent', isPercentage: false, isRecurring: true } as ObligationItem,
-      } as any);
-      const november = appReducer(withObligation, {
-        type: ACTION_TYPES.START_NEW_MONTH,
-        payload: { name: 'November', month: 11 } as CurrentPeriod,
-      } as any);
-      expect(november.totalObligations).toBe(500);
-    });
   });
-
 });

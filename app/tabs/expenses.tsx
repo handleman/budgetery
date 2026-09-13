@@ -3,6 +3,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import { useContext, useMemo, useState } from 'react';
+import { useRouter } from 'expo-router';
 import { appContext } from '@/store/context';
 import { visibleExpenses } from '@/store/reducer';
 import { groupExpensesByDay } from '@/store/expenseGrouping';
@@ -10,10 +11,11 @@ import { computeOverlapWarnings } from '@/store/expensesOverlap';
 import { ExpenseItem } from '@/store/types';
 import AddExpenseModal from '@/components/modal/AddExpenseModal';
 import { ExpenseDayCard } from '@/components/expenses/ExpenseDayCard';
-import { AppEmptyState, AppFAB, AppDivider, StickyTotalsBar, screenGamma } from '@/components/ui';
+import { AppEmptyState, AppFAB, AppBackButton, AppDivider, StickyTotalsBar, screenGamma } from '@/components/ui';
 
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
+  const router = useRouter();
   const { expensesTutorialPassed, remains, totalExpenses, daylyBudget } = ctx.store;
   // Tutorial flag is derived from the store directly — no mirror state.
   const tutorialPassed = expensesTutorialPassed;
@@ -54,6 +56,7 @@ export default function ExpensesScreen() {
 
   return (
     <ThemedView style={styles.screen}>
+      <AppBackButton onPress={() => router.replace('/')} testID="expenses-back-button" />
       <ParallaxScrollView
         headerBackgroundColor={{ light: screenGamma.expenses.header, dark: screenGamma.expenses.headerDark }}
         headerImage={
@@ -101,6 +104,7 @@ export default function ExpensesScreen() {
           testID="expenses-totals-bar"
           items={[
             { label: 'Total expenses', value: totalExpenses, testID: 'expenses-totals-bar-total' },
+            { label: 'Daily', value: Math.round(daylyBudget * 100) / 100, testID: 'expenses-totals-bar-daily' },
             { label: 'Remains', value: remains, testID: 'expenses-totals-bar-remains' },
           ]}
         />

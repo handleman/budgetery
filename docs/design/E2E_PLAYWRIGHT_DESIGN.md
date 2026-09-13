@@ -79,11 +79,11 @@ Canonical IDs live in `e2e/helpers/selectors.ts`:
 
 | Area | testIDs |
 |---|---|
-| Welcome | `welcome-get-started`, `month-picker[-anchor/-option-N]`, `period-label-input`, `welcome-apply` (+`start-new-month-button`, `month-list`/`month-row-N`, `tutorial-progress` after a period exists) |
+| Welcome | `welcome-get-started`, `month-picker[-anchor/-option-N]`, `period-label-input`, `welcome-apply` (+`start-new-month-button`, `month-list`/`month-row-N` after a period exists) |
 | Tabs | `tab-income`, `tab-obligations`, `tab-expenses` |
-| Income | `income-empty(-action)`, `income-fab`, `income-row-0…`, `income-totals-bar(-total/-remaining/-daily/-remains)`, `income-projections` |
-| Obligations | `obligations-empty(-action)`, `obligations-fab`, `obligations-row-0…`, `obligation-percentage-switch`, `obligation-recurring-switch`, `obligation-{amount,label,date}-input`, `obligations-totals-bar-*` |
-| Expenses | `expenses-empty(-action)`, `expenses-fab`, `expenses-day-{yyyy-mm-dd}[-warned]`, `expenses-row-N`, `expenses-totals-bar(-total/-remains)` |
+| Income | `income-empty(-action)`, `income-back-button`, `income-fab`, `income-row-0…`, `income-totals-bar(-total/-remaining/-daily/-remains)` |
+| Obligations | `obligations-empty(-action)`, `obligations-back-button`, `obligations-fab`, `obligations-row-0…`, `obligation-percentage-switch`, `obligation-{amount,label,date}-input`, `obligations-totals-bar-*` |
+| Expenses | `expenses-empty(-action)`, `expenses-back-button`, `expenses-fab`, `expenses-day-{yyyy-mm-dd}[-warned]`, `expenses-row-N`, `expenses-totals-bar(-total/-daily/-remains)` |
 | Dialogs | `add-{income,obligation,expense}-dialog-action-save/back/delete`, `{income,obligation,expense}-{amount,label}-input`, `{income,obligation,expense}-date-input` |
 
 If a flow needs a selector not in the map, **add the `testID` to app code first**

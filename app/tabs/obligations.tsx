@@ -7,7 +7,7 @@ import { visibleObligations } from '@/store/reducer';
 import { ThemedView } from '@/components/ThemedView';
 import { ObligationItem } from '@/store/types';
 import AddObligationModal from '@/components/modal/AddObligationModal';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
 
 export default function ObligationScreen() {
   const ctx = useContext(appContext);
@@ -57,6 +57,7 @@ export default function ObligationScreen() {
 
   return (
     <ThemedView style={styles.screen}>
+      <AppBackButton onPress={() => router.replace('/')} testID="obligations-back-button" />
       <ParallaxScrollView
         headerBackgroundColor={{ light: screenGamma.obligations.header, dark: screenGamma.obligations.headerDark }}
         headerImage={
@@ -74,7 +75,7 @@ export default function ObligationScreen() {
                   obligations.map((obligation, index) => (
                     <ThemedView key={`${obligation.date.getTime()}-${index}`}>
                       <AppListRow
-                        title={`${obligation.label} — ${obligation.amount}${obligation.isPercentage ? '%' : ''}${obligation.isRecurring ? ' ↻' : ''}`}
+                        title={`${obligation.label} — ${obligation.amount}${obligation.isPercentage ? '%' : ''}`}
                         description={obligationSubtitle(obligation)}
                         testID={`obligations-row-${index}`}
                         onPress={() => editHandler(index)}
