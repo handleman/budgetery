@@ -1,5 +1,6 @@
 export { AppButton } from './AppButton';
 export { AppBackButton } from './AppBackButton';
+export { AppDatePicker } from './AppDatePicker';
 export { AppCard, AppCardTitle } from './AppCard';
 export { AppTextInput } from './AppTextInput';
 export { AppDialog } from './AppDialog';
