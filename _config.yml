@@ -1,0 +1,25 @@
+remote_theme: just-the-docs/just-the-docs@v0.10.1
+title: Budgetery
+description: Local-first budget tracking with Expo + React Native
+url: "https://handleman.github.io"
+baseurl: "/budgetery"
+permalink: pretty
+exclude:
+  - node_modules
+  - dist
+  - .expo
+  - .opencode
+  - .playwright-mcp
+  - test-results
+  - playwright-report
+  - Gemfile
+  - "*.gemspec"
+defaults:
+  - scope: { path: "README.md" }
+    values: { layout: "home", permalink: "/", title: "Budgetery", nav_order: 1 }
+  - scope: { path: "docs" }
+    values: { layout: "default" }
+  - scope: { path: "AGENTS.md" }
+    values: { layout: "default", title: "Contributor notes", nav_exclude: true }
+plugins:
+  - jekyll-relative-links # default-on; listed for explicitness

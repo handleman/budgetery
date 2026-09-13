@@ -65,6 +65,13 @@ See [AGENTS.md](./AGENTS.md) for detailed notes on:
 - Tab navigation structure
 - Component organization
 
+## Documentation
+
+Full docs are published as a website, starting from this page:
+
+- [Documentation](./docs/index.md) — guides and test reports
+- [Design docs](./docs/design/index.md) — architecture, UX, sync and planning documents
+
 ## Why Build Locally?
 
 1. **Zero development costs** - No cloud APIs needed
