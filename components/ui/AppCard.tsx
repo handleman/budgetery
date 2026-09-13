@@ -17,15 +17,22 @@ export function AppCard({ children, style, testID }: CardProps) {
 }
 
 export function AppCardTitle({ title, subtitle }: { title: string; subtitle?: string }) {
-  return <Card.Title title={title} subtitle={subtitle} />;
+  return <Card.Title title={title} subtitle={subtitle} style={styles.title} />;
 }
 
 const styles = StyleSheet.create({
   card: {
     borderRadius: 12,
-    marginVertical: 6,
+    marginVertical: 4,
+  },
+  title: {
+    paddingHorizontal: 8,
+    paddingVertical: 0,
+    minHeight: 0,
   },
   content: {
-    padding: 16,
+    paddingHorizontal: 8,
+    paddingTop: 0,
+    paddingBottom: 8,
   },
 });

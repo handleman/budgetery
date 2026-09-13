@@ -40,10 +40,20 @@ Then run one of:
 - `npm run android` - Android emulator
 - `npm run web` - Web development server
 
+## Features
+
+- Welcome screen: pick a month, track multiple months, start a new one
+- Income, obligations and expenses tabs with sticky totals (total, remaining, daily, remains)
+- Expenses grouped by day with over-budget overlap warnings
+- Round back button on every tab screen leading to the welcome screen
+- Local-first persistence (survives app restarts)
+
 ## Testing
 
 ```bash
-npm test
+npx tsc --noEmit                  # typecheck, must exit 0
+npx jest --silent --runInBand     # unit tests (NOT npm test: --watchAll hangs non-interactively)
+npx expo export --platform web --output-dir dist  # production web build
 ```
 
 ## Architecture
