@@ -14,11 +14,18 @@ export const tid = {
     startNewMonth: 'start-new-month-button',
     monthList: 'month-list',
     monthRow: (i: number) => `month-row-${i}`,
+    config: 'welcome-config',
   },
   tabs: {
     income: 'tab-income',
     obligations: 'tab-obligations',
     expenses: 'tab-expenses',
+  },
+  config: {
+    status: 'config-status',
+    connect: 'config-connect',
+    disconnect: 'config-disconnect',
+    driveFolder: 'config-drive-folder',
   },
   income: {
     empty: 'income-empty',

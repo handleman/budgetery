@@ -2,6 +2,7 @@ import { appReducer, daylyBudgetReducer, totalBudgetReducer, totalExpensesReduce
 import { ACTION_TYPES } from './enums';
 import { TUTORIAL_NAMES } from './enums';
 import { Store, IncomeItem, ExpenseItem, ObligationItem, CurrentPeriod } from './types';
+import { defaultSyncConfig, defaultSyncStatus } from './sync/types';
 
 describe('appReducer', () => {
   const initialStore: Store = {
@@ -22,6 +23,8 @@ describe('appReducer', () => {
     remainingBudget: 0,
     daylyBudget: 0,
     remains: 0,
+    syncConfig: { ...defaultSyncConfig },
+    syncStatus: { ...defaultSyncStatus },
   };
 
   describe('PASS_TUTORIAL actions', () => {
@@ -380,5 +383,32 @@ describe('appReducer', () => {
       expect(backToOctober.totalBudget).toBe(3000);
     });
 
+  });
+
+  describe('SYNC_CONFIG/SYNC_STATUS actions', () => {
+    it('should set sync config when the payload is valid', () => {
+      const result = appReducer(initialStore, {
+        type: ACTION_TYPES.SET_SYNC_CONFIG,
+        payload: { folderId: 'folder-1', folderName: 'Budgetery', autoSync: false, revision: 3 },
+      } as any);
+      expect(result.syncConfig).toEqual({ folderId: 'folder-1', folderName: 'Budgetery', autoSync: false, revision: 3 });
+    });
+
+    it('should ignore an invalid sync config payload', () => {
+      const result = appReducer(initialStore, {
+        type: ACTION_TYPES.SET_SYNC_CONFIG,
+        payload: { folderId: 42 },
+      } as any);
+      expect(result.syncConfig).toEqual(initialStore.syncConfig);
+    });
+
+    it('should set sync status when the payload is valid', () => {
+      const result = appReducer(initialStore, {
+        type: ACTION_TYPES.SET_SYNC_STATUS,
+        payload: { connected: true, email: 'user@example.com', lastSync: null, lastError: null },
+      } as any);
+      expect(result.syncStatus.connected).toBe(true);
+      expect(result.syncStatus.email).toBe('user@example.com');
+    });
   });
 });

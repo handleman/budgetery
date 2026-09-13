@@ -1,4 +1,5 @@
 import { ACTION_TYPES, TUTORIAL_NAMES } from "./enums";
+import { isSyncConfig, isSyncStatus } from "./sync/types";
 import { Action, CurrentPeriod, IncomeItem, ExpenseItem, isCurrentPeriodPassed, isIncomeItemPassed, isObligationItemPassed, ObligationItem, PeriodRecord, Store, isExpenseItemPassed, IndexedItemUpdate } from "./types";
 
 export function periodIdFor(store: Store): string | null {
@@ -246,6 +247,16 @@ export function appReducer(store: Store, action: Action): Store {
         case ACTION_TYPES.START_NEW_MONTH:
             if (isCurrentPeriodPassed(payload)) {
                 return startNewMonthReducer(store, payload);
+            }
+            break;
+        case ACTION_TYPES.SET_SYNC_CONFIG:
+            if (isSyncConfig(payload)) {
+                return { ...store, syncConfig: payload };
+            }
+            break;
+        case ACTION_TYPES.SET_SYNC_STATUS:
+            if (isSyncStatus(payload)) {
+                return { ...store, syncStatus: payload };
             }
             break;
         case ACTION_TYPES.ADD_INCOME:

@@ -1,5 +1,6 @@
 import { IndexedDBAdapter } from './indexed-db.adapter';
 import { Store } from '../types';
+import { defaultSyncConfig, defaultSyncStatus } from '../sync/types';
 
 /**
  * Minimal in-memory fake of the IndexedDB surface used by
@@ -127,6 +128,8 @@ function makeStore(): Store {
     remainingBudget: 5000,
     daylyBudget: 166.67,
     remains: 5000,
+    syncConfig: { ...defaultSyncConfig },
+    syncStatus: { ...defaultSyncStatus },
   };
 }
 
