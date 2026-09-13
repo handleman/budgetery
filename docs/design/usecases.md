@@ -1,3 +1,9 @@
+---
+title: Use cases
+nav_order: 1
+parent: Design docs
+---
+
 # Use Cases
 
 Format: "As a user I want to [action] and get [result]" or "I want to [action] and get [result]"

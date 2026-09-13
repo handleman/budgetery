@@ -1,3 +1,9 @@
+---
+title: Test plan
+nav_order: 1
+parent: Documentation
+---
+
 # Budgetery - Comprehensive Unit Test Plan
 
 This document outlines all components requiring unit tests, organized by priority and functionality.
