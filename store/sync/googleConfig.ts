@@ -4,8 +4,12 @@
  * These are public application identifiers (shown in browsers), NOT secrets —
  * the app uses the PKCE code flow (native) / implicit flow (web), so no
  * client secret exists. iOS/Android IDs are added when native builds exist.
+ *
+ * The web ID reads from `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` so hosted builds
+ * (Vercel) inject it via env; the literal below is the dev fallback.
  */
 export const GOOGLE_WEB_CLIENT_ID =
+    process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ||
     '902898489600-r5tdegs1r6vtj78ol546352k5s61s38s.apps.googleusercontent.com';
 
 export const GOOGLE_IOS_CLIENT_ID: string | undefined = undefined;

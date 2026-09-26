@@ -5,6 +5,7 @@ test-results/
 playwright-report/
 playwright/.cache/
 .playwright-mcp
+temp/
 npm-debug.*
 *.jks
 *.p8

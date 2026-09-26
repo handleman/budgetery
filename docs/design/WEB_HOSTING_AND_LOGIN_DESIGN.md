@@ -18,8 +18,8 @@ Plan only — no implementation.
 ### 2.1 Web export
 
 - `app.json` → `web.bundler: metro`, `web.output: static`. `npx expo export --platform web --output-dir dist` already works (verify trio in `AGENTS.md`); `dist/` is gitignored.
-- File-based routing via `expo-router` (`app/_layout.tsx` Stack: `index`, `tabs`, `+not-found`; plus `app/config.tsx` not yet registered in the Stack — pre-existing gap to fix when touching `_layout.tsx`).
-- No hosting config exists: no `vercel.json`, no deploy workflow, no env-var plumbing. Docs site (`_config.yml`, `GITHUB_PAGES_WEBSITE_DESIGN.md`) uses GitHub Pages **deploy-from-branch on repo root** for Markdown docs — a separate concern from hosting the app.
+- File-based routing via `expo-router` (`app/_layout.tsx` Stack: `index`, `tabs`, `login`, `config`, `+not-found`).
+- No hosting account exists yet: no Vercel project, no deploy workflow, no production origin in Google console. Code-side env plumbing (`EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`) is done. Docs site (`_config.yml`, `GITHUB_PAGES_WEBSITE_DESIGN.md`) uses GitHub Pages **deploy-from-branch on repo root** for Markdown docs — a separate concern from hosting the app.
 
 ### 2.2 Auth / sync building blocks (done, reusable)
 
@@ -31,7 +31,7 @@ Plan only — no implementation.
 | Token vault | `store/sync/tokenStore.ts` (SecureStore native / in-memory web) | ✅ done; web sessions are memory-only by design |
 | Sync state in Store | `syncConfig` / `syncStatus` (`store/sync/types.ts`), persisted via `cleanStoreForStorage()` in `store/persistence/service.ts` | ✅ shell done; folder/push/pull (M3) + auto-sync (M4) pending |
 | Cloud project guide | `docs/design/GOOGLE_CLOUD_SETUP.md` | ✅ exists; production origin still to be registered (see §4) |
-| Login gate / route guard | — | ❌ **does not exist**: app opens straight into `app/index.tsx`; local data (IndexedDB / AsyncStorage) is **plaintext, ungated** |
+| Login gate / route guard | ✅ done 2026-09-26 | `app/login.tsx` + `AuthGate` (`components/auth/`), lock buttons, E2E seam; local data still **plaintext, soft lock only** until encryption (M4) |
 
 ### 2.3 Key insight for the login ask
 
@@ -119,8 +119,8 @@ V1 leaves IndexedDB plaintext. V2 encrypts the persisted payload with the **Web 
 
 ## 6. Milestones & verification
 
-- **M1 — hosting:** env-var refactor, Vercel project, Cloud origins, production smoke test.
-- **M2 — login gate (v1):** `app/login.tsx` + `AuthGate` + lock buttons + fake-auth E2E. Verify trio: `npx tsc --noEmit`, `npx jest --silent --runInBand`, `npx expo export --platform web --output-dir dist`.
+- **M1 — hosting:** ✅ code done 2026-09-26 (env-var client ID, registered `config` route, static export verified); ⬜ owner deploy pending (Vercel project + production origin in Google console).
+- **M2 — login gate (v1):** ✅ done 2026-09-26 (`app/login.tsx` + `AuthGate` + `welcome-lock` + `config-disconnect` → `/login`, `resolveGate` unit tests, `login.spec.ts` L1–L3 via `budgetery.e2e.auth` seam). Verify trio + 24/24 E2E green.
 - **M3 — Drive M3/M4 + `appDataFolder` decision:** folder/push/pull lands first (per `GOOGLE_DRIVE_SYNC_DESIGN.md`); login gate then pulls remote on unlock.
 - **M4 — encryption (v2):** `CryptoAdapter`, lock-wipes-local option, updated test plan.
 - Docs touched: this file (new, `nav_order: 12`), `docs/design/index.md` (link), `GOOGLE_CLOUD_SETUP.md` (production origin step), README deploy badge (optional).

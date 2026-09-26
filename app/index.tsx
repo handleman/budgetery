@@ -2,6 +2,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { AppButton, AppCard, AppCardTitle, AppListRow, AppMenuSelect, AppTextInput } from "@/components/ui";
 import { appContext } from "@/store/context";
+import { useGoogleAuth } from "@/store/sync/googleAuth";
 import { useContext, useState } from "react";
 import { StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -27,11 +28,17 @@ export default function WelcomeScreen() {
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [selectedPeriodName, setSelectedPeriodName] = useState<string>('');
     const router = useRouter();
+    const { connected, disconnect } = useGoogleAuth();
 
 
     const getStartedHandler = () => {
         ctx.mutators.passWelcomeTutorial();
         setTutorialPassed(true);
+    }
+
+    const lockHandler = async () => {
+        await disconnect();
+        router.replace('/login');
     }
 
     const isPeriodValid = selectedMonth !== null && selectedPeriodName.trim() !== '';
@@ -132,6 +139,16 @@ export default function WelcomeScreen() {
                         testID="welcome-config"
                     />
                 </ThemedView>
+                {connected && (
+                    <ThemedView>
+                        <AppButton
+                            title="Lock"
+                            mode="text"
+                            onPress={lockHandler}
+                            testID="welcome-lock"
+                        />
+                    </ThemedView>
+                )}
             </ThemedView>
         </ThemedView>
     )

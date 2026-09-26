@@ -250,3 +250,13 @@ covered), `Snackbar`/`Banner` (no notification usecase — validation is inline)
 2. P8 headers — migrate welcome/stack headers to `Appbar.Header`, or leave
    navigation chrome minimal? Proposed: leave unless actions are needed.
 3. P9 Chip/Badge markers — worth new testIDs + E2E asserts, or keep text markers?
+   **Resolved 2026-09-26: yes** — `AppChip` adapter added; `%` chips on
+   obligation rows (`obligations-row-{i}-chip`), "Over budget" chips on warned
+   day cards (`expenses-day-{key}-chip`); E2E asserts stay on card/row testIDs.
+
+## 8. Round-3 implementation (2026-09-26)
+
+P9 (chips, see §7.3), P10 (boot `ActivityIndicator` in `app/_layout.tsx`,
+`app-boot-loader`), P12 (`DayBreakdownTable` DataTable on the expenses screen,
+`expenses-day-table`) implemented. Verify trio + 24/24 E2E green. P8 stays
+minimal by decision; no other open items.

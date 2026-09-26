@@ -9,6 +9,7 @@ import { fillAndSave, openAddDialog, expectStickyBottom } from '../helpers/dialo
  *  E2 grouped by day, expandable card
  *  E3 over-budget day highlighted until overlap passes
  *  E4 totals sticky at bottom
+ *  E5 day-by-day breakdown table shows spent per day
  */
 test.describe('expenses', () => {
   test.beforeEach(async ({ page }) => {
@@ -75,5 +76,17 @@ test.describe('expenses', () => {
       { amount: '500', label: 'Groceries' },
     );
     await expectStickyBottom(page, tid.expenses.totalsBar);
+  });
+
+  test('E5: day-by-day breakdown shows spent per day', async ({ page }) => {
+    await openAddDialog(page, tid.expenses.emptyAction, tid.expenses.dialog);
+    await fillAndSave(
+      page,
+      { dialog: tid.expenses.dialog, amountInput: tid.expenses.amountInput, labelInput: tid.expenses.labelInput },
+      { amount: '500', label: 'Groceries' },
+    );
+    await expect(page.getByTestId(tid.expenses.dayTable)).toBeVisible();
+    // Daily = 30000/30 = 1000; spent 500 leaves 500 on today's row.
+    await expect(page.getByTestId(tid.expenses.dayTableRow(todayKey()))).toContainText('500');
   });
 });

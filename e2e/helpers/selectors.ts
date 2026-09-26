@@ -15,6 +15,7 @@ export const tid = {
     monthList: 'month-list',
     monthRow: (i: number) => `month-row-${i}`,
     config: 'welcome-config',
+    lock: 'welcome-lock',
   },
   tabs: {
     income: 'tab-income',
@@ -26,6 +27,12 @@ export const tid = {
     connect: 'config-connect',
     disconnect: 'config-disconnect',
     driveFolder: 'config-drive-folder',
+  },
+  login: {
+    title: 'login-title',
+    info: 'login-info',
+    connect: 'login-connect',
+    error: 'login-error',
   },
   income: {
     empty: 'income-empty',
@@ -73,6 +80,8 @@ export const tid = {
     totalsRemains: 'expenses-totals-bar-remains',
     dayCard: (dayKey: string) => `expenses-day-${dayKey}`,
     dayCardWarned: (dayKey: string) => `expenses-day-${dayKey}-warned`,
+    dayTable: 'expenses-day-table',
+    dayTableRow: (dayKey: string) => `expenses-day-table-row-${dayKey}`,
     row: (i: number) => `expenses-row-${i}`,
     amountInput: 'expense-amount-input',
     labelInput: 'expense-label-input',

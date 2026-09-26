@@ -11,12 +11,13 @@ import { computeOverlapWarnings } from '@/store/expensesOverlap';
 import { ExpenseItem } from '@/store/types';
 import AddExpenseModal from '@/components/modal/AddExpenseModal';
 import { ExpenseDayCard } from '@/components/expenses/ExpenseDayCard';
+import { DayBreakdownTable } from '@/components/expenses/DayBreakdownTable';
 import { AppEmptyState, AppFAB, AppBackButton, AppDivider, StickyTotalsBar, screenGamma } from '@/components/ui';
 
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
   const router = useRouter();
-  const { expensesTutorialPassed, remains, totalExpenses, daylyBudget } = ctx.store;
+  const { expensesTutorialPassed, remains, totalExpenses, daylyBudget, periods, currentPeriodId, currentPeriod } = ctx.store;
   // Tutorial flag is derived from the store directly — no mirror state.
   const tutorialPassed = expensesTutorialPassed;
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
@@ -28,6 +29,14 @@ export default function ExpensesScreen() {
   const expenses = useMemo(() => visibleExpenses(ctx.store), [ctx.store]);
   const groups = useMemo(() => groupExpensesByDay(expenses), [expenses]);
   const warnings = useMemo(() => computeOverlapWarnings(groups, daylyBudget), [groups, daylyBudget]);
+
+  // Month/year for the day-by-day breakdown (fall back to today on legacy data).
+  const today = new Date();
+  const activePeriod = periods.find((p) => p.id === currentPeriodId);
+  const rawMonth = activePeriod?.month ?? currentPeriod.month;
+  const rawYear = activePeriod?.year ?? today.getFullYear();
+  const tableMonth = rawMonth >= 1 && rawMonth <= 12 ? rawMonth : today.getMonth() + 1;
+  const tableYear = rawYear > 0 ? rawYear : today.getFullYear();
 
   const getStartedHandler = () => {
     ctx.mutators.passExpensesTutorial();
@@ -82,6 +91,8 @@ export default function ExpensesScreen() {
                   />
                 );
               })}
+              <AppDivider />
+              <DayBreakdownTable groups={groups} daylyBudget={daylyBudget} month={tableMonth} year={tableYear} />
               <AppDivider />
               <AppFAB onPress={addMoreHandler} label="Add expense" testID="expenses-fab" backgroundColor={screenGamma.expenses.cta} color={screenGamma.expenses.onCta} />
               <View style={styles.footerSpacer} />

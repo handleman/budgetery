@@ -7,7 +7,7 @@ import { visibleObligations } from '@/store/reducer';
 import { ThemedView } from '@/components/ThemedView';
 import { ObligationItem } from '@/store/types';
 import AddObligationModal from '@/components/modal/AddObligationModal';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppChip, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
 
 export default function ObligationScreen() {
   const ctx = useContext(appContext);
@@ -79,6 +79,11 @@ export default function ObligationScreen() {
                         description={obligationSubtitle(obligation)}
                         testID={`obligations-row-${index}`}
                         onPress={() => editHandler(index)}
+                        right={
+                          obligation.isPercentage ? (
+                            <AppChip label={`${obligation.amount}%`} testID={`obligations-row-${index}-chip`} />
+                          ) : undefined
+                        }
                       />
                       <AppDivider />
                     </ThemedView>

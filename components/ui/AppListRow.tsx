@@ -7,16 +7,19 @@ type Props = {
   description?: string;
   testID?: string;
   onPress?: () => void;
+  /** Right-side accessory (e.g. marker chip). */
+  right?: React.ReactNode;
 };
 
 /** Adapter: dense budget list row. Compact padding so collapsed lists read dense. */
-export function AppListRow({ title, description, testID, onPress }: Props) {
+export function AppListRow({ title, description, testID, onPress, right }: Props) {
   return (
     <List.Item
       title={title}
       description={description}
       testID={testID}
       onPress={onPress}
+      right={right ? () => <>{right}</> : undefined}
       style={styles.row}
       contentStyle={styles.content}
     />

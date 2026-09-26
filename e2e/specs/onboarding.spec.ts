@@ -35,6 +35,11 @@ test.describe('onboarding', () => {
   }) => {
     await page.evaluate(() => localStorage.clear());
     await page.reload();
+    // Logged out → the gate sends a fresh visitor to /login first.
+    await expect(page.getByTestId(tid.login.title)).toBeVisible();
+    // Simulate sign-in, then the first-run tutorial shows again.
+    await page.evaluate(() => localStorage.setItem('budgetery.e2e.auth', '1'));
+    await page.goto('/');
     await expect(page.getByTestId(tid.welcome.getStarted)).toBeVisible();
   });
 });

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { AppButton, AppCard, AppCardTitle, AppDivider } from '@/components/ui';
@@ -9,8 +9,14 @@ import { useGoogleAuth } from '@/store/sync/googleAuth';
 
 export default function ConfigScreen() {
     const ctx = useContext(appContext);
+    const router = useRouter();
     const { lastSync, lastError } = ctx.store.syncStatus;
     const { connected, email, busy, canPrompt, connect, disconnect } = useGoogleAuth();
+
+    const lockHandler = async () => {
+        await disconnect();
+        router.replace('/login');
+    };
 
     return (
         <ThemedView style={styles.container}>
@@ -27,7 +33,7 @@ export default function ConfigScreen() {
                     <AppButton
                         title="Disconnect Google account"
                         mode="outlined"
-                        onPress={disconnect}
+                        onPress={lockHandler}
                         disabled={busy}
                         testID="config-disconnect"
                     />
