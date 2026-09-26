@@ -15,7 +15,7 @@ A documentation website for Budgetery on GitHub Pages (`https://handleman.github
 - all files under `docs/design/` appear as one **Design docs** section in the site menu;
 - every page stays readable in both contexts: github.com repo view **and** the published site.
 
-Plan only — no implementation. Target inventory (after the pending doc cleanup): `README.md`, `AGENTS.md`, `docs/test-plan.md`, `docs/WEB_VISUAL_TEST.md`, `docs/design/` (8 files: usecases, E2E ×2, paper/UX/persistence/fulfillment designs, Drive sync, Cloud setup, native plan) + 2 new section indexes (below).
+Plan only — no implementation. Target inventory: `README.md`, `AGENTS.md`, `docs/test-plan.md`, `docs/WEB_VISUAL_TEST.md`, `docs/design/` (13 files: status, usecases, E2E ×2, paper/UX/persistence/fulfillment designs, Drive sync, Cloud setup, native plan, web hosting + login) + 2 section indexes (below).
 
 ## 2. Approach decision
 
@@ -49,10 +49,12 @@ New files (only 3): `_config.yml`, `docs/index.md`, `docs/design/index.md`. Menu
   - Test plan → `docs/test-plan.md`
   - Web visual testing → `docs/WEB_VISUAL_TEST.md`
 - Design docs → `docs/design/index.md` (new, one-line summary + links per doc)
+  - Status → `STATUS.md` (current truth, listed first)
   - Use cases → `usecases.md`
   - E2E: Playwright design / implementation plan (2 files)
   - UX library decision, Paper migration, Persistence layer, Usecase fulfillment (4 files)
   - Drive sync design, Cloud setup, Native builds plan (3 files)
+  - Web hosting + login, Implementation status (2 files)
 - `AGENTS.md`: published but **excluded from the menu** (`nav_exclude: true`) — contributor notes, still reachable from README's existing link.
 
 Hierarchy is explicit front matter per file (JTD does not infer nesting from folders): section indexes carry `has_children: true`, children carry `parent: <section title>`.
@@ -68,6 +70,7 @@ Hierarchy is explicit front matter per file (JTD does not infer nesting from fol
 | `docs/test-plan.md` | Test plan | 1 | `parent: Documentation` |
 | `docs/WEB_VISUAL_TEST.md` | Web visual testing | 2 | `parent: Documentation` |
 | `docs/design/index.md` *(new)* | Design docs | 3 | `has_children: true` |
+| `docs/design/STATUS.md` *(new)* | Implementation status | 0 | `parent: Design docs` |
 | `docs/design/usecases.md` | Use cases | 1 | `parent: Design docs` |
 | `docs/design/E2E_PLAYWRIGHT_DESIGN.md` | E2E: Playwright design | 2 | `parent: Design docs` |
 | `docs/design/E2E_IMPLEMENTATION_PLAN.md` | E2E: implementation plan | 3 | `parent: Design docs` |
@@ -78,6 +81,7 @@ Hierarchy is explicit front matter per file (JTD does not infer nesting from fol
 | `docs/design/GOOGLE_DRIVE_SYNC_DESIGN.md` | Drive sync | 8 | `parent: Design docs` |
 | `docs/design/GOOGLE_CLOUD_SETUP.md` | Cloud setup | 9 | `parent: Design docs` |
 | `docs/design/NATIVE_BUILDS_SETUP_PLAN.md` | Native builds | 10 | `parent: Design docs` |
+| `docs/design/WEB_HOSTING_AND_LOGIN_DESIGN.md` | Web hosting + login | 12 | `parent: Design docs` |
 | `AGENTS.md` | Contributor notes | — | `nav_exclude: true` |
 
 ## 6. `_config.yml` draft (implementation copies this)

@@ -76,3 +76,14 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 - As a user I want all budget calculations to be accurate and get correct remaining budget values
 - As a user I want to see day-by-day budget breakdown and get proper daily average calculations
 
+## Web Hosting
+
+- As a user I want to open the app from a public web URL and get the same functionality as the local web build
+- As a user I want deep links to income, obligations, expenses and configuration screens to work on the hosted version
+
+## Login & Data Protection
+
+- As a user I want to sign in with my Google account before seeing any financial data and get my data hidden from casual viewers
+- As a user I want to lock the app when I step away and get a login screen on return
+- As a user I want my local copy of the data encrypted at rest and get re-authentication instead of an error when the session expires
+

@@ -6,6 +6,10 @@ parent: Design docs
 
 # Usecase Fulfillment — Gap Analysis & Screen-by-Screen Design Plan
 
+> Status note (2026-09-26): this doc is a **2026-09-07 snapshot** — most of
+> M1–M6 is now implemented. See [`STATUS.md`](./STATUS.md) for current truth
+> and the remaining leftovers.
+
 Source of truth: `docs/design/usecases.md` vs codebase at `app/`, `store/`, `components/modal/`, `components/ui/`.
 Date: 2026-09-07.
 
