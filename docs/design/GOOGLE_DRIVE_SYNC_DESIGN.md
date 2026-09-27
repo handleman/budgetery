@@ -105,7 +105,7 @@ store/sync/
 - **M3 — folder + push/pull**: ✅ done minimal 2026-09-27 (fixed default folder, manual Sync now, 16 stubbed-fetch unit tests). Supersedes the folder-picker plan in §4 and the conflict-backup plan in §6 — neither is built.
 - **M4 — auto-sync**: **DROPPED 2026-09-27** (manual sync only).
 - **M5 — E2E + docs**: ✅ minimal (stubbed-fetch unit tests + config presence spec F1; no fake-transport E2E — nothing automatic to drive it).
-- Current phase status lives in [`STATUS.md`](./STATUS.md); the login gate that reuses this auth is designed in [`WEB_HOSTING_AND_LOGIN_DESIGN.md`](./WEB_HOSTING_AND_LOGIN_DESIGN.md).
+- Current phase status lives in [`STATUS.md`](./STATUS.md); Google sign-in here is only the Drive-sync connector (no app lock) — see [`WEB_HOSTING_AND_LOGIN_DESIGN.md`](./WEB_HOSTING_AND_LOGIN_DESIGN.md).
 
 ## 9. Risks & open questions
 

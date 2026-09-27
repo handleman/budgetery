@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, useColorScheme, useWindowDimensions, View } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import { ThemedText } from '@/components/ThemedText';
@@ -9,7 +9,8 @@ import { appContext } from '@/store/context';
 import { visibleIncome } from '@/store/reducer';
 import AddIncomeModal from '@/components/modal/AddIncomeModal';
 import { IncomeItem } from '@/store/types';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppListRow, StickyTotalsBar, SummaryHero, canvasColors, glyphForLabel, screenGamma } from '@/components/ui';
+import { shouldShowSidebar } from '@/components/navigation/sidebar';
+import { AppCard, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppListRow, StickyTotalsBar, SideTotalsCard, SummaryHero, canvasColors, glyphForLabel, screenGamma } from '@/components/ui';
 
 export default function IncomeScreen() {
 
@@ -24,6 +25,8 @@ export default function IncomeScreen() {
 
   const incomes = useMemo(() => visibleIncome(ctx.store), [ctx.store]);
   const colorScheme = useColorScheme();
+  const { width } = useWindowDimensions();
+  const wide = shouldShowSidebar(Platform.OS, width);
   const scrollRef = useRef<ScrollView>(null);
 
 
@@ -56,72 +59,87 @@ export default function IncomeScreen() {
     }
   }, [incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed, router]);
 
+  const totalsItems = [
+    { label: 'Total', value: totalBudget, testID: 'income-totals-bar-total' },
+    { label: 'Remaining', value: remainingBudget, testID: 'income-totals-bar-remaining' },
+    { label: 'Daily', value: Math.round(daylyBudget * 100) / 100, testID: 'income-totals-bar-daily' },
+    { label: 'Remains', value: remains, testID: 'income-totals-bar-remains' },
+  ];
+
+  const body = tutorialPassed ? (
+    <ThemedView style={styles.listBlock}>
+      <SummaryHero
+        title="Total Income:"
+        value={totalBudget}
+        gamma="income"
+        onAddPress={() => wide ? addMoreHandler() : scrollRef.current?.scrollToEnd({ animated: true })}
+        testID="income-hero"
+        addTestID="income-hero-add"
+      />
+      <AppCard testID="income-list-card">
+        {incomes.map((income, index) => (
+          <ThemedView key={`${income.date.getTime()}-${index}`}>
+            <AppListRow
+              title={`${income.label} — ${income.amount}`}
+              description={income.date.toLocaleDateString()}
+              testID={`income-row-${index}`}
+              onPress={() => editHandler(index)}
+              glyph={glyphForLabel(income.label)}
+              showPencil
+            />
+            <AppDivider />
+          </ThemedView>
+        ))}
+      </AppCard>
+      <AppDivider />
+      {!wide && (
+        <View style={styles.fabRow}>
+          <AppFAB onPress={addMoreHandler} testID="income-fab" backgroundColor={screenGamma.income.cta} color={screenGamma.income.onCta} />
+        </View>
+      )}
+      <View style={styles.footerSpacer} />
+    </ThemedView>
+  ) : (
+    <AppEmptyState
+      title="Income Sources"
+      description="Your monthly income sources — set the whole budget by adding different incomes (salary, cashback, present, etc.)"
+      actionLabel="Get started!"
+      onAction={getStartedHandler}
+      adornment={<HelloWave />}
+      testID="income-empty"
+      buttonColor={screenGamma.income.cta}
+      textColor={screenGamma.income.onCta}
+    />
+  );
+
   return (
     <ThemedView style={[styles.screen, { backgroundColor: colorScheme === 'dark' ? canvasColors.dark : canvasColors.light }]}>
-      <AppBackButton onPress={() => router.replace('/')} testID="income-back-button" />
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={styles.content}
-      >
-        <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
-        {
-          tutorialPassed ? (
-            <ThemedView style={styles.listBlock}>
-              <SummaryHero
-                title="Total Income:"
-                value={totalBudget}
-                gamma="income"
-                onAddPress={() => scrollRef.current?.scrollToEnd({ animated: true })}
-                testID="income-hero"
-                addTestID="income-hero-add"
-              />
-              <AppCard testID="income-list-card">
-                <AppCardTitle title="Income sources" subtitle={`${incomes.length} items`} />
-                {incomes.map((income, index) => (
-                  <ThemedView key={`${income.date.getTime()}-${index}`}>
-                    <AppListRow
-                      title={`${income.label} — ${income.amount}`}
-                      description={income.date.toLocaleDateString()}
-                      testID={`income-row-${index}`}
-                      onPress={() => editHandler(index)}
-                      glyph={glyphForLabel(income.label)}
-                      showPencil
-                    />
-                    <AppDivider />
-                  </ThemedView>
-                ))}
-              </AppCard>
-              <AppDivider />
-              <View style={styles.fabRow}>
-                <AppFAB onPress={addMoreHandler} testID="income-fab" backgroundColor={screenGamma.income.cta} color={screenGamma.income.onCta} />
-              </View>
-              <View style={styles.footerSpacer} />
-            </ThemedView>
-          ) : (
-            <AppEmptyState
-              title="Income Sources"
-              description="Your monthly income sources — set the whole budget by adding different incomes (salary, cashback, present, etc.)"
-              actionLabel="Get started!"
-              onAction={getStartedHandler}
-              adornment={<HelloWave />}
-              testID="income-empty"
-              buttonColor={screenGamma.income.cta}
-              textColor={screenGamma.income.onCta}
-            />
-          )
-        }
-
-      </ScrollView>
-      {tutorialPassed && (
-        <StickyTotalsBar
-          testID="income-totals-bar"
-          items={[
-            { label: 'Total', value: totalBudget, testID: 'income-totals-bar-total' },
-            { label: 'Remaining', value: remainingBudget, testID: 'income-totals-bar-remaining' },
-            { label: 'Daily', value: Math.round(daylyBudget * 100) / 100, testID: 'income-totals-bar-daily' },
-            { label: 'Remains', value: remains, testID: 'income-totals-bar-remains' },
-          ]}
-        />
+      {!wide && <AppBackButton onPress={() => router.replace('/')} testID="income-back-button" />}
+      {wide ? (
+        <View style={styles.wideRow}>
+          <ScrollView
+            ref={scrollRef}
+            style={styles.wideScroll}
+            contentContainerStyle={[styles.content, styles.contentWide]}
+          >
+            <ThemedText type="title">Income</ThemedText>
+            {body}
+          </ScrollView>
+          {tutorialPassed && <SideTotalsCard items={totalsItems} testID="income-totals-bar" />}
+        </View>
+      ) : (
+        <>
+          <ScrollView
+            ref={scrollRef}
+            contentContainerStyle={styles.content}
+          >
+            <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
+            {body}
+          </ScrollView>
+          {tutorialPassed && (
+            <StickyTotalsBar testID="income-totals-bar" items={totalsItems} />
+          )}
+        </>
       )}
       <AddIncomeModal isVisible={isModalVisible} onClose={closeModal} editingIndex={editingIndex} initial={editingItem} />
     </ThemedView>
@@ -135,6 +153,18 @@ const styles = StyleSheet.create({
   content: {
     padding: 32,
     gap: 16,
+  },
+  contentWide: {
+    width: '100%',
+    maxWidth: 960,
+    alignSelf: 'center',
+  },
+  wideRow: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  wideScroll: {
+    flex: 1,
   },
   wordmark: {
     // Clears the absolute-positioned back button (top-left).

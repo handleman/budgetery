@@ -11,7 +11,7 @@ test.use({ viewport: { width: 390, height: 844 } });
  * Shots land in test-results/visual/ (gitignored scratch); compare each
  * shot eyeball-to-mockup after the run. Element shots (not page shots):
  * the app scrolls inside a nested container that window scrolling
- * cannot reset. Auth runs via the fixture seam — no login needed.
+ * cannot reset.
  */
 test.describe('visual', () => {
   test.beforeEach(async ({ page }) => {

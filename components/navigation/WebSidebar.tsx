@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, useColorScheme } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { usePathname, useRouter } from 'expo-router';
@@ -29,6 +29,10 @@ export function WebSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const theme = useTheme();
+  const colorScheme = useColorScheme();
+  // Mockup active pill: light green tint (both color schemes mapped).
+  const activeBg = colorScheme === 'dark' ? '#1E4D2B' : '#DFF3E4';
+  const activeFg = colorScheme === 'dark' ? '#7ED957' : '#0E863D';
   return (
     <View testID="web-sidebar" style={[styles.rail, { backgroundColor: theme.colors.surface }]}>
       <Text variant="titleLarge" style={styles.brand}>
@@ -41,14 +45,14 @@ export function WebSidebar() {
             key={item.key}
             onPress={() => router.push(item.route as never)}
             testID={`sidebar-nav-${item.key}`}
-            style={[styles.row, active && { backgroundColor: theme.colors.primaryContainer }]}
+            style={[styles.row, active && { backgroundColor: activeBg }]}
           >
             <MaterialCommunityIcons
               name={item.icon}
               size={22}
-              color={active ? theme.colors.primary : theme.colors.onSurfaceVariant}
+              color={active ? activeFg : theme.colors.onSurfaceVariant}
             />
-            <Text style={[styles.label, active && { color: theme.colors.primary, fontWeight: 'bold' }]}>
+            <Text style={[styles.label, active && { color: activeFg, fontWeight: 'bold' }]}>
               {item.label}
             </Text>
           </Pressable>

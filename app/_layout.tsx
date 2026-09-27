@@ -9,7 +9,6 @@ import { PaperProvider } from 'react-native-paper';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AppContextProvider from '@/store/context';
-import { AuthGate } from '@/components/auth/AuthGate';
 import { getPaperTheme } from '@/components/ui/paperTheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -42,15 +41,12 @@ export default function RootLayout() {
     <PaperProvider theme={paperTheme}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AppContextProvider>
-        <AuthGate>
         <Stack>
           <Stack.Screen name="index" options={{ title: 'Welcome to Budgetery' }} />
           <Stack.Screen name="tabs" options={{ headerShown: false }} />
           <Stack.Screen name="config" options={{ title: 'Configuration' }} />
-          <Stack.Screen name="login" options={{ title: 'Login', headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
-        </AuthGate>
       </AppContextProvider>
     </ThemeProvider>
     </PaperProvider>

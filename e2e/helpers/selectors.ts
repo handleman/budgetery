@@ -15,7 +15,6 @@ export const tid = {
     monthList: 'month-list',
     monthRow: (i: number) => `month-row-${i}`,
     config: 'welcome-config',
-    lock: 'welcome-lock',
   },
   tabs: {
     income: 'tab-income',
@@ -33,12 +32,6 @@ export const tid = {
     disconnect: 'config-disconnect',
     driveFolder: 'config-drive-folder',
     syncNow: 'config-sync-now',
-  },
-  login: {
-    title: 'login-title',
-    info: 'login-info',
-    connect: 'login-connect',
-    error: 'login-error',
   },
   income: {
     empty: 'income-empty',

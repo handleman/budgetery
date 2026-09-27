@@ -42,23 +42,19 @@ export function useGoogleAuth() {
         scopes: [GOOGLE_DRIVE_FILE_SCOPE],
     });
     const [busy, setBusy] = useState(false);
-    /** True once the persisted-session restore attempt finished. */
-    const [restored, setRestored] = useState(false);
 
     // Restore a persisted session (M2: valid access token only; silent
     // refresh with refresh_token arrives with the native code flow).
     useEffect(() => {
         let live = true;
         loadTokens().then((tokens) => {
-            if (!live) return;
-            if (tokens && tokens.expiresAt > Date.now()) {
+            if (live && tokens && tokens.expiresAt > Date.now()) {
                 ctx.mutators.setSyncStatus({
                     ...defaultSyncStatus,
                     connected: true,
                     email: tokens.email,
                 });
             }
-            setRestored(true);
         });
         return () => {
             live = false;
@@ -127,7 +123,6 @@ export function useGoogleAuth() {
         connected: ctx.store.syncStatus.connected,
         email: ctx.store.syncStatus.email,
         busy,
-        restored,
         canPrompt: !!request,
         connect,
         disconnect,

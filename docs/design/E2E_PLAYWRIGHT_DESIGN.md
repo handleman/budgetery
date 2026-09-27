@@ -67,6 +67,8 @@ Rules:
   npm run e2e:build   # expo export --platform web --output-dir dist
   npm run e2e          # playwright test (webServer: npx serve dist -l 8081)
   ```
+  (Production bundle — no auth flags exist anymore; the suite runs login-free
+  because there is no gate. Never deploy a dev-flagged `dist/`.)
 - **`playwright.config.ts` essentials:**
   - `testDir: 'e2e/specs'`, `baseURL: 'http://localhost:8081'`
   - `webServer: { command: 'npx -y serve dist -l 8081', url: 'http://localhost:8081', reuseExistingServer: !process.env.CI }`

@@ -25,7 +25,30 @@ export async function fillAndSave(
 
 /** Open the add dialog via FAB (list state) or empty-state action (first item). */
 export async function openAddDialog(page: Page, triggerTestId: string, dialogTestId: string): Promise<void> {
-  await page.getByTestId(triggerTestId).click();
+  // Wide layout: FAB hidden, the screen's hero + opens the modal instead.
+  // The hero is dialog-mapped (not first-visible): expo-router keeps
+  // background tabs mounted, so any visible hero may belong to a covered
+  // screen that cannot receive pointer events.
+  const heroForDialog: Record<string, string> = {
+    'add-income-dialog': 'income-hero-add',
+    'add-obligation-dialog': 'obligations-hero-add',
+    'add-expense-dialog': 'expenses-hero-add',
+  };
+  const trigger = page.getByTestId(triggerTestId);
+  let opened = false;
+  if (await trigger.isVisible().catch(() => false)) {
+    try {
+      await trigger.click({ timeout: 3000 });
+      opened = true;
+    } catch {
+      opened = false;
+    }
+  }
+  if (!opened) {
+    const hero = heroForDialog[dialogTestId];
+    if (!hero) throw new Error(`openAddDialog: trigger ${triggerTestId} not clickable, no hero for ${dialogTestId}`);
+    await page.getByTestId(hero).click();
+  }
   await page.getByTestId(dialogTestId).waitFor();
 }
 

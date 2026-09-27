@@ -1,15 +1,21 @@
 ---
-title: Web hosting + login
+title: Web hosting + Drive auth
 nav_order: 12
 parent: Design docs
 ---
 
-# Web Hosting + Login Gate — Design Plan
+# Web Hosting + Drive Auth — Design Plan
+
+> **Login gate removed 2026-09-28:** no backend exists and all data stays on
+> device, so an app lock is theater — `app/login.tsx`, `AuthGate`, lock
+> buttons, and the auth switcher were deleted. Google OAuth remains solely
+> as the Drive-sync connector in the config screen. §§5, 6 (M2), 7 (2, 3)
+> are record only.
 
 ## 1. Goals
 
 1. **Host the Expo web export online** on a free static host with minimal ops overhead.
-2. **Add a login screen** guarding financial data, with a **minimal-dependency goal**: no auth SaaS, no backend, no new paid services — reuse what the repo already has (Google OAuth via `expo-auth-session`, Drive sync scaffolding, SecureStore).
+2. ~~**Add a login screen** guarding financial data~~ — dropped (see banner).
 
 Plan only — no implementation.
 
@@ -18,7 +24,7 @@ Plan only — no implementation.
 ### 2.1 Web export
 
 - `app.json` → `web.bundler: metro`, `web.output: static`. `npx expo export --platform web --output-dir dist` already works (verify trio in `AGENTS.md`); `dist/` is gitignored.
-- File-based routing via `expo-router` (`app/_layout.tsx` Stack: `index`, `tabs`, `login`, `config`, `+not-found`).
+- File-based routing via `expo-router` (`app/_layout.tsx` Stack: `index`, `tabs`, `config`, `+not-found`).
 - No hosting account exists yet: no Vercel project, no deploy workflow, no production origin in Google console. Code-side env plumbing (`EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`) is done. Docs site (`_config.yml`, `GITHUB_PAGES_WEBSITE_DESIGN.md`) uses GitHub Pages **deploy-from-branch on repo root** for Markdown docs — a separate concern from hosting the app.
 
 ### 2.2 Auth / sync building blocks (done, reusable)
@@ -31,7 +37,7 @@ Plan only — no implementation.
 | Token vault | `store/sync/tokenStore.ts` (SecureStore native / in-memory web) | ✅ done; web sessions are memory-only by design |
 | Sync state in Store | `syncConfig` / `syncStatus` (`store/sync/types.ts`), persisted via `cleanStoreForStorage()` in `store/persistence/service.ts` | ✅ minimal sync done (default folder, manual Sync now) |
 | Cloud project guide | `docs/design/GOOGLE_CLOUD_SETUP.md` | ✅ exists; production origin still to be registered (see §4) |
-| Login gate / route guard | ✅ done 2026-09-26 | `app/login.tsx` + `AuthGate` (`components/auth/`), lock buttons, E2E seam; local data still **plaintext, soft lock only** until encryption (M4) |
+| Google sign-in (Drive only) | `app/config.tsx` (`config-connect/disconnect`), `useGoogleAuth` | ✅ kept — Drive-sync connector, no app lock |
 
 ### 2.3 Key insight for the login ask
 
@@ -74,7 +80,11 @@ Plan only — no implementation.
 3. **Vercel (owner clicks, ~10 min):** import repo → preset Other → build/output as §3.3 → set env var → deploy. Note preview deployments get distinct URLs — Google rejects unregistered origins, so **test login only on localhost + production**, not on preview URLs (or register one stable preview domain).
 4. **Verify:** `npx tsc --noEmit`, `npx jest --silent --runInBand`, `npx expo export --platform web --output-dir dist`; then Playwright smoke on production URL (welcome renders, tabs navigate, console clean).
 
-## 5. Login design (minimal-dependency)
+## 5. Login design (REMOVED 2026-09-28 — record only)
+
+The sections below designed an app lock that was built, manually verified,
+then deleted: with no backend and all data on-device, a lock is theater.
+Google OAuth remains only as the Drive-sync connector (§5.5 still current).
 
 ### 5.1 Non-goals / rejected alternatives
 
@@ -98,10 +108,12 @@ So the plan is two layers: **v1 soft gate (UX lock)** → **v2 hard privacy (enc
 in `components/auth/gate.ts` disables the gate when either switch position
 is set — build-time `EXPO_PUBLIC_LOCAL_AUTH_OFF=1` (e.g. login-free
 `npx expo start --web`; never set in production builds) or runtime
-localStorage `budgetery.auth.disabled=1` (flippable from the dev-only
-`config-auth-switch` toggle on the config screen, `__DEV__` only, no rebuild;
-toggling navigates to `/` so the gate re-evaluates). E2E uses the separate
-`budgetery.e2e.auth` seam, so the suite never needs login either.
+localStorage `budgetery.auth.disabled=1` **in dev builds only** (flippable
+from the dev-only `config-auth-switch` toggle on the config screen,
+`__DEV__` only, no rebuild; toggling navigates to `/` so the gate
+re-evaluates). Production exports ignore both localStorage flags (and the
+E2E seam) entirely — defense in depth. E2E runs a dev-flagged bundle
+(`npm run e2e:build` uses `expo export --dev`), which never ships.
 
 - **New route `app/login.tsx`** (Stack screen, header hidden like tabs):
   - Title + one-line privacy note ("Your data lives in your own Google Drive, this device keeps only a local copy").
@@ -128,15 +140,15 @@ V1 leaves IndexedDB plaintext. V2 encrypts the persisted payload with the **Web 
 ## 6. Milestones & verification
 
 - **M1 — hosting:** ✅ code done 2026-09-26 (env-var client ID, registered `config` route, static export verified); ⬜ owner deploy pending (Vercel project + production origin in Google console).
-- **M2 — login gate (v1):** ✅ done 2026-09-26, **manually verified with a real Google account 2026-09-27** (`app/login.tsx` + `AuthGate` + `welcome-lock` + `config-disconnect` → `/login`, `resolveGate` unit tests, `login.spec.ts` L1–L3 via `budgetery.e2e.auth` seam). Verify trio + 25/25 E2E green.
+- **M2 — login gate (v1):** ~~built, verified, then~~ **REMOVED 2026-09-28** (no backend → lock is theater; Drive connect in config stays).
 - **M3 — Drive sync:** ✅ done minimal 2026-09-27 (fixed default folder, manual Sync now; picker / conflict backups / auto-sync dropped; no remote pull on unlock).
 - **M4 — encryption (v2):** `CryptoAdapter`, lock-wipes-local option, updated test plan.
 - Docs touched: this file (new, `nav_order: 12`), `docs/design/index.md` (link), `GOOGLE_CLOUD_SETUP.md` (production origin step), README deploy badge (optional).
 
 ## 7. Risks & open questions
 
-1. **Preview-URL logins fail** unless origins are registered — constrain login testing to localhost + production (documented above).
-2. **Testing-mode refresh expiry (~7 days)** forces re-login — acceptable; the login screen normalizes it.
-3. **V1 is a soft lock** (devtools can read IndexedDB) — must be stated in the login-screen copy and README until M4 lands; do not oversell it.
-4. **Single-user assumption:** one Google account per browser profile. Multi-account switching = disconnect + reconnect; no account picker UI in v1.
+1. **Preview-URL OAuth fails** unless origins are registered — constrain Drive-connect testing to localhost + production (documented above).
+2. **Testing-mode refresh expiry (~7 days)** forces reconnect in config — acceptable for a manual backup feature.
+3. ~~**V1 is a soft lock** (devtools can read IndexedDB) — must be stated in the login-screen copy and README until M4 lands; do not oversell it.~~ Removed with the lock — local data is openly on-device by design.
+4. **Single-user assumption:** one Google account per browser profile. Multi-account switching = disconnect + reconnect; no account picker UI.
 5. **`expo-auth-session` web implicit flow** returns short-lived tokens with no refresh — session length equals token lifetime; native code flow (refresh tokens, SecureStore) arrives with native builds.

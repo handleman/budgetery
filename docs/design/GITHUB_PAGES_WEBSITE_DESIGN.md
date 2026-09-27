@@ -81,7 +81,7 @@ Hierarchy is explicit front matter per file (JTD does not infer nesting from fol
 | `docs/design/GOOGLE_DRIVE_SYNC_DESIGN.md` | Drive sync | 8 | `parent: Design docs` |
 | `docs/design/GOOGLE_CLOUD_SETUP.md` | Cloud setup | 9 | `parent: Design docs` |
 | `docs/design/NATIVE_BUILDS_SETUP_PLAN.md` | Native builds | 10 | `parent: Design docs` |
-| `docs/design/WEB_HOSTING_AND_LOGIN_DESIGN.md` | Web hosting + login | 12 | `parent: Design docs` |
+| `docs/design/WEB_HOSTING_AND_LOGIN_DESIGN.md` | Web hosting + Drive auth | 12 | `parent: Design docs` |
 | `AGENTS.md` | Contributor notes | — | `nav_exclude: true` |
 
 ## 6. `_config.yml` draft (implementation copies this)

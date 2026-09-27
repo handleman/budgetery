@@ -17,4 +17,5 @@ export { AppCheckbox } from './AppCheckbox';
 export { AppAccordion } from './AppAccordion';
 export { screenGamma, canvasColors } from './screenGamma';
 export { StickyTotalsBar } from './StickyTotalsBar';
+export { SideTotalsCard } from './SideTotalsCard';
 export { getPaperTheme } from './paperTheme';

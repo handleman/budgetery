@@ -53,21 +53,12 @@ export async function waitForBoot(
  * The store persists via AsyncStorage -> localStorage on web,
  * so every test starts from a clean slate: goto('/'), clear storage,
  * reload, then wait for boot to settle before interacting.
- *
- * Auth: the login gate (AuthGate) redirects to /login when logged out.
- * Tests run authenticated via the `budgetery.e2e.auth` localStorage seam
- * (see components/auth/gate.ts) — the gate spec covers the locked path
- * without the flag. Real Google OAuth is never touched in CI.
  */
 export const test = base.extend<object>({
   page: async ({ page }, use) => {
     await page.goto('/');
     await page.evaluate(() => localStorage.clear());
-    await page.evaluate(() => localStorage.setItem('budgetery.e2e.auth', '1'));
-    // Navigate (not reload): the first load may already have redirected to
-    // /login before the flag was set — goto('/') guarantees we start at
-    // welcome with the seam active.
-    await page.goto('/');
+    await page.reload();
     await waitForBoot(page);
     await use(page);
   },

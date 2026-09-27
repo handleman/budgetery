@@ -9,7 +9,15 @@ parent: Design docs
 Source: 4 mockup images (`income.jpg`, `income_add.jpg`, `expenses.jpg`,
 `obligations.jpg`) showing mobile + web variants of the three tab screens,
 the expense modal, the obligation modal, and a full-screen add-income form.
-Decisions §4 resolved 2026-09-27. STATUS: P0–P4 done, P5–P6 pending.
+Decisions §4 resolved 2026-09-27. STATUS: P0–P6 done (P6 = token audit; device headed check open).
+
+Pixel round (2026-09-27, wide 1280 + narrow 390 vs mockups) fixed: sidebar
+active-pill tint, wide screen titles (no back chevron where the sidebar
+provides Home), FAB hidden on wide (hero `+` opens the modal there),
+list-card headers removed, wide content max-width 960, dialog-mapped hero
+fallback in `openAddDialog` (background tabs stay mounted). Web totals live
+in a side card (`SideTotalsCard`, same testIDs, wide only). Accepted
+deviations: breakdown table kept on expenses, back button kept on narrow.
 
 ## 1. What the mockups show
 
@@ -80,7 +88,7 @@ Decisions §4 resolved 2026-09-27. STATUS: P0–P4 done, P5–P6 pending.
 | Web sidebar (Home/Track/Settings + tabs) | `PaperTabBar` bottom tabs on all sizes | New responsive shell (§4.4): sidebar ≥ breakpoint, tabs below; Home→`/`, Settings→`/config`, Track→TBD |
 | Flat background, no header photos | `ParallaxScrollView` + `*-back.jpeg` per tab | Remove header images/illustrations on the 3 tabs (keep component for other screens or retire) |
 
-What stays untouched: store, reducers, persistence, sync, auth gate,
+What stays untouched: store, reducers, persistence, sync, Drive connect,
 grouping/overlap math, testIDs (additive only), E2E flows.
 
 ## 4. Decisions (resolved 2026-09-27)
@@ -128,9 +136,11 @@ next begins; shared foundations land in P0. Every phase exits:
 - **P5 responsive shell (1–2d):** sidebar ≥1024px (Home/Track/Settings
   mapping, §4.4), bottom tabs below; totals side card on web; web E2E
   viewport asserts. Mobile snapshots unaffected.
-- **P6 polish:** dark-mode headed pass; screenshot-driven review per the
-  S-phase method (`PAPER_MIGRATION_DESIGN.md` §5): scripted shots per
-  screen light+dark, gap log, fix, re-shoot; temp specs deleted afterwards.
+- **P6 polish:** dark-mode token audit done 2026-09-28 (every new surface
+  carries dark stops: hero `gradientDark`, canvas, day strips, warn
+  backgrounds, sidebar pill; white-on-gamma contrast holds in both modes).
+  Device headed check remains open (headless `emulateMedia` renders
+  half-dark artifacts — see Paper migration V-L; verify on OS-level dark).
 
 ## 6. Risks
 

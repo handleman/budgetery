@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, useColorScheme, useWindowDimensions, View } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -12,7 +12,8 @@ import { ExpenseItem } from '@/store/types';
 import AddExpenseModal from '@/components/modal/AddExpenseModal';
 import { ExpenseDayCard } from '@/components/expenses/ExpenseDayCard';
 import { DayBreakdownTable } from '@/components/expenses/DayBreakdownTable';
-import { AppEmptyState, AppFAB, AppBackButton, AppDivider, StickyTotalsBar, SummaryHero, canvasColors, screenGamma } from '@/components/ui';
+import { shouldShowSidebar } from '@/components/navigation/sidebar';
+import { AppEmptyState, AppFAB, AppBackButton, AppDivider, StickyTotalsBar, SideTotalsCard, SummaryHero, canvasColors, screenGamma } from '@/components/ui';
 
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
@@ -30,6 +31,8 @@ export default function ExpensesScreen() {
   const groups = useMemo(() => groupExpensesByDay(expenses), [expenses]);
   const warnings = useMemo(() => computeOverlapWarnings(groups, daylyBudget), [groups, daylyBudget]);
   const colorScheme = useColorScheme();
+  const { width } = useWindowDimensions();
+  const wide = shouldShowSidebar(Platform.OS, width);
   const scrollRef = useRef<ScrollView>(null);
 
   // Month/year for the day-by-day breakdown (fall back to today on legacy data).
@@ -65,69 +68,86 @@ export default function ExpensesScreen() {
     setExpandedDays((prev) => ({ ...prev, [dayKey]: !(prev[dayKey] ?? true) }));
   };
 
+  const totalsItems = [
+    { label: 'Total expenses', value: totalExpenses, testID: 'expenses-totals-bar-total' },
+    { label: 'Daily', value: Math.round(daylyBudget * 100) / 100, testID: 'expenses-totals-bar-daily' },
+    { label: 'Remains', value: remains, testID: 'expenses-totals-bar-remains' },
+  ];
+
+  const body = tutorialPassed ? (
+    <ThemedView style={styles.listBlock}>
+      <SummaryHero
+        title="Total Expenses:"
+        value={totalExpenses}
+        gamma="expenses"
+        onAddPress={() => wide ? addMoreHandler() : scrollRef.current?.scrollToEnd({ animated: true })}
+        testID="expenses-hero"
+        addTestID="expenses-hero-add"
+      />
+      {groups.map((group) => {
+        const warning = warnings.get(group.dayKey);
+        return (
+          <ExpenseDayCard
+            key={group.dayKey}
+            group={group}
+            warned={warning?.warned ?? false}
+            overrunFrom={warning?.overrunFrom}
+            expanded={expandedDays[group.dayKey] ?? true}
+            onToggle={() => toggleDay(group.dayKey)}
+            onEditItem={editHandler}
+          />
+        );
+      })}
+      <AppDivider />
+      <DayBreakdownTable groups={groups} daylyBudget={daylyBudget} month={tableMonth} year={tableYear} />
+      <AppDivider />
+      {!wide && (
+        <View style={styles.fabRow}>
+          <AppFAB onPress={addMoreHandler} testID="expenses-fab" backgroundColor={screenGamma.expenses.cta} color={screenGamma.expenses.onCta} />
+        </View>
+      )}
+      <View style={styles.footerSpacer} />
+    </ThemedView>
+  ) : (
+    <AppEmptyState
+      title="Daily expenses"
+      description="You can enter several values in a row, separated by comma — your casual daily expenses"
+      actionLabel="Add one!"
+      onAction={getStartedHandler}
+      testID="expenses-empty"
+      buttonColor={screenGamma.expenses.cta}
+      textColor={screenGamma.expenses.onCta}
+    />
+  );
+
   return (
     <ThemedView style={[styles.screen, { backgroundColor: colorScheme === 'dark' ? canvasColors.dark : canvasColors.light }]}>
-      <AppBackButton onPress={() => router.replace('/')} testID="expenses-back-button" />
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={styles.content}
-      >
-        <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
-        {
-          tutorialPassed ? (
-            <ThemedView style={styles.listBlock}>
-              <SummaryHero
-                title="Total Expenses:"
-                value={totalExpenses}
-                gamma="expenses"
-                onAddPress={() => scrollRef.current?.scrollToEnd({ animated: true })}
-                testID="expenses-hero"
-                addTestID="expenses-hero-add"
-              />
-              {groups.map((group) => {
-                const warning = warnings.get(group.dayKey);
-                return (
-                  <ExpenseDayCard
-                    key={group.dayKey}
-                    group={group}
-                    warned={warning?.warned ?? false}
-                    overrunFrom={warning?.overrunFrom}
-                    expanded={expandedDays[group.dayKey] ?? true}
-                    onToggle={() => toggleDay(group.dayKey)}
-                    onEditItem={editHandler}
-                  />
-                );
-              })}
-              <AppDivider />
-              <DayBreakdownTable groups={groups} daylyBudget={daylyBudget} month={tableMonth} year={tableYear} />
-              <AppDivider />
-              <View style={styles.fabRow}>
-                <AppFAB onPress={addMoreHandler} testID="expenses-fab" backgroundColor={screenGamma.expenses.cta} color={screenGamma.expenses.onCta} />
-              </View>
-              <View style={styles.footerSpacer} />
-            </ThemedView>
-          ) : (
-            <AppEmptyState
-              title="Daily expenses"
-              description="You can enter several values in a row, separated by comma — your casual daily expenses"
-              actionLabel="Add one!"
-              onAction={getStartedHandler}
-              testID="expenses-empty"
-              buttonColor={screenGamma.expenses.cta}
-              textColor={screenGamma.expenses.onCta}
-            />
-          )
-        }
-      </ScrollView>
-      {tutorialPassed && (
-        <StickyTotalsBar
-          testID="expenses-totals-bar"
-          items={[
-            { label: 'Total expenses', value: totalExpenses, testID: 'expenses-totals-bar-total' },
-            { label: 'Daily', value: Math.round(daylyBudget * 100) / 100, testID: 'expenses-totals-bar-daily' },
-            { label: 'Remains', value: remains, testID: 'expenses-totals-bar-remains' },
-          ]}
-        />
+      {!wide && <AppBackButton onPress={() => router.replace('/')} testID="expenses-back-button" />}
+      {wide ? (
+        <View style={styles.wideRow}>
+          <ScrollView
+            ref={scrollRef}
+            style={styles.wideScroll}
+            contentContainerStyle={[styles.content, styles.contentWide]}
+          >
+            <ThemedText type="title">Expenses</ThemedText>
+            {body}
+          </ScrollView>
+          {tutorialPassed && <SideTotalsCard items={totalsItems} testID="expenses-totals-bar" />}
+        </View>
+      ) : (
+        <>
+          <ScrollView
+            ref={scrollRef}
+            contentContainerStyle={styles.content}
+          >
+            <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
+            {body}
+          </ScrollView>
+          {tutorialPassed && (
+            <StickyTotalsBar testID="expenses-totals-bar" items={totalsItems} />
+          )}
+        </>
       )}
       <AddExpenseModal isVisible={isModalVisible} onClose={closeModal} editingIndex={editingIndex} initial={editingItem} />
     </ThemedView>
@@ -141,6 +161,18 @@ const styles = StyleSheet.create({
   content: {
     padding: 32,
     gap: 16,
+  },
+  contentWide: {
+    width: '100%',
+    maxWidth: 960,
+    alignSelf: 'center',
+  },
+  wideRow: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  wideScroll: {
+    flex: 1,
   },
   wordmark: {
     // Clears the absolute-positioned back button (top-left).

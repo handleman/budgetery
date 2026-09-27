@@ -75,7 +75,12 @@ test.describe('expenses', () => {
       { dialog: tid.expenses.dialog, amountInput: tid.expenses.amountInput, labelInput: tid.expenses.labelInput },
       { amount: '500', label: 'Groceries' },
     );
-    await expectStickyBottom(page, tid.expenses.totalsBar);
+    if (await page.getByTestId(tid.sidebar.rail).isVisible().catch(() => false)) {
+      // Wide: totals live in the side card, always visible (no scroll).
+      await expect(page.getByTestId(tid.expenses.totalsBar)).toBeVisible();
+    } else {
+      await expectStickyBottom(page, tid.expenses.totalsBar);
+    }
   });
 
   test('E5: day-by-day breakdown shows spent per day', async ({ page }) => {
