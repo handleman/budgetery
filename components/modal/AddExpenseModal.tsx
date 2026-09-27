@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { TextInput as PaperTextInput } from 'react-native-paper';
 import { ThemedText } from '../ThemedText';
 import { appContext } from '@/store/context';
 import { AppDialog, AppDatePicker, AppTextInput } from '@/components/ui';
@@ -95,6 +96,7 @@ const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = n
                     value={amountText}
                     onChangeText={setAmountText}
                     testID="expense-amount-input"
+                    right={<PaperTextInput.Icon icon="currency-usd" />}
                 />
             </View>
             <View style={styles.inputContainer}>
@@ -103,6 +105,7 @@ const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = n
                     value={label}
                     onChangeText={setLabel}
                     testID="expense-label-input"
+                    right={<PaperTextInput.Icon icon="tag" />}
                 />
             </View>
             <View style={styles.inputContainer}>

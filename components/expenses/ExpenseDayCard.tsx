@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { AppAccordion, AppCard, AppChip, AppDivider, AppListRow } from '../ui';
+import { AppAccordion, AppCard, AppChip, AppDivider, AppListRow, glyphForLabel } from '../ui';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import type { DayGroup } from '@/store/expenseGrouping';
 import { formatDayKey } from '@/store/expenseGrouping';
@@ -20,6 +20,7 @@ type Props = {
  */
 export function ExpenseDayCard({ group, warned, overrunFrom, expanded, onToggle, onEditItem }: Props) {
   const warnBg = useThemeColor({ light: '#FDECEA', dark: '#57201C' }, 'background');
+  const stripBg = useThemeColor({ light: '#EDEAF4', dark: '#2A2830' }, 'background');
   const testID = `expenses-day-${group.dayKey}${warned ? '-warned' : ''}`;
   const title = `${formatDayKey(group.dayKey)} — ${group.total} (${group.items.length})`;
   const description =
@@ -41,6 +42,7 @@ export function ExpenseDayCard({ group, warned, overrunFrom, expanded, onToggle,
         description={description}
         expanded={expanded}
         onPress={onToggle}
+        style={[styles.groupHeader, { backgroundColor: stripBg }]}
       >
         <View>
           {group.items.map(({ item, listIndex }, i) => (
@@ -49,6 +51,7 @@ export function ExpenseDayCard({ group, warned, overrunFrom, expanded, onToggle,
                 title={`${item.label} — ${item.amount}`}
                 testID={`expenses-row-${listIndex}`}
                 onPress={() => onEditItem(listIndex)}
+                glyph={glyphForLabel(item.label)}
               />
               <AppDivider />
             </View>
@@ -64,5 +67,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 8,
     paddingTop: 8,
+  },
+  groupHeader: {
+    borderRadius: 12,
+    paddingHorizontal: 8,
   },
 });

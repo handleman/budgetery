@@ -28,7 +28,7 @@ Legend: ✅ done · 🟡 partial · ⬜ not started.
 | Native builds | ⬜ plan only | No `eas.json`, no bundle IDs, no `expo-dev-client`; web-first until then |
 | GitHub Pages website | 🟡 skeleton done | `_config.yml` + section indexes + front matter done; live deployment under Settings → Pages unverified |
 | Web hosting + login | 🟡 code done, deploy pending | `app/login.tsx` + `AuthGate` + lock buttons + `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` + registered `config` route done, 25/25 E2E green; pending owner actions: Vercel project, production origin in Google console; encryption (M4) not started |
-| Redesign (mockups) | 🟡 P0–P2 done | Foundations + Income + Obligations match mockups (verified by screenshot); P3–P6 pending |
+| Redesign (mockups) | 🟡 P0–P3 done | Foundations + all 3 tabs match mockups (verified by screenshot); P4–P6 pending |
 
 ## 2. Feature matrix (usecases → code)
 

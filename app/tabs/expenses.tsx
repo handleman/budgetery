@@ -1,8 +1,8 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
 
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { appContext } from '@/store/context';
 import { visibleExpenses } from '@/store/reducer';
@@ -12,7 +12,7 @@ import { ExpenseItem } from '@/store/types';
 import AddExpenseModal from '@/components/modal/AddExpenseModal';
 import { ExpenseDayCard } from '@/components/expenses/ExpenseDayCard';
 import { DayBreakdownTable } from '@/components/expenses/DayBreakdownTable';
-import { AppEmptyState, AppFAB, AppBackButton, AppDivider, StickyTotalsBar, screenGamma } from '@/components/ui';
+import { AppEmptyState, AppFAB, AppBackButton, AppDivider, StickyTotalsBar, SummaryHero, canvasColors, screenGamma } from '@/components/ui';
 
 export default function ExpensesScreen() {
   const ctx = useContext(appContext);
@@ -29,6 +29,8 @@ export default function ExpensesScreen() {
   const expenses = useMemo(() => visibleExpenses(ctx.store), [ctx.store]);
   const groups = useMemo(() => groupExpensesByDay(expenses), [expenses]);
   const warnings = useMemo(() => computeOverlapWarnings(groups, daylyBudget), [groups, daylyBudget]);
+  const colorScheme = useColorScheme();
+  const scrollRef = useRef<ScrollView>(null);
 
   // Month/year for the day-by-day breakdown (fall back to today on legacy data).
   const today = new Date();
@@ -64,19 +66,24 @@ export default function ExpensesScreen() {
   };
 
   return (
-    <ThemedView style={styles.screen}>
+    <ThemedView style={[styles.screen, { backgroundColor: colorScheme === 'dark' ? canvasColors.dark : canvasColors.light }]}>
       <AppBackButton onPress={() => router.replace('/')} testID="expenses-back-button" />
-      <ParallaxScrollView
-        headerBackgroundColor={{ light: screenGamma.expenses.header, dark: screenGamma.expenses.headerDark }}
-        headerImage={
-          <Image
-            source={require('@/assets/images/expenses-back.jpeg')}
-            style={styles.reactLogo}
-          />
-        }>
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={styles.content}
+      >
+        <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
         {
           tutorialPassed ? (
-            <ThemedView>
+            <ThemedView style={styles.listBlock}>
+              <SummaryHero
+                title="Total Expenses:"
+                value={totalExpenses}
+                gamma="expenses"
+                onAddPress={() => scrollRef.current?.scrollToEnd({ animated: true })}
+                testID="expenses-hero"
+                addTestID="expenses-hero-add"
+              />
               {groups.map((group) => {
                 const warning = warnings.get(group.dayKey);
                 return (
@@ -94,7 +101,9 @@ export default function ExpensesScreen() {
               <AppDivider />
               <DayBreakdownTable groups={groups} daylyBudget={daylyBudget} month={tableMonth} year={tableYear} />
               <AppDivider />
-              <AppFAB onPress={addMoreHandler} label="Add expense" testID="expenses-fab" backgroundColor={screenGamma.expenses.cta} color={screenGamma.expenses.onCta} />
+              <View style={styles.fabRow}>
+                <AppFAB onPress={addMoreHandler} testID="expenses-fab" backgroundColor={screenGamma.expenses.cta} color={screenGamma.expenses.onCta} />
+              </View>
               <View style={styles.footerSpacer} />
             </ThemedView>
           ) : (
@@ -109,7 +118,7 @@ export default function ExpensesScreen() {
             />
           )
         }
-      </ParallaxScrollView>
+      </ScrollView>
       {tutorialPassed && (
         <StickyTotalsBar
           testID="expenses-totals-bar"
@@ -129,21 +138,21 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-  titleContainer: {
+  content: {
+    padding: 32,
+    gap: 16,
+  },
+  wordmark: {
+    // Clears the absolute-positioned back button (top-left).
+    paddingLeft: 48,
+  },
+  listBlock: {
+    gap: 16,
+    backgroundColor: 'transparent',
+  },
+  fabRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 200,
-    width: '100%',
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+    justifyContent: 'flex-end',
   },
   footerSpacer: {
     height: 8,
