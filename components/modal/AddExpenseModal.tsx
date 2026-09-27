@@ -4,6 +4,7 @@ import { TextInput as PaperTextInput } from 'react-native-paper';
 import { ThemedText } from '../ThemedText';
 import { appContext } from '@/store/context';
 import { AppDialog, AppDatePicker, AppTextInput } from '@/components/ui';
+import { screenGamma } from '@/components/ui/screenGamma';
 import type { ExpenseItem } from '@/store/types';
 import { parseCommaAmounts, parseDateInput, toDayKey } from '@/store/expenseGrouping';
 
@@ -88,6 +89,7 @@ const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = n
             title={isEditing ? 'Edit expense' : 'Add expense'}
             testID="add-expense-dialog"
             actions={actions}
+            saveButtonColor={screenGamma.expenses.cta}
         >
             <View style={styles.inputContainer}>
                 <AppTextInput

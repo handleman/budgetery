@@ -27,8 +27,9 @@ Legend: ✅ done · 🟡 partial · ⬜ not started.
 | Cloud setup | 🟡 partial | Web OAuth client exists (`googleConfig.ts`); pending: production origin registration, iOS/Android clients (need native builds first) |
 | Native builds | ⬜ plan only | No `eas.json`, no bundle IDs, no `expo-dev-client`; web-first until then |
 | GitHub Pages website | 🟡 skeleton done | `_config.yml` + section indexes + front matter done; live deployment under Settings → Pages unverified |
-| Web hosting + login | 🟡 code done, deploy pending | `app/login.tsx` + `AuthGate` + lock buttons + `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` + registered `config` route done, 25/25 E2E green; pending owner actions: Vercel project, production origin in Google console; encryption (M4) not started |
-| Redesign (mockups) | 🟡 P0–P3 done | Foundations + all 3 tabs match mockups (verified by screenshot); P4–P6 pending |
+| Login gate | ✅ done | Manually verified with a real Google account 2026-09-27 (`app/login.tsx` + `AuthGate` + lock buttons); soft lock until encryption (M4) |
+| Web hosting | 🟡 code done, deploy pending | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` + registered routes done, 25/25 E2E green; pending owner actions: Vercel project, production origin in Google console; encryption (M4) not started |
+| Redesign (mockups) | 🟡 P0–P4 done | Foundations + all 3 tabs + dialog CTAs match mockups (verified by screenshot); P5–P6 pending |
 
 ## 2. Feature matrix (usecases → code)
 
@@ -46,7 +47,7 @@ Legend: ✅ done · 🟡 partial · ⬜ not started.
 | Tutorial routing (first run → income, else expenses) | ✅ | Redirects in `app/tabs/index.tsx`, `app/index.tsx` |
 | State persistence + accurate cross-screen calculations | ✅ | `PersistenceService`, `migrations.ts`, `reducer.test.ts` |
 | Config screen + Google connect/disconnect | ✅ | `app/config.tsx` (`config-status/connect/disconnect`, `config-drive-folder` default, `config-sync-now`) |
-| Login gate guarding financial data | ✅ (code, soft lock) | Gate + lock done; local data still plaintext until encryption (M4) |
+| Login gate guarding financial data | ✅ done | Manually verified 2026-09-27; soft lock until encryption (M4) |
 
 ## 3. Known leftovers (accepted scope for future milestones)
 

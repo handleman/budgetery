@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { TextInput as PaperTextInput } from 'react-native-paper';
 import { appContext } from '@/store/context';
 import { AppDialog, AppTextInput } from '@/components/ui';
+import { screenGamma } from '@/components/ui/screenGamma';
 import type { IncomeItem } from '@/store/types';
 import { parseDateInput, toDayKey } from '@/store/expenseGrouping';
 
@@ -83,6 +84,7 @@ const AddIncomeModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = nu
             title={isEditing ? 'Edit income' : 'Add income'}
             testID="add-income-dialog"
             actions={actions}
+            saveButtonColor={screenGamma.income.cta}
         >
             <View style={styles.inputContainer}>
                 <AppTextInput

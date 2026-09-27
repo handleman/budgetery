@@ -9,7 +9,7 @@ parent: Design docs
 Source: 4 mockup images (`income.jpg`, `income_add.jpg`, `expenses.jpg`,
 `obligations.jpg`) showing mobile + web variants of the three tab screens,
 the expense modal, the obligation modal, and a full-screen add-income form.
-Decisions §4 resolved 2026-09-27. STATUS: P0–P3 done, P4–P6 pending.
+Decisions §4 resolved 2026-09-27. STATUS: P0–P4 done, P5–P6 pending.
 
 ## 1. What the mockups show
 

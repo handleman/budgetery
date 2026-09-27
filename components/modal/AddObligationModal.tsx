@@ -4,6 +4,7 @@ import { TextInput as PaperTextInput } from 'react-native-paper';
 import { ThemedText } from '../ThemedText';
 import { appContext } from '@/store/context';
 import { AppDialog, AppSwitch, AppTextInput } from '@/components/ui';
+import { screenGamma } from '@/components/ui/screenGamma';
 import type { ObligationItem } from '@/store/types';
 import { parseDateInput, toDayKey } from '@/store/expenseGrouping';
 
@@ -92,6 +93,7 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
             title={isEditing ? 'Edit obligation' : 'Add obligation'}
             testID="add-obligation-dialog"
             actions={actions}
+            saveButtonColor={screenGamma.income.cta}
         >
             <View>
                 <ThemedText>You may choose between exact amount or relative percentage</ThemedText>

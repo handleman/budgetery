@@ -119,7 +119,7 @@ V1 leaves IndexedDB plaintext. V2 encrypts the persisted payload with the **Web 
 ## 6. Milestones & verification
 
 - **M1 — hosting:** ✅ code done 2026-09-26 (env-var client ID, registered `config` route, static export verified); ⬜ owner deploy pending (Vercel project + production origin in Google console).
-- **M2 — login gate (v1):** ✅ done 2026-09-26 (`app/login.tsx` + `AuthGate` + `welcome-lock` + `config-disconnect` → `/login`, `resolveGate` unit tests, `login.spec.ts` L1–L3 via `budgetery.e2e.auth` seam). Verify trio + 24/24 E2E green.
+- **M2 — login gate (v1):** ✅ done 2026-09-26, **manually verified with a real Google account 2026-09-27** (`app/login.tsx` + `AuthGate` + `welcome-lock` + `config-disconnect` → `/login`, `resolveGate` unit tests, `login.spec.ts` L1–L3 via `budgetery.e2e.auth` seam). Verify trio + 25/25 E2E green.
 - **M3 — Drive sync:** ✅ done minimal 2026-09-27 (fixed default folder, manual Sync now; picker / conflict backups / auto-sync dropped; no remote pull on unlock).
 - **M4 — encryption (v2):** `CryptoAdapter`, lock-wipes-local option, updated test plan.
 - Docs touched: this file (new, `nav_order: 12`), `docs/design/index.md` (link), `GOOGLE_CLOUD_SETUP.md` (production origin step), README deploy badge (optional).
