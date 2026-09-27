@@ -1,13 +1,13 @@
-import { StyleSheet, Image, View } from 'react-native';
-import { useContext, useState, useEffect, useMemo } from 'react';
+import { ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
+import { useContext, useRef, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'expo-router';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import { appContext } from '@/store/context';
 import { visibleObligations } from '@/store/reducer';
-import { ThemedView } from '@/components/ThemedView';
 import { ObligationItem } from '@/store/types';
 import AddObligationModal from '@/components/modal/AddObligationModal';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppChip, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppChip, AppListRow, StickyTotalsBar, SummaryHero, canvasColors, glyphForLabel, screenGamma } from '@/components/ui';
 
 export default function ObligationScreen() {
   const ctx = useContext(appContext);
@@ -20,6 +20,8 @@ export default function ObligationScreen() {
   const [editingItem, setEditingItem] = useState<ObligationItem | null>(null);
 
   const obligations = useMemo(() => visibleObligations(ctx.store), [ctx.store]);
+  const colorScheme = useColorScheme();
+  const scrollRef = useRef<ScrollView>(null);
 
   const getStartedHandler = () => {
     ctx.mutators.passObligationsTutorial();
@@ -56,19 +58,24 @@ export default function ObligationScreen() {
   };
 
   return (
-    <ThemedView style={styles.screen}>
+    <ThemedView style={[styles.screen, { backgroundColor: colorScheme === 'dark' ? canvasColors.dark : canvasColors.light }]}>
       <AppBackButton onPress={() => router.replace('/')} testID="obligations-back-button" />
-      <ParallaxScrollView
-        headerBackgroundColor={{ light: screenGamma.obligations.header, dark: screenGamma.obligations.headerDark }}
-        headerImage={
-          <Image
-            source={require('@/assets/images/obligations-back.jpeg')}
-            style={styles.reactLogo}
-          />
-        }>
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={styles.content}
+      >
+        <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
         {
           tutorialPassed ? (
-            <ThemedView>
+            <ThemedView style={styles.listBlock}>
+              <SummaryHero
+                title="Total Obligations:"
+                value={totalObligations}
+                gamma="obligations"
+                onAddPress={() => scrollRef.current?.scrollToEnd({ animated: true })}
+                testID="obligations-hero"
+                addTestID="obligations-hero-add"
+              />
               <AppCard testID="obligations-list-card">
                 <AppCardTitle title="Obligations" subtitle={`${obligations.length} items`} />
                 {
@@ -79,6 +86,8 @@ export default function ObligationScreen() {
                         description={obligationSubtitle(obligation)}
                         testID={`obligations-row-${index}`}
                         onPress={() => editHandler(index)}
+                        glyph={glyphForLabel(obligation.label)}
+                        showPencil
                         right={
                           obligation.isPercentage ? (
                             <AppChip label={`${obligation.amount}%`} testID={`obligations-row-${index}-chip`} />
@@ -90,7 +99,9 @@ export default function ObligationScreen() {
                   ))
                 }
               </AppCard>
-              <AppFAB onPress={addMoreHandler} label="Add obligation" testID="obligations-fab" backgroundColor={screenGamma.obligations.cta} color={screenGamma.obligations.onCta} />
+              <View style={styles.fabRow}>
+                <AppFAB onPress={addMoreHandler} testID="obligations-fab" backgroundColor={screenGamma.obligations.cta} color={screenGamma.obligations.onCta} />
+              </View>
               <View style={styles.footerSpacer} />
             </ThemedView>
           ) : (
@@ -105,7 +116,7 @@ export default function ObligationScreen() {
             />
           )
         }
-      </ParallaxScrollView>
+      </ScrollView>
       {tutorialPassed && (
         <StickyTotalsBar
           testID="obligations-totals-bar"
@@ -126,23 +137,21 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  content: {
+    padding: 32,
+    gap: 16,
   },
-  titleContainer: {
+  wordmark: {
+    // Clears the absolute-positioned back button (top-left).
+    paddingLeft: 48,
+  },
+  listBlock: {
+    gap: 16,
+    backgroundColor: 'transparent',
+  },
+  fabRow: {
     flexDirection: 'row',
-    gap: 8,
-  },
-  reactLogo: {
-    height: 200,
-    width: '100%',
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-    resizeMode: 'cover',
+    justifyContent: 'flex-end',
   },
   footerSpacer: {
     height: 8,

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { TextInput as PaperTextInput } from 'react-native-paper';
 import { ThemedText } from '../ThemedText';
 import { appContext } from '@/store/context';
 import { AppDialog, AppSwitch, AppTextInput } from '@/components/ui';
@@ -112,6 +113,7 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
                     value={amountText}
                     onChangeText={setAmountText}
                     testID="obligation-amount-input"
+                    right={<PaperTextInput.Icon icon={isPercentage ? 'percent' : 'currency-usd'} />}
                 />
             </View>
             <View style={styles.inputContainer}>
@@ -120,6 +122,7 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
                     value={label}
                     onChangeText={setLabel}
                     testID="obligation-label-input"
+                    right={<PaperTextInput.Icon icon="tag" />}
                 />
             </View>
             <View style={styles.inputContainer}>
@@ -128,6 +131,7 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
                     value={dateText}
                     onChangeText={setDateText}
                     testID="obligation-date-input"
+                    right={<PaperTextInput.Icon icon="calendar" />}
                 />
             </View>
         </AppDialog>
