@@ -29,7 +29,7 @@ Plan only — no implementation.
 | Client IDs | `store/sync/googleConfig.ts` (`GOOGLE_WEB_CLIENT_ID` hardcoded; iOS/Android `undefined`) | ✅ web works; native pending |
 | Scope | `drive.file` (least privilege) + default `openid email profile` | ✅ correct, keep |
 | Token vault | `store/sync/tokenStore.ts` (SecureStore native / in-memory web) | ✅ done; web sessions are memory-only by design |
-| Sync state in Store | `syncConfig` / `syncStatus` (`store/sync/types.ts`), persisted via `cleanStoreForStorage()` in `store/persistence/service.ts` | ✅ shell done; folder/push/pull (M3) + auto-sync (M4) pending |
+| Sync state in Store | `syncConfig` / `syncStatus` (`store/sync/types.ts`), persisted via `cleanStoreForStorage()` in `store/persistence/service.ts` | ✅ minimal sync done (default folder, manual Sync now) |
 | Cloud project guide | `docs/design/GOOGLE_CLOUD_SETUP.md` | ✅ exists; production origin still to be registered (see §4) |
 | Login gate / route guard | ✅ done 2026-09-26 | `app/login.tsx` + `AuthGate` (`components/auth/`), lock buttons, E2E seam; local data still **plaintext, soft lock only** until encryption (M4) |
 
@@ -109,8 +109,7 @@ V1 leaves IndexedDB plaintext. V2 encrypts the persisted payload with the **Web 
 
 - Key derivation: `SHA-256(access_token)` or `PBKDF2(passphrase)` — key lives in memory only, never in storage. Simplest coherent choice: derive from the Google `access_token` (proves identity, zero new UX); optional user passphrase as later hardening.
 - Change is confined to `store/persistence/`: wrap `cleanStoreForStorage()` output in `AES-GCM encrypt` on `save` / decrypt on `load` via a new `CryptoAdapter` decorator around the existing adapters (`IStorageAdapter` contract unchanged — the modular design from `PERSISTENCE_LAYER_DESIGN.md` pays off here).
-- Lock then = drop key from memory (+ optionally `clear()` local copy); unlock = login → fetch key → decrypt local or pull `budgetery-backup.json` from Drive (M3 format) as source of truth.
-- **Drive-side note:** the backup file in the user's Drive is protected by their Google account (not public). `drive.file` scope + `appDataFolder` (hidden per-app folder, no user-visible clutter) is worth considering in M3 as an alternative to the visible `Budgetery/` folder — same API, better privacy posture.
+- Lock then = drop key from memory (+ optionally `clear()` local copy); unlock = login → fetch key → decrypt the local copy.
 
 ### 5.5 What Google Cloud tools are / aren't useful
 
@@ -121,7 +120,7 @@ V1 leaves IndexedDB plaintext. V2 encrypts the persisted payload with the **Web 
 
 - **M1 — hosting:** ✅ code done 2026-09-26 (env-var client ID, registered `config` route, static export verified); ⬜ owner deploy pending (Vercel project + production origin in Google console).
 - **M2 — login gate (v1):** ✅ done 2026-09-26 (`app/login.tsx` + `AuthGate` + `welcome-lock` + `config-disconnect` → `/login`, `resolveGate` unit tests, `login.spec.ts` L1–L3 via `budgetery.e2e.auth` seam). Verify trio + 24/24 E2E green.
-- **M3 — Drive M3/M4 + `appDataFolder` decision:** folder/push/pull lands first (per `GOOGLE_DRIVE_SYNC_DESIGN.md`); login gate then pulls remote on unlock.
+- **M3 — Drive sync:** ✅ done minimal 2026-09-27 (fixed default folder, manual Sync now; picker / conflict backups / auto-sync dropped; no remote pull on unlock).
 - **M4 — encryption (v2):** `CryptoAdapter`, lock-wipes-local option, updated test plan.
 - Docs touched: this file (new, `nav_order: 12`), `docs/design/index.md` (link), `GOOGLE_CLOUD_SETUP.md` (production origin step), README deploy badge (optional).
 

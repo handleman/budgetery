@@ -55,6 +55,7 @@ export const defaultAppContextValue: AppContext = {
         startNewMonth: (_value: CurrentPeriod) => { },
         setSyncConfig: (_value: SyncConfig) => { },
         setSyncStatus: (_value: SyncStatus) => { },
+        loadStore: (_value: Store) => { },
     }
 };
 
@@ -154,6 +155,9 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     function setSyncStatus(passed: SyncStatus) {
         dispatch({ type: ACTION_TYPES.SET_SYNC_STATUS, payload: passed });
     }
+    function loadStore(passed: Store) {
+        dispatch({ type: ACTION_TYPES.LOAD_STORE, payload: passed });
+    }
 
     const value = {
         store,
@@ -177,6 +181,7 @@ const AppContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
         startNewMonth,
         setSyncConfig,
         setSyncStatus,
+        loadStore,
         }
     }
 

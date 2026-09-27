@@ -27,6 +27,7 @@ export const tid = {
     connect: 'config-connect',
     disconnect: 'config-disconnect',
     driveFolder: 'config-drive-folder',
+    syncNow: 'config-sync-now',
   },
   login: {
     title: 'login-title',

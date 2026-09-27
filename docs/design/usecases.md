@@ -29,7 +29,7 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 - as a user i want to have configuration screen
 - as a user i want to access the configuration screen from the main welcome screen
 - i want to see distincitve button or menu link
-- in the configuration screen i want to have ability to configure data synchronization with google drive where i can select a folder in my google drive where store data from app
+- in the configuration screen i want my data synchronized with google drive to a default Budgetery folder, without having to select a folder
 
 ## Expense Tracking
 

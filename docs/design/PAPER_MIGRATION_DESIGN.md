@@ -21,7 +21,7 @@ audits every non-Paper element and decides migrate vs keep.
 | P1 | Bottom bar: expo-router `Tabs` default tab bar (`app/tabs/_layout.tsx`) + Ionicons `TabBarIcon` | `BottomNavigation.Bar` as `Tabs tabBar` | **MIGRATE** (biggest gap, user-visible MD3 upgrade) |
 | P2 | `ExpenseDayCard` custom expandable (`components/expenses/`) | `List.Accordion` (controlled) | **MIGRATE** (small, testID-safe) |
 | P3 | `Hr` custom divider (income + expenses screens) while `AppDivider` exists | `AppDivider` (Paper `Divider`) | **MIGRATE** (trivial consolidation) |
-| P4 | Bare `Checkbox` import in `TutorialProgress` | New `AppCheckbox` adapter | **MIGRATE** (adapter-convention compliance) |
+| P4 | (TutorialProgress checklist dropped 2026-09-27) | **DROPPED** — the only `Checkbox` consumer was never built; `AppCheckbox` adapter remains available as a generic |
 | P5 | `ThemedText` custom vs Paper `Text` (mixed: `AppEmptyState` uses Paper `Text`) | Rebase `ThemedText` on Paper `Text` | **MIGRATE** (small, keeps API) |
 | P6 | Month-list `Pressable`+`ThemedView` rows (welcome) | `List.Item` / `List.Section` | **MIGRATE** (small) |
 | P7 | `StickyTotalsBar` custom `View` | Keep custom, rebase on Paper `Surface` | **KEEP + rebase** (no Paper sticky-footer exists) |
@@ -46,7 +46,7 @@ Already on Paper (no action): `AppButton`, `AppCard`, `AppDialog` (+Portal),
   List (`AppListRow`), Menu (`AppMenuSelect`), Switch, TextInput. Convention
   (paperTheme.ts): screens import via adapters, never Paper directly.
 - Non-Paper exceptions: `Hr` (used in `app/tabs/index.tsx`, `expenses.tsx`
-  alongside `AppDivider`), bare `Checkbox` in `TutorialProgress`,
+  alongside `AppDivider`),
   custom `ExpenseDayCard` (expand/collapse hand-rolled with `ThemedText onPress`),
   custom `StickyTotalsBar` (plain `View`), welcome month rows (`Pressable`),
   `ThemedText` (custom) vs Paper `Text` in `AppEmptyState`.
@@ -89,11 +89,11 @@ default-expanded behavior. Deletes ~30 lines of hand-rolled toggle code.
 `Hr` and `AppDivider` do the same job; screens use both. Delete `Hr`
 (or re-export `AppDivider` from it for one release), replace two usages.
 
-### P4 — `AppCheckbox` adapter
+### P4 — `AppCheckbox` adapter — DROPPED 2026-09-27
 
-`TutorialProgress` imports Paper `Checkbox` directly, violating the
-adapter convention. Add `components/ui/AppCheckbox.tsx`, export from
-`components/ui/index.ts`, switch the one usage. `tutorial-check-*` IDs unchanged.
+Moot: the TutorialProgress checklist (the only planned `Checkbox` consumer)
+was removed from plans. The generic `AppCheckbox` adapter already exists in
+`components/ui/` for any future checkbox need.
 
 ### P5 — `ThemedText` on Paper `Text`
 

@@ -230,8 +230,9 @@ function cleanItems(items: unknown): Record<string, unknown>[] {
 /**
  * Clean a store for JSON serialization (Date -> ISO string, etc.).
  * Preserves every Store field so round-trips are lossless.
+ * Exported for Drive sync envelopes (same payload as local storage).
  */
-function cleanStoreForStorage(store: Store): Store {
+export function cleanStoreForStorage(store: Store): Store {
     const record = store as unknown as Record<string, unknown>;
     const monthRaw = store.currentPeriod?.month;
     const month =
@@ -313,6 +314,18 @@ function restoreDates(store: Store): Store {
     });
 
     return restored as unknown as Store;
+}
+
+/**
+ * Prepare a pulled (Drive) payload for the store: migrate, restore dates,
+ * fill defaults. Exported for Drive sync pull.
+ */
+export async function preparePulledStore(raw: unknown): Promise<Store> {
+    if (!raw || typeof raw !== 'object') {
+        throw new Error('Pulled payload is not an object.');
+    }
+    const migrated = (await applyMigrations(raw as Partial<Store>)) as Store;
+    return normalizeStore(restoreDates(migrated));
 }
 
 /**

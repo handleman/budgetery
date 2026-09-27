@@ -131,6 +131,7 @@ export type AppContext = {
         startNewMonth: (value: CurrentPeriod) => void;
         setSyncConfig: (value: SyncConfig) => void;
         setSyncStatus: (value: SyncStatus) => void;
+        loadStore: (value: Store) => void;
     }
 }
 

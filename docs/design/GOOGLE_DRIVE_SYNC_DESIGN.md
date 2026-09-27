@@ -6,6 +6,11 @@ parent: Design docs
 
 # Google Drive Sync + Configuration Screen — Design Plan
 
+> **2026-09-27: M3 reinstated in minimal form** — fixed default `Budgetery`
+> folder, manual Sync now, timestamp direction, no picker / conflict backups /
+> auto-sync (those stay dropped). M1 + M2 built earlier. §§4–6 mostly record;
+> §8 is current.
+
 ## 1. Usecase analysis (added in `7e22a04`)
 
 `docs/design/usecases.md` → new `## Configuration page` section:
@@ -53,9 +58,9 @@ New `store/sync/` module (pure logic, unit-testable with injected `fetch`):
 
 ```
 store/sync/
-  driveClient.ts    # thin Drive v3 REST wrapper (list/create/upload/download), fetch injected
+  driveClient.ts    # thin Drive v3 REST wrapper (fetch injected): ensure default folder, backup read/write
   tokenStore.ts     # SecureStore (native) / memory (web) for refresh_token + access_token
-  syncService.ts    # policy: needsSync, push, pull, resolveConflict; reuses cleanStoreForStorage()
+  syncService.ts    # minimal policy: pushStore, pullStore, syncNow (timestamp direction, last-write-wins)
   types.ts          # SyncConfig { folderId, folderName, autoSync }, SyncStatus, SyncResult
 ```
 
@@ -97,16 +102,15 @@ store/sync/
 
 - **M1 — shell**: ✅ done (config screen, welcome entry, store fields, no network).
 - **M2 — auth**: ✅ done (expo-auth-session Google flow, tokenStore, connect/disconnect + email; verified end-to-end on web Sep 2026).
-- **M3 — folder + push/pull**: ⬜ not started (`driveClient` absent, folder row is a placeholder in `app/config.tsx`).
-- **M4 — auto-sync**: ⬜ not started.
-- Current phase status lives in [`STATUS.md`](./STATUS.md); the login gate that will reuse this auth is designed in [`WEB_HOSTING_AND_LOGIN_DESIGN.md`](./WEB_HOSTING_AND_LOGIN_DESIGN.md).
-- **M5 — E2E + docs**: Playwright flows with a fake Drive transport (never hits real Google in CI), TEST_COVERAGE + README updates.
-- Verify trio each milestone: `npx tsc --noEmit`, `npx jest --silent --runInBand`, `npx expo export --platform web --output-dir dist`.
+- **M3 — folder + push/pull**: ✅ done minimal 2026-09-27 (fixed default folder, manual Sync now, 16 stubbed-fetch unit tests). Supersedes the folder-picker plan in §4 and the conflict-backup plan in §6 — neither is built.
+- **M4 — auto-sync**: **DROPPED 2026-09-27** (manual sync only).
+- **M5 — E2E + docs**: ✅ minimal (stubbed-fetch unit tests + config presence spec F1; no fake-transport E2E — nothing automatic to drive it).
+- Current phase status lives in [`STATUS.md`](./STATUS.md); the login gate that reuses this auth is designed in [`WEB_HOSTING_AND_LOGIN_DESIGN.md`](./WEB_HOSTING_AND_LOGIN_DESIGN.md).
 
 ## 9. Risks & open questions
 
 1. **Google Cloud setup** (owner action, one-time, free): the Cloud project is only the app's *identity* for Google's login screen — user data still lives exclusively in each user's own personal Drive, nothing flows through the project. Needed: project, OAuth client IDs per platform, testing-mode test users, authorized origins. Blocks M2 — needs confirmation before any credential touches the repo.
 2. **Expo Go won't verify native auth** — require `expo-dev-client` for M2+ device testing.
 3. **`drive.file` vs arbitrary folders** — current plan covers app-created folders only; full-drive scope is a deliberate non-goal unless requested.
-4. **Web refresh tokens** — in-memory only; long sessions re-prompt. Acceptable for a backup feature; alternatives (own token-exchange backend) are out of scope.
-5. **Quota** — Drive API default quotas dwarf a manual/debounced backup workload; no action unless auto-sync interval goes below ~1 min.
+4. **Web refresh tokens** — in-memory only; long sessions re-prompt. Acceptable; alternatives (own token-exchange backend) are out of scope.
+5. **Quota** — manual-only sync workload is negligible against Drive API default quotas; no action.
