@@ -1,6 +1,8 @@
 export { AppButton } from './AppButton';
 export { AppBackButton } from './AppBackButton';
 export { AppChip } from './AppChip';
+export { SummaryHero } from './SummaryHero';
+export { glyphForLabel } from './itemGlyph';
 export { AppDatePicker } from './AppDatePicker';
 export { AppCard, AppCardTitle } from './AppCard';
 export { AppTextInput } from './AppTextInput';
@@ -13,6 +15,6 @@ export { AppMenuSelect } from './AppMenuSelect';
 export { AppSwitch } from './AppSwitch';
 export { AppCheckbox } from './AppCheckbox';
 export { AppAccordion } from './AppAccordion';
-export { screenGamma } from './screenGamma';
+export { screenGamma, canvasColors } from './screenGamma';
 export { StickyTotalsBar } from './StickyTotalsBar';
 export { getPaperTheme } from './paperTheme';

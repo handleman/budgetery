@@ -21,3 +21,4 @@ Architecture, UX and planning documents.
 - [Native builds](./NATIVE_BUILDS_SETUP_PLAN.md) — iOS/Android builds plan.
 - [GitHub Pages website](./GITHUB_PAGES_WEBSITE_DESIGN.md) — this website's own plan.
 - [Web hosting + login](./WEB_HOSTING_AND_LOGIN_DESIGN.md) — Vercel static hosting and Google login gate.
+- [Redesign (mockups)](./REDESIGN_PLAN.md) — redesign plan from `docs/redesign/` mockups.

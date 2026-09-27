@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { TextInput as PaperTextInput } from 'react-native-paper';
 import { appContext } from '@/store/context';
 import { AppDialog, AppTextInput } from '@/components/ui';
 import type { IncomeItem } from '@/store/types';
@@ -90,6 +91,7 @@ const AddIncomeModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = nu
                     value={amountText}
                     onChangeText={setAmountText}
                     testID="income-amount-input"
+                    right={<PaperTextInput.Icon icon="currency-usd" />}
                 />
             </View>
             <View style={styles.inputContainer}>
@@ -98,6 +100,7 @@ const AddIncomeModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = nu
                     value={label}
                     onChangeText={setLabel}
                     testID="income-label-input"
+                    right={<PaperTextInput.Icon icon="tag" />}
                 />
             </View>
             <View style={styles.inputContainer}>
@@ -106,6 +109,7 @@ const AddIncomeModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = nu
                     value={dateText}
                     onChangeText={setDateText}
                     testID="income-date-input"
+                    right={<PaperTextInput.Icon icon="calendar" />}
                 />
             </View>
         </AppDialog>

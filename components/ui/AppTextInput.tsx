@@ -3,7 +3,7 @@ import { TextInput as PaperTextInput, type TextInputProps as PaperProps } from '
 
 type Props = Pick<
   PaperProps,
-  'label' | 'value' | 'onChangeText' | 'keyboardType' | 'testID' | 'disabled' | 'multiline'
+  'label' | 'value' | 'onChangeText' | 'keyboardType' | 'testID' | 'disabled' | 'multiline' | 'right'
 >;
 
 /** Adapter: outlined Paper input with app defaults. */

@@ -1,14 +1,15 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { HelloWave } from '@/components/HelloWave';
+import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useContext, useState, useEffect, useMemo } from 'react';
+import { useContext, useRef, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { appContext } from '@/store/context';
 import { visibleIncome } from '@/store/reducer';
 import AddIncomeModal from '@/components/modal/AddIncomeModal';
 import { IncomeItem } from '@/store/types';
-import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppListRow, StickyTotalsBar, screenGamma } from '@/components/ui';
+import { AppCard, AppCardTitle, AppDivider, AppEmptyState, AppFAB, AppBackButton, AppListRow, StickyTotalsBar, SummaryHero, canvasColors, glyphForLabel, screenGamma } from '@/components/ui';
 
 export default function IncomeScreen() {
 
@@ -22,6 +23,8 @@ export default function IncomeScreen() {
   const [editingItem, setEditingItem] = useState<IncomeItem | null>(null);
 
   const incomes = useMemo(() => visibleIncome(ctx.store), [ctx.store]);
+  const colorScheme = useColorScheme();
+  const scrollRef = useRef<ScrollView>(null);
 
 
   const getStartedHandler = () => {
@@ -54,19 +57,24 @@ export default function IncomeScreen() {
   }, [incomeTutorialPassed, obligationsTutorialPassed, expensesTutorialPassed, router]);
 
   return (
-    <ThemedView style={styles.screen}>
+    <ThemedView style={[styles.screen, { backgroundColor: colorScheme === 'dark' ? canvasColors.dark : canvasColors.light }]}>
       <AppBackButton onPress={() => router.replace('/')} testID="income-back-button" />
-      <ParallaxScrollView
-        headerBackgroundColor={{ dark: screenGamma.income.headerDark, light: screenGamma.income.header }}
-        headerImage={
-          <Image
-            source={require('@/assets/images/income-back.jpeg')}
-            style={styles.reactLogo}
-          />
-        }>
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={styles.content}
+      >
+        <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
         {
           tutorialPassed ? (
-            <ThemedView>
+            <ThemedView style={styles.listBlock}>
+              <SummaryHero
+                title="Total Income:"
+                value={totalBudget}
+                gamma="income"
+                onAddPress={() => scrollRef.current?.scrollToEnd({ animated: true })}
+                testID="income-hero"
+                addTestID="income-hero-add"
+              />
               <AppCard testID="income-list-card">
                 <AppCardTitle title="Income sources" subtitle={`${incomes.length} items`} />
                 {incomes.map((income, index) => (
@@ -76,13 +84,17 @@ export default function IncomeScreen() {
                       description={income.date.toLocaleDateString()}
                       testID={`income-row-${index}`}
                       onPress={() => editHandler(index)}
+                      glyph={glyphForLabel(income.label)}
+                      showPencil
                     />
                     <AppDivider />
                   </ThemedView>
                 ))}
               </AppCard>
               <AppDivider />
-              <AppFAB onPress={addMoreHandler} label="Add income" testID="income-fab" backgroundColor={screenGamma.income.cta} color={screenGamma.income.onCta} />
+              <View style={styles.fabRow}>
+                <AppFAB onPress={addMoreHandler} testID="income-fab" backgroundColor={screenGamma.income.cta} color={screenGamma.income.onCta} />
+              </View>
               <View style={styles.footerSpacer} />
             </ThemedView>
           ) : (
@@ -99,7 +111,7 @@ export default function IncomeScreen() {
           )
         }
 
-      </ParallaxScrollView>
+      </ScrollView>
       {tutorialPassed && (
         <StickyTotalsBar
           testID="income-totals-bar"
@@ -120,18 +132,21 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  content: {
+    padding: 32,
+    gap: 16,
   },
-  reactLogo: {
-    height: 200,
-    width: '100%',
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-    resizeMode: 'cover',
+  wordmark: {
+    // Clears the absolute-positioned back button (top-left).
+    paddingLeft: 48,
+  },
+  fabRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  listBlock: {
+    gap: 16,
+    backgroundColor: 'transparent',
   },
   footerSpacer: {
     height: 8,
