@@ -1,6 +1,6 @@
 import { test, expect } from '../fixtures/test';
 import { tid, todayKey } from '../helpers/selectors';
-import { setupPeriod } from '../helpers/flows';
+import { gotoTab, setupPeriod } from '../helpers/flows';
 import { fillAndSave, openAddDialog, expectStickyBottom } from '../helpers/dialogs';
 
 /**
@@ -15,14 +15,14 @@ test.describe('expenses', () => {
   test.beforeEach(async ({ page }) => {
     await setupPeriod(page, { month: 9, periodLabel: 'September' });
     // Seed budget so remains/daily are meaningful.
-    await page.getByTestId(tid.tabs.income).click();
+    await gotoTab(page, 'income');
     await openAddDialog(page, tid.income.emptyAction, tid.income.dialog);
     await fillAndSave(
       page,
       { dialog: tid.income.dialog, amountInput: tid.income.amountInput, labelInput: tid.income.labelInput },
       { amount: '30000', label: 'Salary' },
     );
-    await page.getByTestId(tid.tabs.expenses).click();
+    await gotoTab(page, 'expenses');
   });
 
   test('E1: add expense updates total + remains', async ({ page }) => {

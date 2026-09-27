@@ -1,6 +1,6 @@
 import { test, expect } from '../fixtures/test';
 import { tid } from '../helpers/selectors';
-import { setupPeriod } from '../helpers/flows';
+import { gotoTab, setupPeriod } from '../helpers/flows';
 import { fillAndSave, openAddDialog } from '../helpers/dialogs';
 
 /**
@@ -20,14 +20,14 @@ test.describe('calculations', () => {
       { dialog: tid.income.dialog, amountInput: tid.income.amountInput, labelInput: tid.income.labelInput },
       { amount: '10000', label: 'Salary' },
     );
-    await page.getByTestId(tid.tabs.obligations).click();
+    await gotoTab(page, 'obligations');
     await openAddDialog(page, tid.obligations.emptyAction, tid.obligations.dialog);
     await fillAndSave(
       page,
       { dialog: tid.obligations.dialog, amountInput: tid.obligations.amountInput, labelInput: tid.obligations.labelInput },
       { amount: '2000', label: 'Rent' },
     );
-    await page.getByTestId(tid.tabs.expenses).click();
+    await gotoTab(page, 'expenses');
     await openAddDialog(page, tid.expenses.emptyAction, tid.expenses.dialog);
     await fillAndSave(
       page,
@@ -37,9 +37,9 @@ test.describe('calculations', () => {
 
     // 10000 − 2000 − 500 = 7500 everywhere.
     await expect(page.getByTestId(tid.expenses.totalsRemains)).toContainText('7500');
-    await page.getByTestId(tid.tabs.income).click();
+    await gotoTab(page, 'income');
     await expect(page.getByTestId(tid.income.totalsRemains)).toContainText('7500');
-    await page.getByTestId(tid.tabs.obligations).click();
+    await gotoTab(page, 'obligations');
     await expect(page.getByTestId(tid.obligations.totalsRemains)).toContainText('7500');
   });
 
@@ -83,7 +83,7 @@ test.describe('calculations', () => {
       { polling: 250, timeout: 10000 },
     );
     await page.reload();
-    await page.getByTestId(tid.tabs.income).click();
+    await gotoTab(page, 'income');
     await expect(page.getByTestId(tid.income.row(0))).toContainText('Salary');
     await expect(page.getByTestId(tid.income.totalsTotal)).toContainText('8000');
   });

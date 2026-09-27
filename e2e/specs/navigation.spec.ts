@@ -2,6 +2,10 @@ import { test, expect } from '../fixtures/test';
 import { tid } from '../helpers/selectors';
 import { setupPeriod } from '../helpers/flows';
 
+// This suite covers the bottom tab bar itself → pinned to a narrow viewport
+// (wide screens render the sidebar instead; see sidebar.spec.ts).
+test.use({ viewport: { width: 390, height: 844 } });
+
 /**
  * Bottom navbar navigation: income / obligations / expenses.
  * Usecase: "navigate between screens by bottom bar".

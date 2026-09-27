@@ -1,6 +1,6 @@
 import { test, expect } from '../fixtures/test';
 import { tid } from '../helpers/selectors';
-import { setupPeriod } from '../helpers/flows';
+import { gotoTab, setupPeriod } from '../helpers/flows';
 import { fillAndSave, openAddDialog } from '../helpers/dialogs';
 
 /**
@@ -13,7 +13,7 @@ import { fillAndSave, openAddDialog } from '../helpers/dialogs';
 test.describe('obligations', () => {
   test.beforeEach(async ({ page }) => {
     await setupPeriod(page, { month: 9, periodLabel: 'September' });
-    await page.getByTestId(tid.tabs.obligations).click();
+    await gotoTab(page, 'obligations');
   });
 
   test('B1: add fixed obligation', async ({ page }) => {
@@ -29,14 +29,14 @@ test.describe('obligations', () => {
 
   test('B2: add percentage obligation', async ({ page }) => {
     // Seed total budget first: 10% of 10000 = 1000.
-    await page.getByTestId(tid.tabs.income).click();
+    await gotoTab(page, 'income');
     await openAddDialog(page, tid.income.emptyAction, tid.income.dialog);
     await fillAndSave(
       page,
       { dialog: tid.income.dialog, amountInput: tid.income.amountInput, labelInput: tid.income.labelInput },
       { amount: '10000', label: 'Salary' },
     );
-    await page.getByTestId(tid.tabs.obligations).click();
+    await gotoTab(page, 'obligations');
     await openAddDialog(page, tid.obligations.emptyAction, tid.obligations.dialog);
     await page.getByTestId(tid.obligations.percentageSwitch).click();
     await fillAndSave(
@@ -60,14 +60,14 @@ test.describe('obligations', () => {
   });
 
   test('B4: daily + remaining recalculated', async ({ page }) => {
-    await page.getByTestId(tid.tabs.income).click();
+    await gotoTab(page, 'income');
     await openAddDialog(page, tid.income.emptyAction, tid.income.dialog);
     await fillAndSave(
       page,
       { dialog: tid.income.dialog, amountInput: tid.income.amountInput, labelInput: tid.income.labelInput },
       { amount: '31000', label: 'Salary' },
     );
-    await page.getByTestId(tid.tabs.obligations).click();
+    await gotoTab(page, 'obligations');
     await openAddDialog(page, tid.obligations.emptyAction, tid.obligations.dialog);
     await fillAndSave(
       page,

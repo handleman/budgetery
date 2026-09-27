@@ -1,4 +1,4 @@
-import { isE2EBypass, resolveGate } from './gate';
+import { isAuthDisabled, isE2EBypass, resolveGate } from './gate';
 
 describe('resolveGate', () => {
     it('holds splash while token restore is in flight', () => {
@@ -43,5 +43,25 @@ describe('resolveGate', () => {
 describe('isE2EBypass', () => {
     it('is false outside a browser (Jest/Node)', () => {
         expect(isE2EBypass()).toBe(false);
+    });
+});
+
+describe('isAuthDisabled', () => {
+    const KEY = 'EXPO_PUBLIC_LOCAL_AUTH_OFF';
+    const prev = process.env[KEY];
+
+    afterEach(() => {
+        if (prev === undefined) delete process.env[KEY];
+        else process.env[KEY] = prev;
+    });
+
+    it('is true when the build-time switch is set', () => {
+        process.env[KEY] = '1';
+        expect(isAuthDisabled()).toBe(true);
+    });
+
+    it('is false by default (secure default, no DOM in Node)', () => {
+        delete process.env[KEY];
+        expect(isAuthDisabled()).toBe(false);
     });
 });

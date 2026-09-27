@@ -22,6 +22,11 @@ export const tid = {
     obligations: 'tab-obligations',
     expenses: 'tab-expenses',
   },
+  sidebar: {
+    rail: 'web-sidebar',
+    nav: (key: 'home' | 'income' | 'obligations' | 'expenses' | 'track' | 'settings') =>
+      `sidebar-nav-${key}`,
+  },
   config: {
     status: 'config-status',
     connect: 'config-connect',
@@ -40,6 +45,7 @@ export const tid = {
     emptyAction: 'income-empty-action',
     backButton: 'income-back-button',
     fab: 'income-fab',
+    hero: 'income-hero',
     listCard: 'income-list-card',
     totalsBar: 'income-totals-bar',
     totalsTotal: 'income-totals-bar-total',
@@ -57,6 +63,7 @@ export const tid = {
     emptyAction: 'obligations-empty-action',
     backButton: 'obligations-back-button',
     fab: 'obligations-fab',
+    hero: 'obligations-hero',
     listCard: 'obligations-list-card',
     totalsBar: 'obligations-totals-bar',
     totalsTotal: 'obligations-totals-bar-total',
@@ -75,6 +82,7 @@ export const tid = {
     emptyAction: 'expenses-empty-action',
     backButton: 'expenses-back-button',
     fab: 'expenses-fab',
+    hero: 'expenses-hero',
     totalsBar: 'expenses-totals-bar',
     totalsTotal: 'expenses-totals-bar-total',
     totalsDaily: 'expenses-totals-bar-daily',

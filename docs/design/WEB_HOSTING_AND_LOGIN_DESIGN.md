@@ -94,6 +94,15 @@ So the plan is two layers: **v1 soft gate (UX lock)** → **v2 hard privacy (enc
 
 **Concept:** the Drive-sync Google identity becomes the entry ticket. `syncStatus.connected` (already in the Store) drives an `AuthGate`; unauthenticated users see only a login screen.
 
+**Local switch (login OFF for debugging, ON by default):** `isAuthDisabled()`
+in `components/auth/gate.ts` disables the gate when either switch position
+is set — build-time `EXPO_PUBLIC_LOCAL_AUTH_OFF=1` (e.g. login-free
+`npx expo start --web`; never set in production builds) or runtime
+localStorage `budgetery.auth.disabled=1` (flippable from the dev-only
+`config-auth-switch` toggle on the config screen, `__DEV__` only, no rebuild;
+toggling navigates to `/` so the gate re-evaluates). E2E uses the separate
+`budgetery.e2e.auth` seam, so the suite never needs login either.
+
 - **New route `app/login.tsx`** (Stack screen, header hidden like tabs):
   - Title + one-line privacy note ("Your data lives in your own Google Drive, this device keeps only a local copy").
   - `Connect with Google` button reusing `useGoogleAuth().connect` — **same hook, same `drive.file` scope, zero new OAuth config**. `testID="login-connect"`, error line `testID="login-error"`.

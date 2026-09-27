@@ -65,7 +65,20 @@ function monthLabel(month: number): string {
 /** Land on /tabs with a period applied (requires month picked first). */
 export async function enterTabs(page: Page) {
   await page.getByTestId(tid.welcome.apply).click();
-  await page.getByTestId(tid.tabs.income).waitFor();
+  // Either navigation chrome counts: sidebar (wide) or tab bar (narrow).
+  await page.getByTestId(tid.sidebar.rail).or(page.getByTestId(tid.tabs.income)).waitFor();
+}
+
+export type TabKey = 'income' | 'obligations' | 'expenses';
+
+/** Switch tabs via sidebar (wide) or bottom bar (narrow), whichever exists. */
+export async function gotoTab(page: Page, tab: TabKey): Promise<void> {
+  await page.getByTestId(tid.sidebar.rail).or(page.getByTestId(tid.tabs[tab])).waitFor();
+  if (await page.getByTestId(tid.sidebar.rail).isVisible()) {
+    await page.getByTestId(tid.sidebar.nav(tab)).click();
+  } else {
+    await page.getByTestId(tid.tabs[tab]).click();
+  }
 }
 
 /** Full setup: welcome -> pick month -> tabs. */

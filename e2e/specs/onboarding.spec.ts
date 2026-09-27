@@ -25,9 +25,10 @@ test.describe('onboarding', () => {
   // atomic in-page open+select (e2e/helpers/flows.ts selectMenuOption).
   test('O3: select month + label navigates to tabs', async ({ page }) => {
     await setupPeriod(page, { month: 9, periodLabel: 'September' });
-    await expect(page.getByTestId(tid.tabs.income)).toBeVisible();
-    await expect(page.getByTestId(tid.tabs.obligations)).toBeVisible();
-    await expect(page.getByTestId(tid.tabs.expenses)).toBeVisible();
+    // Either navigation chrome counts: sidebar (wide) or tab bar (narrow).
+    await expect(
+      page.getByTestId(tid.sidebar.rail).or(page.getByTestId(tid.tabs.income)),
+    ).toBeVisible();
   });
 
   test('O4: new month (cleared storage) shows tutorial again', async ({

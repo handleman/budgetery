@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useRouter, useSegments } from 'expo-router';
 import { appContext } from '@/store/context';
 import { useGoogleAuth } from '@/store/sync/googleAuth';
-import { isE2EBypass, resolveGate } from './gate';
+import { isAuthDisabled, isE2EBypass, resolveGate } from './gate';
 
 /**
  * Login gate: unauthenticated users see only /login.
@@ -18,7 +18,7 @@ export function AuthGate({ children }: React.PropsWithChildren) {
     const segment = segments[0];
     const verdict = resolveGate({
         connected,
-        bypassed: isE2EBypass(),
+        bypassed: isE2EBypass() || isAuthDisabled(),
         restored,
         segment,
     });

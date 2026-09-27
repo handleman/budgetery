@@ -6,6 +6,14 @@ parent: Documentation
 
 # Web Visual Testing Checklist
 
+> Automated successor (2026-09-27): `e2e/specs/visual.spec.ts` (V1–V6) —
+> scripted element screenshots against `docs/redesign/*.jpg`, run with the
+> normal suite (`npx expo export --platform web --output-dir dist`, then
+> `npx playwright test`). Shots land in `test-results/visual/` (gitignored);
+> compare eyeball-to-mockup after the run. Narrow viewport (390×844, mobile
+> mockups); auth via the fixture seam — no login needed. The checklist below
+> is retained as historical record.
+
 The following tests should be run manually since browser MCP is not yet fully connected:
 
 ## Basic Navigation ✓ PASSING

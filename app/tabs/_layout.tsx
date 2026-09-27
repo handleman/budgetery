@@ -1,16 +1,24 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { PaperTabBar } from '@/components/navigation/PaperTabBar';
+import { WebSidebar } from '@/components/navigation/WebSidebar';
+import { shouldShowSidebar } from '@/components/navigation/sidebar';
 
 export default function TabLayout() {
+  const { width } = useWindowDimensions();
+  const wide = shouldShowSidebar(Platform.OS, width);
   return (
-    <Tabs
-      tabBar={(props) => <PaperTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-      }}>
+    <View style={wide ? styles.wide : styles.narrow}>
+      {wide ? <WebSidebar /> : null}
+      <View style={styles.content}>
+        <Tabs
+          tabBar={wide ? () => null : (props) => <PaperTabBar {...props} />}
+          screenOptions={{
+            headerShown: false,
+          }}>
       <Tabs.Screen
         name="index"
         options={{
@@ -41,6 +49,21 @@ export default function TabLayout() {
           ),
         }}
       />
-    </Tabs>
+        </Tabs>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  narrow: {
+    flex: 1,
+  },
+  wide: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  content: {
+    flex: 1,
+  },
+});
