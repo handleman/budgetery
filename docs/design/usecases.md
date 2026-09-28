@@ -81,3 +81,5 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 - As a user I want to open the app from a public web URL and get the same functionality as the local web build
 - As a user I want deep links to income, obligations, expenses and configuration screens to work on the hosted version
 
+Live: `https://budgetery.vercel.app` (auto-deploy on `main` push; Drive-connect pending production-origin registration).
+

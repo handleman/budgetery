@@ -49,8 +49,8 @@ Prerequisite: any Google account (a personal Gmail is fine).
 
 1. Go to **Clients** tab → **Create Client**.
 2. Application type: **Web application**; name: `budgetery-web`.
-3. **Authorised JavaScript origins**: add `http://localhost:8081` (dev server).
-4. **Authorised redirect URIs**: add `http://localhost:8081` (add the production origin here later when the web build is hosted).
+3. **Authorised JavaScript origins**: add `http://localhost:8081` (dev server) + `https://budgetery.vercel.app` (production — required for Drive-connect on the hosted app).
+4. **Authorised redirect URIs**: add `http://localhost:8081` + `https://budgetery.vercel.app` (production).
 5. **Create** → copy the **Client ID** (`...apps.googleusercontent.com`). No secret needed (the app uses the PKCE code flow).
 6. If login later fails with `redirect_uri_mismatch`, copy the exact URI from the browser address bar into this list (match is character-exact: scheme, port, trailing slash).
 

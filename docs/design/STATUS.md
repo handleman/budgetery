@@ -6,7 +6,7 @@ parent: Design docs
 
 # Implementation Status — where the app stands
 
-Date: 2026-09-26. This is the **current truth** for what is built vs planned.
+Date: 2026-09-28. This is the **current truth** for what is built vs planned.
 Dated design docs below it are snapshots — when they disagree with this page,
 this page wins.
 
@@ -24,10 +24,10 @@ Legend: ✅ done · 🟡 partial · ⬜ not started.
 | Persistence layer | ✅ done | `PersistenceService` wired in `store/context.tsx` (load on start, save on every mutation); AsyncStorage / IndexedDB / session / mock adapters; migrations at v2 |
 | Usecase fulfillment (M1–M7) | 🟡 mostly done | M1 correctness, M2 sticky footers, M4 grouping/date/edit/CSV, M5 overlap, M6 multi-month isolation done; leftovers in §3 |
 | Drive sync | ✅ minimal done | Manual Sync now against fixed default `Budgetery` folder (`driveClient` + `syncService`, timestamp direction, 16 unit tests, config F1 spec); Google connect/disconnect in config; picker / conflict backups / auto-sync / app lock dropped |
-| Cloud setup | 🟡 partial | Web OAuth client exists (`googleConfig.ts`); pending: production origin registration, iOS/Android clients (need native builds first) |
+| Cloud setup | 🟡 partial | Web OAuth client exists (`googleConfig.ts`); remaining: register `https://budgetery.vercel.app` as production origin; iOS/Android clients need native builds first |
 | Native builds | ⬜ plan only | No `eas.json`, no bundle IDs, no `expo-dev-client`; web-first until then |
 | GitHub Pages website | 🟡 skeleton done | `_config.yml` + section indexes + front matter done; live deployment under Settings → Pages unverified |
-| Web hosting | 🟡 code done, deploy pending | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` + registered routes done, E2E green; pending owner actions: Vercel project, production origin in Google console |
+| Web hosting | ✅ deployed | Live at `https://budgetery.vercel.app` (Vercel, preset Other, output `dist`, auto-deploy on `main` push); only remaining: production origin in Google console |
 | Redesign (mockups) | ✅ done | Foundations, tabs, dialogs, sidebar match mockups (pixel rounds); P6 = token audit, device headed check open |
 
 ## 2. Feature matrix (usecases → code)
@@ -40,7 +40,7 @@ Legend: ✅ done · 🟡 partial · ⬜ not started.
 | Obligations: fixed + % amounts, no timestamps, sticky footer | ✅ | `app/tabs/obligations.tsx` (`obligations-totals-bar`, `obligation-percentage-switch`) |
 | Expenses: day-grouped expandable cards, date/edit, comma multi-entry, overlap warnings, sticky totals | ✅ | `app/tabs/expenses.tsx` (`expenses-totals-bar`), `ExpenseDayCard` (`expenses-day-{key}[-warned]`), `groupExpensesByDay`, `computeOverlapWarnings`, `expense-date-input` |
 | Expenses: day-by-day breakdown table | ✅ | `DayBreakdownTable` (`expenses-day-table`, `expenses-day-table-row-{dayKey}`) |
-| Hosted web version (public URL) | 🟡 code-ready | Export + env-var + routes ready; owner still to create Vercel project + register production origin |
+| Hosted web version (public URL) | ✅ live | `https://budgetery.vercel.app` (auto-deploy on `main` push); remaining: register production origin in Google console for Drive-connect |
 | Multi-month: periods list, select, start-new-month (resets tab tutorials) | ✅ | `periods[]` + `currentPeriodId` in `store/types.ts`, `START_NEW_MONTH` / `SELECT_PERIOD`, migration v2 |
 | Tutorial routing (first run → income, else expenses) | ✅ | Redirects in `app/tabs/index.tsx`, `app/index.tsx` |
 | State persistence + accurate cross-screen calculations | ✅ | `PersistenceService`, `migrations.ts`, `reducer.test.ts` |
@@ -48,7 +48,11 @@ Legend: ✅ done · 🟡 partial · ⬜ not started.
 
 ## 3. Known leftovers (accepted scope for future milestones)
 
-1. Hosting deploy (Vercel project + production origin — owner clicks), encryption at rest (M4).
+1. Hosting deploy — Vercel ✅ live at `https://budgetery.vercel.app` (auto-deploy on `main` push; see `WEB_HOSTING_AND_LOGIN_DESIGN.md` §§3–4):
+   - Google console (only remaining step): add `https://budgetery.vercel.app` to Authorised JavaScript origins + redirect URIs of `budgetery-web` client; keep `http://localhost:8081` for dev. Until then, Drive-connect works on localhost only.
+   - Caveat: preview URLs get distinct domains — test Drive-connect only on localhost + production.
+   - Verify: trio (§4) + Playwright smoke on production URL.
+   - Plus: encryption at rest (M4).
 2. Native builds (bundle IDs, EAS, dev client) + iOS/Android OAuth clients.
 
 (Dropped per owner request: TutorialProgress checklist, recurring obligations, income projections, Drive folder picker / conflict backups / auto-sync, app login gate.)
