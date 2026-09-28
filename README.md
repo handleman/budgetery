@@ -1,16 +1,11 @@
 # Budgetery
 
+**Try it live: https://budgetery.vercel.app** — runs right in your browser,
+no install needed. Add income, obligations and expenses; all data stays on
+your device. (Google Drive backup on the hosted version is pending a one-time
+Google console registration — everything else works.)
+
 A budget tracking application built entirely free on a home computer using open source tools.
-
-## Live demo
-
-Hosted web build (Vercel, auto-deploys on every `main` push):
-
-- https://budgetery.vercel.app
-
-Note: Google Drive sync on the hosted URL needs the production origin
-registered in the Google Cloud console (`budgetery-web` client) — until then,
-Drive connect works on `http://localhost:8081` only.
 
 ## Made With
 
