@@ -1,6 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { AppButton, AppCard, AppCardTitle, AppListRow, AppMenuSelect, AppTextInput } from "@/components/ui";
+import { AppButton, AppCard, AppCardTitle, AppListRow, AppMenuSelect, AppTextInput, DIALOG_MAX_WIDTH } from "@/components/ui";
 import { appContext } from "@/store/context";
 import { useContext, useState } from "react";
 import { StyleSheet } from 'react-native';
@@ -146,5 +146,9 @@ const styles = StyleSheet.create({
         padding: 32,
         gap: 16,
         overflow: 'hidden',
+        // Same cap as modals: full width on phones, centered column on desktop.
+        width: '100%',
+        maxWidth: DIALOG_MAX_WIDTH,
+        alignSelf: 'center',
     },
 });
