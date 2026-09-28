@@ -25,6 +25,15 @@ export function visibleExpenses(store: Store): ExpenseItem[] {
     return store.expenseItems.filter((i) => !i.periodId || i.periodId === pid);
 }
 
+/**
+ * Returning users with tracked months skip the welcome tutorial gate — the
+ * month list is the entry point. Covers legacy stores whose data predates
+ * the welcomeTutorialPassed flag.
+ */
+export function hasTrackedPeriod(store: Store): boolean {
+    return store.periods.length > 0 || store.currentPeriod.name !== '';
+}
+
 /** Map an index within the visible (filtered) list back to the full store array index. */
 export function visibleIndexToStoreIndex<T extends { periodId?: string }>(full: T[], visible: T[], visibleIndex: number): number {
     const item = visible[visibleIndex];

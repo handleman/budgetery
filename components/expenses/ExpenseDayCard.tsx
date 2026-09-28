@@ -53,7 +53,7 @@ export function ExpenseDayCard({ group, warned, overrunFrom, expanded, onToggle,
                 onPress={() => onEditItem(listIndex)}
                 glyph={glyphForLabel(item.label)}
               />
-              <AppDivider />
+              {i < group.items.length - 1 && <AppDivider />}
             </View>
           ))}
         </View>
@@ -71,5 +71,7 @@ const styles = StyleSheet.create({
   groupHeader: {
     borderRadius: 12,
     paddingHorizontal: 8,
+    // Bleed to the card edges (Card.Content pads its children).
+    marginHorizontal: -8,
   },
 });
