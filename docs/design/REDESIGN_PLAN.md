@@ -102,7 +102,8 @@ grouping/overlap math, testIDs (additive only), E2E flows.
    sidebar-only on web.
 4. **Sidebar mapping as proposed** — Home→`/` (welcome/months),
    Settings→`/config`, Track→ start-new-month entry on welcome; breakpoint
-   ≥1024px.
+   ≥1024px. (Track removed 2026-09-28: it duplicated Home — both routed to
+   `/`; mockup descriptions above are historical.)
 5. **Restyle modals** — no new routes; full-width content on narrow screens.
 6. **Gamma-mapped dark** — dark gradient stops in `screenGamma.ts`, headed
    verification per screen.

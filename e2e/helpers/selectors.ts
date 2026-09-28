@@ -23,7 +23,7 @@ export const tid = {
   },
   sidebar: {
     rail: 'web-sidebar',
-    nav: (key: 'home' | 'income' | 'obligations' | 'expenses' | 'track' | 'settings') =>
+    nav: (key: 'home' | 'income' | 'obligations' | 'expenses' | 'settings') =>
       `sidebar-nav-${key}`,
   },
   config: {
@@ -83,6 +83,7 @@ export const tid = {
     dayCard: (dayKey: string) => `expenses-day-${dayKey}`,
     dayCardWarned: (dayKey: string) => `expenses-day-${dayKey}-warned`,
     dayTable: 'expenses-day-table',
+    dayTableToggle: 'expenses-day-table-toggle',
     dayTableRow: (dayKey: string) => `expenses-day-table-row-${dayKey}`,
     row: (i: number) => `expenses-row-${i}`,
     amountInput: 'expense-amount-input',

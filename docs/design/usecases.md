@@ -38,19 +38,23 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 - i want to be able to set expense, and label
 - i want to be able to see expenses grouped by day entered, expandable card consisting expenses for the day
 - i want to be able to add\edit expenses in the current day as default but may want to edit another day before today
-- i want to fill the expense date via a visual calendar picker (same calendar control on iOS, Android and web), future dates are not allowed
+- i want to fill the expense date via a visual calendar picker (same calendar control on iOS, Android and web), future dates are not allowed in the current month; within a selected past or future period month the whole month is selectable
+- if the selected period month is not the current month (e.g. tracking February while today is in September), new income, obligation and expense entries default to the 1st of the selected period month instead of today, so the day-by-day breakdown reflects period entries instead of showing 0s
+- dates entered on submit are clamped into the selected period month (up to today for the current month), so every saved entry lands in its period
 - if my expense exceed dayly budget goal i want to see visual confirmation for example day card should be colored in theme's accent level as warning, for example become pale red
 - the next card should be accented as well untill there is not passes as much days as daily budget overlap (big_expense/day_budget = quatity of days should be passed until overlap warning will be taken off), and i am free to enter expense
 - if i enter the expenses on the next day after overlapped day with accented visual warning it should be accented untill (big_expense/day_budget = quatity of days should be passed until overlap warning will be taken off) newly added expenses should add to big_expense value
 - if i enter expense after overlap days went off so day card should be usual
 - if i enter expense i want to see remaining sum from allowed budget recalculated on all the related screens
 - i want to see total spend summary below all day cards and remaining sum (remains) to spend in this month
+- i want the day-by-day breakdown table collapsed by default and expandable on demand
 - i want to see daily budget on the expenses page as well
 - remains and total spend should be sticked as  bottom navbar
 
 ## Income Management
 
 - As a user I want to add multiple income sources (salary, freelance, investments) and see combined total
+- new income entries default to today in the current month, or to the 1st of the selected period month otherwise (same period-date rule as expenses)
 - want to see here total income sum of all entered
 - dayly budget
 - remaing budget which is total - obligations
@@ -59,6 +63,7 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 ## Obligation Tracking
 
 - As a user I want to add obligations (rent, utilities, subscriptions) and see total obligation cost
+- new obligation entries default to today in the current month, or to the 1st of the selected period month otherwise (same period-date rule as expenses)
 - As a user I want to mark some obligations as percentage-based and get calculated amounts from total budget
 - i want to see dayly budget calculated
 - i want to see remaining budget calculated here

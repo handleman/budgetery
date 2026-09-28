@@ -15,17 +15,29 @@ export function toDayKey(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-export function parseDateInput(text: string, fallback: Date = new Date()): Date {
-  const trimmed = text.trim();
+export function parseDateInput(text: string, fallback: Date = new Date()): Date {  const trimmed = text.trim();
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(trimmed);
   if (!match) return fallback;
   const parsed = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), 12, 0, 0);
   if (Number.isNaN(parsed.getTime())) return fallback;
-  // Clamp future dates to today — expenses are tracked for today or past days.
-  const today = new Date();
-  today.setHours(23, 59, 59, 999);
-  if (parsed.getTime() > today.getTime()) return new Date();
-  return parsed;
+    // Clamp future dates to today — expenses are tracked for today or past days.
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    if (parsed.getTime() > today.getTime()) return new Date();
+    return parsed;
+}
+
+/**
+ * Strict YYYY-MM-DD parse with NO future clamping (unlike parseDateInput).
+ * Returns undefined on garbage — for display paths (calendar fields) where
+ * the value may legitimately lie in a future period month.
+ */
+export function parseDayKeyStrict(text: string): Date | undefined {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text.trim());
+    if (!match) return undefined;
+    const parsed = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), 12, 0, 0);
+    if (Number.isNaN(parsed.getTime())) return undefined;
+    return parsed;
 }
 
 export function formatDayKey(dayKey: string): string {
