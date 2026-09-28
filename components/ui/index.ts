@@ -6,7 +6,7 @@ export { glyphForLabel } from './itemGlyph';
 export { AppDatePicker } from './AppDatePicker';
 export { AppCard, AppCardTitle } from './AppCard';
 export { AppTextInput } from './AppTextInput';
-export { AppDialog } from './AppDialog';
+export { AppDialog, DIALOG_MAX_WIDTH } from './AppDialog';
 export { AppFAB } from './AppFAB';
 export { AppListRow } from './AppListRow';
 export { AppEmptyState } from './AppEmptyState';

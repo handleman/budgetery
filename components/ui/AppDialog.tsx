@@ -61,7 +61,8 @@ export function AppDialog({ visible, onDismiss, title, children, actions = [], t
   );
 }
 
-const DIALOG_MAX_WIDTH = 560;
+/** Shared narrow-content cap (dialogs, welcome form): full width on phones, centered card on wide screens. */
+export const DIALOG_MAX_WIDTH = 560;
 
 const styles = StyleSheet.create({
   dialog: {
