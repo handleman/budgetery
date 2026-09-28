@@ -25,7 +25,7 @@ Plan only — no implementation.
 
 - `app.json` → `web.bundler: metro`, `web.output: static`. `npx expo export --platform web --output-dir dist` already works (verify trio in `AGENTS.md`); `dist/` is gitignored.
 - File-based routing via `expo-router` (`app/_layout.tsx` Stack: `index`, `tabs`, `config`, `+not-found`).
-- Vercel project exists and is deployed at `https://budgetery.vercel.app` (preset Other, output `dist`, env `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` set, auto-deploy on every `main` push). Code-side env plumbing (`EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`) is done. Remaining: production origin in Google console (see §4). Docs site (`_config.yml`, `GITHUB_PAGES_WEBSITE_DESIGN.md`) uses GitHub Pages **deploy-from-branch on repo root** for Markdown docs — a separate concern from hosting the app.
+- Vercel project exists and is deployed at [https://budgetery.vercel.app](https://budgetery.vercel.app) (preset Other, output `dist`, env `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` set, auto-deploy on every `main` push). Code-side env plumbing (`EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`) is done. Remaining: production origin in Google console (see §4). Docs site (`_config.yml`, `GITHUB_PAGES_WEBSITE_DESIGN.md`) uses GitHub Pages **deploy-from-branch on repo root** for Markdown docs — a separate concern from hosting the app.
 
 ### 2.2 Auth / sync building blocks (done, reusable)
 
@@ -76,8 +76,8 @@ Plan only — no implementation.
    - `googleConfig.ts`: read web client ID from `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` with the current literal as dev fallback. No secret ever committed.
    - Register `app/config.tsx` in `app/_layout.tsx` Stack (currently missing) while routes are being touched.
    - Confirm `dist/` stays gitignored; Vercel builds from source (never commit build output).
-2. **Google Cloud console (owner, ~5 min — only remaining step):** add the production origin `https://budgetery.vercel.app` to **Authorised JavaScript origins + redirect URIs** of the `budgetery-web` client (companion to `GOOGLE_CLOUD_SETUP.md` Step 6; `redirect_uri_mismatch` otherwise). Keep `http://localhost:8081` for dev.
-3. **Vercel ✅ done 2026-09-28:** repo imported → preset Other → build/output as §3.3 → env var set → deployed at `https://budgetery.vercel.app`, auto-deploy on every `main` push. Note preview deployments get distinct URLs — Google rejects unregistered origins, so **test Drive-connect only on localhost + production**, not on preview URLs (or register one stable preview domain).
+2. **Google Cloud console (owner, ~5 min — only remaining step):** add the production origin [https://budgetery.vercel.app](https://budgetery.vercel.app) to **Authorised JavaScript origins + redirect URIs** of the `budgetery-web` client (companion to `GOOGLE_CLOUD_SETUP.md` Step 6; `redirect_uri_mismatch` otherwise). Keep `http://localhost:8081` for dev.
+3. **Vercel ✅ done 2026-09-28:** repo imported → preset Other → build/output as §3.3 → env var set → deployed at [https://budgetery.vercel.app](https://budgetery.vercel.app), auto-deploy on every `main` push. Note preview deployments get distinct URLs — Google rejects unregistered origins, so **test Drive-connect only on localhost + production**, not on preview URLs (or register one stable preview domain).
 4. **Verify:** `npx tsc --noEmit`, `npx jest --silent --runInBand`, `npx expo export --platform web --output-dir dist`; then Playwright smoke on production URL (welcome renders, tabs navigate, console clean).
 
 ## 5. Login design (REMOVED 2026-09-28 — record only)
@@ -139,7 +139,7 @@ V1 leaves IndexedDB plaintext. V2 encrypts the persisted payload with the **Web 
 
 ## 6. Milestones & verification
 
-- **M1 — hosting:** ✅ code done 2026-09-26 (env-var client ID, registered `config` route, static export verified); ✅ deployed 2026-09-28 at `https://budgetery.vercel.app` (auto-deploy on `main` push); ⬜ only production origin in Google console remaining.
+- **M1 — hosting:** ✅ code done 2026-09-26 (env-var client ID, registered `config` route, static export verified); ✅ deployed 2026-09-28 at [https://budgetery.vercel.app](https://budgetery.vercel.app) (auto-deploy on `main` push); ⬜ only production origin in Google console remaining.
 - **M2 — login gate (v1):** ~~built, verified, then~~ **REMOVED 2026-09-28** (no backend → lock is theater; Drive connect in config stays).
 - **M3 — Drive sync:** ✅ done minimal 2026-09-27 (fixed default folder, manual Sync now; picker / conflict backups / auto-sync dropped; no remote pull on unlock).
 - **M4 — encryption (v2):** `CryptoAdapter`, lock-wipes-local option, updated test plan.

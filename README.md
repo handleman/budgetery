@@ -1,6 +1,6 @@
 # Budgetery
 
-**Try it live: https://budgetery.vercel.app** — runs right in your browser,
+**[Try it live: https://budgetery.vercel.app](https://budgetery.vercel.app)** — runs right in your browser,
 no install needed. Add income, obligations and expenses; all data stays on
 your device. (Google Drive backup on the hosted version is pending a one-time
 Google console registration — everything else works.)
