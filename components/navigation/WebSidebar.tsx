@@ -16,14 +16,14 @@ const ITEMS: Item[] = [
   { key: 'income', label: 'Income', icon: 'wallet', route: '/tabs' },
   { key: 'obligations', label: 'Obligations', icon: 'alert-circle', route: '/tabs/obligations' },
   { key: 'expenses', label: 'Expenses', icon: 'basket', route: '/tabs/expenses' },
-  { key: 'track', label: 'Track', icon: 'swap-horizontal', route: '/' },
   { key: 'settings', label: 'Settings', icon: 'cog', route: '/config' },
 ];
 
 /**
  * WebSidebar — wide-screen navigation rail (redesign P5, ≥1024px web).
- * Bottom tabs stay for narrow screens. Track maps to welcome (start a new
- * month there); no new route. Active = current pathname, pill highlight.
+ * Bottom tabs stay for narrow screens. (Track was removed 2026-09-28: it
+ * duplicated Home — both routed to `/`.) Active = current pathname, pill
+ * highlight.
  */
 export function WebSidebar() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export function WebSidebar() {
         Budgetery
       </Text>
       {ITEMS.map((item) => {
-        const active = item.key === 'track' ? false : pathname === item.route;
+        const active = pathname === item.route;
         return (
           <Pressable
             key={item.key}

@@ -25,6 +25,8 @@ export default function ExpensesScreen() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingItem, setEditingItem] = useState<ExpenseItem | null>(null);
   const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
+  // Breakdown table is long — collapsed by default, expands on demand.
+  const [breakdownExpanded, setBreakdownExpanded] = useState<boolean>(false);
 
   // Period-scoped visible items; grouping + warnings derive from these.
   const expenses = useMemo(() => visibleExpenses(ctx.store), [ctx.store]);
@@ -99,7 +101,14 @@ export default function ExpensesScreen() {
         );
       })}
       <AppDivider />
-      <DayBreakdownTable groups={groups} daylyBudget={daylyBudget} month={tableMonth} year={tableYear} />
+      <DayBreakdownTable
+        groups={groups}
+        daylyBudget={daylyBudget}
+        month={tableMonth}
+        year={tableYear}
+        expanded={breakdownExpanded}
+        onToggle={() => setBreakdownExpanded((v) => !v)}
+      />
       <AppDivider />
       {!wide && (
         <View style={styles.fabRow}>

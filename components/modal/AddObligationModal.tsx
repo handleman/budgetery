@@ -6,7 +6,13 @@ import { appContext } from '@/store/context';
 import { AppDialog, AppSwitch, AppTextInput } from '@/components/ui';
 import { screenGamma } from '@/components/ui/screenGamma';
 import type { ObligationItem } from '@/store/types';
-import { parseDateInput, toDayKey } from '@/store/expenseGrouping';
+import { toDayKey } from '@/store/expenseGrouping';
+import {
+    activePeriodMonthYear,
+    defaultDayKeyForPeriod,
+    isCurrentPeriodMonth,
+    parseDateInputForPeriod,
+} from '@/store/periodDates';
 
 type Props = {
     isVisible: boolean;
@@ -18,10 +24,14 @@ type Props = {
 const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = null, initial = null }) => {
     const ctx = useContext(appContext);
     const isEditing = editingIndex !== null && editingIndex !== undefined && initial !== null;
+    // Period-aware dates: default to today when today is in the active period
+    // month, else to the 1st of the period month.
+    const period = activePeriodMonthYear(ctx.store);
+    const periodIsCurrent = isCurrentPeriodMonth(period.month, period.year);
     const [amountText, setAmountText] = useState<string>('');
     const [label, setLabel] = useState<string>('');
     const [isPercentage, setIsPercentage] = useState<boolean>(false);
-    const [dateText, setDateText] = useState<string>(toDayKey(new Date()));
+    const [dateText, setDateText] = useState<string>(defaultDayKeyForPeriod(period.month, period.year));
 
     // Prefill on open (transition closed→open) during render — the React-endorsed
     // alternative to setState-in-effect. The editing target never changes while open.
@@ -38,7 +48,7 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
                 setAmountText('');
                 setLabel('');
                 setIsPercentage(false);
-                setDateText(toDayKey(new Date()));
+                setDateText(defaultDayKeyForPeriod(period.month, period.year));
             }
         }
     }
@@ -47,14 +57,14 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
         setAmountText('');
         setLabel('');
         setIsPercentage(false);
-        setDateText(toDayKey(new Date()));
+        setDateText(defaultDayKeyForPeriod(period.month, period.year));
         onClose();
     };
 
     const onSubmit = () => {
         const amount = Number(amountText);
         if (!Number.isFinite(amount) || amount === 0 || label.trim() === '') return;
-        const date = parseDateInput(dateText);
+        const date = parseDateInputForPeriod(dateText, period.month, period.year);
         const obligationItem = { date, amount, label: label.trim(), isPercentage };
         if (isEditing && editingIndex !== null && editingIndex !== undefined) {
             ctx.mutators.updateObligationItem(editingIndex, obligationItem);
@@ -129,7 +139,7 @@ const AddObligationModal: React.FC<Props> = ({ isVisible, onClose, editingIndex 
             </View>
             <View style={styles.inputContainer}>
                 <AppTextInput
-                    label="Date (YYYY-MM-DD, today by default)"
+                    label={periodIsCurrent ? 'Date (YYYY-MM-DD, today by default)' : 'Date (YYYY-MM-DD, 1st of period month by default)'}
                     value={dateText}
                     onChangeText={setDateText}
                     testID="obligation-date-input"

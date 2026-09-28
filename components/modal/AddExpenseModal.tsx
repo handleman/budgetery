@@ -6,7 +6,14 @@ import { appContext } from '@/store/context';
 import { AppDialog, AppDatePicker, AppTextInput } from '@/components/ui';
 import { screenGamma } from '@/components/ui/screenGamma';
 import type { ExpenseItem } from '@/store/types';
-import { parseCommaAmounts, parseDateInput, toDayKey } from '@/store/expenseGrouping';
+import { parseCommaAmounts, toDayKey } from '@/store/expenseGrouping';
+import {
+    activePeriodMonthYear,
+    defaultDayKeyForPeriod,
+    isCurrentPeriodMonth,
+    parseDateInputForPeriod,
+    periodMonthBounds,
+} from '@/store/periodDates';
 
 type Props = {
     isVisible: boolean;
@@ -19,9 +26,16 @@ type Props = {
 const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = null, initial = null }) => {
     const ctx = useContext(appContext);
     const isEditing = editingIndex !== null && editingIndex !== undefined && initial !== null;
+    // Period-aware dates: default to today when today is in the active period
+    // month, else to the 1st of the period month (keeps entries + the
+    // day-by-day breakdown inside the selected period).
+    const period = activePeriodMonthYear(ctx.store);
+    const periodDefaultKey = defaultDayKeyForPeriod(period.month, period.year);
+    const periodBounds = periodMonthBounds(period.month, period.year);
+    const periodIsCurrent = isCurrentPeriodMonth(period.month, period.year);
     const [amountText, setAmountText] = useState<string>('');
     const [label, setLabel] = useState<string>('');
-    const [dateText, setDateText] = useState<string>(toDayKey(new Date()));
+    const [dateText, setDateText] = useState<string>(periodDefaultKey);
 
     // Prefill on open (transition closed→open) during render — the React-endorsed
     // alternative to setState-in-effect. The editing target never changes while open.
@@ -36,7 +50,7 @@ const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = n
             } else {
                 setAmountText('');
                 setLabel('');
-                setDateText(toDayKey(new Date()));
+                setDateText(defaultDayKeyForPeriod(period.month, period.year));
             }
         }
     }
@@ -44,13 +58,13 @@ const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = n
     const closeAndReset = () => {
         setAmountText('');
         setLabel('');
-        setDateText(toDayKey(new Date()));
+        setDateText(defaultDayKeyForPeriod(period.month, period.year));
         onClose();
     };
 
     const onSubmit = () => {
         if (label.trim() === '') return;
-        const date = parseDateInput(dateText);
+        const date = parseDateInputForPeriod(dateText, period.month, period.year);
         if (isEditing && editingIndex !== null && editingIndex !== undefined) {
             const amount = Number(amountText);
             if (!Number.isFinite(amount) || amount === 0) return;
@@ -112,10 +126,12 @@ const AddExpenseModal: React.FC<Props> = ({ isVisible, onClose, editingIndex = n
             </View>
             <View style={styles.inputContainer}>
                 <AppDatePicker
-                    label="Date (today by default)"
+                    label={periodIsCurrent ? 'Date (today by default)' : 'Date (1st of period month by default)'}
                     value={dateText}
                     onChange={setDateText}
                     testID="expense-date-input"
+                    startDate={periodBounds.start}
+                    endDate={periodIsCurrent ? undefined : periodBounds.end}
                 />
             </View>
             {!isEditing && (

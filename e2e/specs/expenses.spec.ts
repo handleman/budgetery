@@ -91,6 +91,9 @@ test.describe('expenses', () => {
       { amount: '500', label: 'Groceries' },
     );
     await expect(page.getByTestId(tid.expenses.dayTable)).toBeVisible();
+    // Collapsed by default — rows mount on expand.
+    await expect(page.getByTestId(tid.expenses.dayTableRow(todayKey()))).toHaveCount(0);
+    await page.getByTestId(tid.expenses.dayTableToggle).click();
     // Daily = 30000/30 = 1000; spent 500 leaves 500 on today's row.
     await expect(page.getByTestId(tid.expenses.dayTableRow(todayKey()))).toContainText('500');
   });
