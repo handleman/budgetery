@@ -49,7 +49,7 @@ Gaps in the current wording (assumptions made explicit in this plan):
 
 - **Google Cloud project is a user action**: OAuth client IDs (web + iOS + Android) must be created by the repo owner; consent screen runs in **testing mode** (≤100 test users) until/unless verified. Client IDs are public identifiers, but per repo security rules they are added only with explicit confirmation — never commit a client *secret*.
 - **Expo Go + Google sign-in is unreliable** (redirect-URI handling); plan verification on **web + dev build** (`expo-dev-client`), not Expo Go.
-- **Web** needs the production origin + `http://localhost:8081` registered as authorized JavaScript origins.
+- **Web** needs the production origin (`https://budgetery.vercel.app`) + `http://localhost:8081` registered as authorized JavaScript origins.
 - Access tokens live ~1h → store the **refresh token** (SecureStore on native) and refresh silently; on web keep tokens in memory and re-prompt when expired.
 
 ## 3. Architecture

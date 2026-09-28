@@ -2,6 +2,16 @@
 
 A budget tracking application built entirely free on a home computer using open source tools.
 
+## Live demo
+
+Hosted web build (Vercel, auto-deploys on every `main` push):
+
+- https://budgetery.vercel.app
+
+Note: Google Drive sync on the hosted URL needs the production origin
+registered in the Google Cloud console (`budgetery-web` client) — until then,
+Drive connect works on `http://localhost:8081` only.
+
 ## Made With
 
 - **opencode** - AI coding assistant for streamlined development
