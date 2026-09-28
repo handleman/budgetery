@@ -1,4 +1,4 @@
-import { appReducer, daylyBudgetReducer, totalBudgetReducer, totalExpensesReducer, totalObligationsReducer, totalPercentageObligationsReducer, remainingBudgetReducer, remainsReducer } from './reducer';
+import { appReducer, daylyBudgetReducer, hasTrackedPeriod, totalBudgetReducer, totalExpensesReducer, totalObligationsReducer, totalPercentageObligationsReducer, remainingBudgetReducer, remainsReducer } from './reducer';
 import { ACTION_TYPES } from './enums';
 import { TUTORIAL_NAMES } from './enums';
 import { Store, IncomeItem, ExpenseItem, ObligationItem, CurrentPeriod } from './types';
@@ -383,6 +383,19 @@ describe('appReducer', () => {
       expect(backToOctober.totalBudget).toBe(3000);
     });
 
+  });
+
+  describe('hasTrackedPeriod', () => {
+    it('is false for a fresh store, true once any month is tracked', () => {
+      expect(hasTrackedPeriod(initialStore)).toBe(false);
+      const withPeriod = appReducer(initialStore, {
+        type: ACTION_TYPES.START_NEW_MONTH,
+        payload: { name: 'October', month: 10 } as CurrentPeriod,
+      } as any);
+      expect(hasTrackedPeriod(withPeriod)).toBe(true);
+      // Legacy data without a periods array entry but with a currentPeriod name.
+      expect(hasTrackedPeriod({ ...initialStore, currentPeriod: { name: 'September', month: 9 } })).toBe(true);
+    });
   });
 
   describe('SYNC_CONFIG/SYNC_STATUS actions', () => {

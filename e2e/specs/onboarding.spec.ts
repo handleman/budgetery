@@ -38,4 +38,29 @@ test.describe('onboarding', () => {
     await page.reload();
     await expect(page.getByTestId(tid.welcome.getStarted)).toBeVisible();
   });
+
+  test('O5: tracked month skips the tutorial gate even with the flag unset', async ({
+    page,
+  }) => {
+    await setupPeriod(page, { month: 9, periodLabel: 'September' });
+    // Simulate a legacy store: tracked data whose tutorial flag predates it.
+    await page.evaluate(() => {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key) continue;
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw || !raw.includes('"periods"')) continue;
+          const stored = JSON.parse(raw);
+          stored.welcomeTutorialPassed = false;
+          localStorage.setItem(key, JSON.stringify(stored));
+        } catch {
+          // Non-JSON entries are unrelated to the store.
+        }
+      }
+    });
+    await page.goto('/');
+    await expect(page.getByTestId(tid.welcome.getStarted)).toHaveCount(0);
+    await expect(page.getByTestId(tid.welcome.monthList)).toBeVisible();
+  });
 });

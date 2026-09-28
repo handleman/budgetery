@@ -74,6 +74,7 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 ## Tutorial Onboarding
 
 - As a user I want to complete the welcome tutorial and progress through income/obligations/expenses modules
+- if i already have a tracked month, opening the app skips the first-run tutorial gate and shows the tracked-months list directly
 
 ## State Management
 

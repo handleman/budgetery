@@ -2,6 +2,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { AppButton, AppCard, AppCardTitle, AppListRow, AppMenuSelect, AppTextInput, DIALOG_MAX_WIDTH } from "@/components/ui";
 import { appContext } from "@/store/context";
+import { hasTrackedPeriod } from "@/store/reducer";
 import { useContext, useState } from "react";
 import { StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -23,7 +24,10 @@ const monthNames = [
 export default function WelcomeScreen() {
     const ctx = useContext(appContext);
     const { welcomeTutorialPassed, incomeTutorialPassed, periods, currentPeriodId, currentPeriod } = ctx.store;
-    const [tutorialPassed, setTutorialPassed] = useState<boolean>(welcomeTutorialPassed);
+    // Returning users with tracked months never see the first-run gate — even
+    // when the flag predates their data (legacy stores). Derived directly from
+    // the store (no mirror state) so it stays correct after mutations.
+    const tutorialPassed = welcomeTutorialPassed || hasTrackedPeriod(ctx.store);
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [selectedPeriodName, setSelectedPeriodName] = useState<string>('');
     const router = useRouter();
@@ -31,7 +35,6 @@ export default function WelcomeScreen() {
 
     const getStartedHandler = () => {
         ctx.mutators.passWelcomeTutorial();
-        setTutorialPassed(true);
     }
 
     const isPeriodValid = selectedMonth !== null && selectedPeriodName.trim() !== '';
