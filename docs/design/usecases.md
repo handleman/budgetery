@@ -48,6 +48,7 @@ Format: "As a user I want to [action] and get [result]" or "I want to [action] a
 - if i enter expense i want to see remaining sum from allowed budget recalculated on all the related screens
 - i want to see total spend summary below all day cards and remaining sum (remains) to spend in this month
 - i want the day-by-day breakdown table collapsed by default and expandable on demand
+- i want the breakdown "Left" column to show the running period balance (previous Left + daily budget − this day's spent), so a severe overshoot keeps following days negative until recovered, with negative rows colored red
 - i want to see daily budget on the expenses page as well
 - remains and total spend should be sticked as  bottom navbar
 
