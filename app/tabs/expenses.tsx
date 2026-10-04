@@ -112,6 +112,7 @@ export default function ExpensesScreen() {
             expanded={expandedDays[group.dayKey] ?? true}
             onToggle={() => toggleDay(group.dayKey)}
             onEditItem={editHandler}
+            style={!wide ? styles.listFullBleed : undefined}
           />
         );
       })}
@@ -123,6 +124,7 @@ export default function ExpensesScreen() {
         year={tableYear}
         expanded={breakdownExpanded}
         onToggle={() => setBreakdownExpanded((v) => !v)}
+        style={!wide ? styles.listFullBleed : undefined}
       />
       <AppDivider />
       {!wide && !heroVisible && (
@@ -207,6 +209,12 @@ const styles = StyleSheet.create({
   listBlock: {
     gap: 16,
     backgroundColor: 'transparent',
+  },
+  // Narrow: the lists cancel the screen's horizontal padding and go
+  // edge-to-edge (square corners); headers/hero keep their inset.
+  listFullBleed: {
+    marginHorizontal: -32,
+    borderRadius: 0,
   },
   fabRow: {
     flexDirection: 'row',

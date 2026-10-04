@@ -1,7 +1,6 @@
 import { test, expect } from '../fixtures/test';
 import { tid } from '../helpers/selectors';
 import { setupPeriod } from '../helpers/flows';
-
 /**
  * Tutorial Onboarding + period selection.
  * Usecases: first-run tutorial, month picker, period label, navigation to tabs.
@@ -62,5 +61,18 @@ test.describe('onboarding', () => {
     await page.goto('/');
     await expect(page.getByTestId(tid.welcome.getStarted)).toHaveCount(0);
     await expect(page.getByTestId(tid.welcome.monthList)).toBeVisible();
+  });
+
+  test('O6: month picker opens a custom option sheet (web)', async ({ page }) => {
+    await page.getByTestId(tid.welcome.getStarted).click();
+    // The Dialog-based sheet has no overlay dismiss race (unlike Paper Menu),
+    // so plain sequential clicks are deterministic here.
+    await page.getByTestId(tid.welcome.monthPickerAnchor).click();
+    await expect(page.getByTestId(tid.welcome.monthPicker)).toBeVisible();
+    await expect(page.getByTestId(tid.welcome.monthOption(1))).toContainText('January');
+    await expect(page.getByTestId(tid.welcome.monthOption(12))).toContainText('December');
+    await page.getByTestId(tid.welcome.monthOption(9)).click();
+    await expect(page.getByTestId(tid.welcome.monthPickerAnchor)).toContainText('September');
+    await expect(page.getByTestId(tid.welcome.monthPicker)).toBeHidden();
   });
 });

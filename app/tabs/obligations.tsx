@@ -92,7 +92,7 @@ export default function ObligationScreen() {
           addTestID="obligations-hero-add"
         />
       </View>
-      <AppCard testID="obligations-list-card">
+      <AppCard testID="obligations-list-card" style={!wide ? styles.listFullBleed : undefined}>
         {
           obligations.map((obligation, index) => (
             <ThemedView key={`${obligation.date.getTime()}-${index}`}>
@@ -196,6 +196,12 @@ const styles = StyleSheet.create({
   listBlock: {
     gap: 16,
     backgroundColor: 'transparent',
+  },
+  // Narrow: the list cancels the screen's horizontal padding and goes
+  // edge-to-edge (square corners); headers/hero keep their inset.
+  listFullBleed: {
+    marginHorizontal: -32,
+    borderRadius: 0,
   },
   fabRow: {
     flexDirection: 'row',
