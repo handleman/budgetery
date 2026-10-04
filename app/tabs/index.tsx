@@ -28,6 +28,15 @@ export default function IncomeScreen() {
   const { width } = useWindowDimensions();
   const wide = shouldShowSidebar(Platform.OS, width);
   const scrollRef = useRef<ScrollView>(null);
+  // Narrow-layout FAB is a stand-in for the hero "+" once the hero
+  // (SummaryHero) scrolls out of view — hidden while the hero is visible.
+  const [heroVisible, setHeroVisible] = useState(true);
+  const heroHeight = useRef(0);
+  const handleScroll = (offsetY: number) => {
+    const threshold = heroHeight.current > 0 ? heroHeight.current : 160;
+    const visible = offsetY < threshold;
+    setHeroVisible((prev) => (prev === visible ? prev : visible));
+  };
 
 
   const getStartedHandler = () => {
@@ -68,14 +77,20 @@ export default function IncomeScreen() {
 
   const body = tutorialPassed ? (
     <ThemedView style={styles.listBlock}>
-      <SummaryHero
-        title="Total Income:"
-        value={totalBudget}
-        gamma="income"
-        onAddPress={() => wide ? addMoreHandler() : scrollRef.current?.scrollToEnd({ animated: true })}
-        testID="income-hero"
-        addTestID="income-hero-add"
-      />
+      <View
+        onLayout={(e) => {
+          heroHeight.current = e.nativeEvent.layout.height;
+        }}
+      >
+        <SummaryHero
+          title="Total Income:"
+          value={totalBudget}
+          gamma="income"
+          onAddPress={addMoreHandler}
+          testID="income-hero"
+          addTestID="income-hero-add"
+        />
+      </View>
       <AppCard testID="income-list-card">
         {incomes.map((income, index) => (
           <ThemedView key={`${income.date.getTime()}-${index}`}>
@@ -92,7 +107,7 @@ export default function IncomeScreen() {
         ))}
       </AppCard>
       <AppDivider />
-      {!wide && (
+      {!wide && !heroVisible && (
         <View style={styles.fabRow}>
           <AppFAB onPress={addMoreHandler} testID="income-fab" backgroundColor={screenGamma.income.cta} color={screenGamma.income.onCta} />
         </View>
@@ -132,6 +147,8 @@ export default function IncomeScreen() {
           <ScrollView
             ref={scrollRef}
             contentContainerStyle={styles.content}
+            scrollEventThrottle={16}
+            onScroll={(e) => handleScroll(e.nativeEvent.contentOffset.y)}
           >
             <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
             {body}

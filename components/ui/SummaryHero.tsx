@@ -16,8 +16,8 @@ type Props = {
 
 /**
  * SummaryHero — gradient summary card with an embedded white "+" button.
- * One primary action per screen stands: the FAB opens the modal; the hero
- * "+" scrolls (mobile) or opens it where no FAB exists (web).
+ * The "+" opens the add modal directly. On narrow screens the in-flow FAB
+ * takes over as the add affordance once this hero scrolls out of view.
  */
 export function SummaryHero({ title, value, gamma, onAddPress, testID, addTestID }: Props) {
   const theme = useTheme();
