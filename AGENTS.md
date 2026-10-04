@@ -106,6 +106,10 @@ navigate("http://localhost:8081/tabs/obligations")
 **Remote name:** `budgetery` (not "origin")  
 **Push command:** `git push budgetery main`
 
+## CI / Workflows
+- Do NOT create GitHub Actions workflows (or any CI automation) unless the user explicitly requests one.
+- Verification runs locally (`npx jest`, `npx playwright test`); no workflow is expected to keep them green.
+
 ## Git Operations Available
 ```bash
 # View staged changes
