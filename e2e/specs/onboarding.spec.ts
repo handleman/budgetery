@@ -69,6 +69,11 @@ test.describe('onboarding', () => {
     // so plain sequential clicks are deterministic here.
     await page.getByTestId(tid.welcome.monthPickerAnchor).click();
     await expect(page.getByTestId(tid.welcome.monthPicker)).toBeVisible();
+    // Sheet corners follow app roundness — not Paper Dialog's 7x pill default.
+    const cornerRadius = await page
+      .getByTestId(tid.welcome.monthPicker)
+      .evaluate((el) => getComputedStyle(el).getPropertyValue('border-top-left-radius'));
+    expect(parseFloat(cornerRadius)).toBeLessThanOrEqual(16);
     await expect(page.getByTestId(tid.welcome.monthOption(1))).toContainText('January');
     await expect(page.getByTestId(tid.welcome.monthOption(12))).toContainText('December');
     await page.getByTestId(tid.welcome.monthOption(9)).click();

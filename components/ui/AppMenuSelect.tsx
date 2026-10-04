@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, ScrollView, StyleSheet } from 'react-native';
+import { Platform, ScrollView, StyleSheet, useWindowDimensions } from 'react-native';
 import { Button, Dialog, List, Menu, Portal, useTheme } from 'react-native-paper';
 import { DIALOG_MAX_WIDTH } from './AppDialog';
 
@@ -30,11 +30,15 @@ type Props = {
 export function AppMenuSelect({ placeholder = 'Select an option', value, options, onSelect, testID }: Props) {
   const [visible, setVisible] = React.useState(false);
   const theme = useTheme();
+  const { height: windowHeight } = useWindowDimensions();
   const selected = options.find((o) => o.value === value);
   const choose = (next: number) => {
     onSelect(next);
     setVisible(false);
   };
+  // Sheet list height follows the viewport so the whole dialog (title +
+  // list) fits on screen; the option list scrolls inside it.
+  const listMaxHeight = Math.max(240, Math.min(480, windowHeight - 280));
 
   if (Platform.OS === 'web') {
     return (
@@ -53,10 +57,10 @@ export function AppMenuSelect({ placeholder = 'Select an option', value, options
               visible={visible}
               onDismiss={() => setVisible(false)}
               testID={testID}
-              style={styles.sheet}
+              style={[styles.sheet, { borderRadius: theme.roundness }]}
             >
               <Dialog.Title>{selected ? selected.label : placeholder}</Dialog.Title>
-              <Dialog.ScrollArea style={styles.scroll}>
+              <Dialog.ScrollArea style={[styles.scroll, { maxHeight: listMaxHeight }]}>
                 <ScrollView>
                   {options.map((option) => (
                     <List.Item
@@ -125,7 +129,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   scroll: {
-    maxHeight: 420,
     paddingHorizontal: 0,
   },
 });
