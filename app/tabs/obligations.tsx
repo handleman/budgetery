@@ -25,6 +25,15 @@ export default function ObligationScreen() {
   const { width } = useWindowDimensions();
   const wide = shouldShowSidebar(Platform.OS, width);
   const scrollRef = useRef<ScrollView>(null);
+  // Narrow-layout FAB is a stand-in for the hero "+" once the hero
+  // (SummaryHero) scrolls out of view — hidden while the hero is visible.
+  const [heroVisible, setHeroVisible] = useState(true);
+  const heroHeight = useRef(0);
+  const handleScroll = (offsetY: number) => {
+    const threshold = heroHeight.current > 0 ? heroHeight.current : 160;
+    const visible = offsetY < threshold;
+    setHeroVisible((prev) => (prev === visible ? prev : visible));
+  };
 
   const getStartedHandler = () => {
     ctx.mutators.passObligationsTutorial();
@@ -69,14 +78,20 @@ export default function ObligationScreen() {
 
   const body = tutorialPassed ? (
     <ThemedView style={styles.listBlock}>
-      <SummaryHero
-        title="Total Obligations:"
-        value={totalObligations}
-        gamma="obligations"
-        onAddPress={() => wide ? addMoreHandler() : scrollRef.current?.scrollToEnd({ animated: true })}
-        testID="obligations-hero"
-        addTestID="obligations-hero-add"
-      />
+      <View
+        onLayout={(e) => {
+          heroHeight.current = e.nativeEvent.layout.height;
+        }}
+      >
+        <SummaryHero
+          title="Total Obligations:"
+          value={totalObligations}
+          gamma="obligations"
+          onAddPress={addMoreHandler}
+          testID="obligations-hero"
+          addTestID="obligations-hero-add"
+        />
+      </View>
       <AppCard testID="obligations-list-card">
         {
           obligations.map((obligation, index) => (
@@ -99,7 +114,7 @@ export default function ObligationScreen() {
           ))
         }
       </AppCard>
-      {!wide && (
+      {!wide && !heroVisible && (
         <View style={styles.fabRow}>
           <AppFAB onPress={addMoreHandler} testID="obligations-fab" backgroundColor={screenGamma.obligations.cta} color={screenGamma.obligations.onCta} />
         </View>
@@ -138,6 +153,8 @@ export default function ObligationScreen() {
           <ScrollView
             ref={scrollRef}
             contentContainerStyle={styles.content}
+            scrollEventThrottle={16}
+            onScroll={(e) => handleScroll(e.nativeEvent.contentOffset.y)}
           >
             <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
             {body}

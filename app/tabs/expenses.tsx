@@ -36,6 +36,15 @@ export default function ExpensesScreen() {
   const { width } = useWindowDimensions();
   const wide = shouldShowSidebar(Platform.OS, width);
   const scrollRef = useRef<ScrollView>(null);
+  // Narrow-layout FAB is a stand-in for the hero "+" once the hero
+  // (SummaryHero) scrolls out of view — hidden while the hero is visible.
+  const [heroVisible, setHeroVisible] = useState(true);
+  const heroHeight = useRef(0);
+  const handleScroll = (offsetY: number) => {
+    const threshold = heroHeight.current > 0 ? heroHeight.current : 160;
+    const visible = offsetY < threshold;
+    setHeroVisible((prev) => (prev === visible ? prev : visible));
+  };
 
   // Month/year for the day-by-day breakdown (fall back to today on legacy data).
   const today = new Date();
@@ -78,14 +87,20 @@ export default function ExpensesScreen() {
 
   const body = tutorialPassed ? (
     <ThemedView style={styles.listBlock}>
-      <SummaryHero
-        title="Total Expenses:"
-        value={totalExpenses}
-        gamma="expenses"
-        onAddPress={() => wide ? addMoreHandler() : scrollRef.current?.scrollToEnd({ animated: true })}
-        testID="expenses-hero"
-        addTestID="expenses-hero-add"
-      />
+      <View
+        onLayout={(e) => {
+          heroHeight.current = e.nativeEvent.layout.height;
+        }}
+      >
+        <SummaryHero
+          title="Total Expenses:"
+          value={totalExpenses}
+          gamma="expenses"
+          onAddPress={addMoreHandler}
+          testID="expenses-hero"
+          addTestID="expenses-hero-add"
+        />
+      </View>
       {groups.map((group) => {
         const warning = warnings.get(group.dayKey);
         return (
@@ -110,7 +125,7 @@ export default function ExpensesScreen() {
         onToggle={() => setBreakdownExpanded((v) => !v)}
       />
       <AppDivider />
-      {!wide && (
+      {!wide && !heroVisible && (
         <View style={styles.fabRow}>
           <AppFAB onPress={addMoreHandler} testID="expenses-fab" backgroundColor={screenGamma.expenses.cta} color={screenGamma.expenses.onCta} />
         </View>
@@ -149,6 +164,8 @@ export default function ExpensesScreen() {
           <ScrollView
             ref={scrollRef}
             contentContainerStyle={styles.content}
+            scrollEventThrottle={16}
+            onScroll={(e) => handleScroll(e.nativeEvent.contentOffset.y)}
           >
             <ThemedText type="title" style={styles.wordmark}>Budgetery</ThemedText>
             {body}

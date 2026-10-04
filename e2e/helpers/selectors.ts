@@ -39,6 +39,7 @@ export const tid = {
     backButton: 'income-back-button',
     fab: 'income-fab',
     hero: 'income-hero',
+    heroAdd: 'income-hero-add',
     listCard: 'income-list-card',
     totalsBar: 'income-totals-bar',
     totalsTotal: 'income-totals-bar-total',
