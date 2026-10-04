@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { DataTable } from 'react-native-paper';
+import type { StyleProp, ViewStyle } from 'react-native';
 import { AppAccordion, AppCard } from '../ui';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import type { DayGroup } from '@/store/expenseGrouping';
@@ -13,6 +14,8 @@ type Props = {
   /** Collapsed by default — the table is long; the user expands it on demand. */
   expanded: boolean;
   onToggle: () => void;
+  /** Outer Card overrides (e.g. narrow full-bleed). */
+  style?: StyleProp<ViewStyle>;
 };
 
 const round2 = (value: number): number => Math.round(value * 100) / 100;
@@ -62,7 +65,7 @@ export function buildBreakdownRows(
  * until recovered; negative rows render pale-red.
  * Collapsed by default (long table); expands on demand via the header.
  */
-export function DayBreakdownTable({ groups, daylyBudget, month, year, expanded, onToggle }: Props) {
+export function DayBreakdownTable({ groups, daylyBudget, month, year, expanded, onToggle, style }: Props) {
   const overdrawnBg = useThemeColor({ light: '#FDECEA', dark: '#57201C' }, 'background');
   const rows = React.useMemo(() => {
     const spentByDay = new Map(groups.map((group) => [group.dayKey, group.total]));
@@ -70,7 +73,7 @@ export function DayBreakdownTable({ groups, daylyBudget, month, year, expanded, 
   }, [groups, daylyBudget, month, year]);
 
   return (
-    <AppCard testID="expenses-day-table">
+    <AppCard testID="expenses-day-table" style={style}>
       <AppAccordion
         title="Day-by-day breakdown"
         description={`${rows.length} days`}

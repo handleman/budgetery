@@ -91,7 +91,7 @@ export default function IncomeScreen() {
           addTestID="income-hero-add"
         />
       </View>
-      <AppCard testID="income-list-card">
+      <AppCard testID="income-list-card" style={!wide ? styles.listFullBleed : undefined}>
         {incomes.map((income, index) => (
           <ThemedView key={`${income.date.getTime()}-${index}`}>
             <AppListRow
@@ -194,6 +194,12 @@ const styles = StyleSheet.create({
   listBlock: {
     gap: 16,
     backgroundColor: 'transparent',
+  },
+  // Narrow: the list cancels the screen's horizontal padding and goes
+  // edge-to-edge (square corners); headers/hero keep their inset.
+  listFullBleed: {
+    marginHorizontal: -32,
+    borderRadius: 0,
   },
   footerSpacer: {
     height: 8,
